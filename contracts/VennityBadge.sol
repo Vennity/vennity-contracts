@@ -3,7 +3,6 @@ pragma solidity >=0.8.4 <=0.9.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "./proxies/ProxyRegistry.sol";
 
 contract VennityBadge is ERC1155 {
     using Strings for string;
@@ -18,10 +17,11 @@ contract VennityBadge is ERC1155 {
     // Contract symbol
     string public symbol;
 
-    constructor() ERC1155("ipfs://vennity-contracts-url") {)
-        string memory _name,
+    constructor(
+       string memory _name,
         string memory _symbol,
         address _proxyRegistryAddress
+    ) ERC1155("ipfs://vennity-contracts-url") {
     ) public {
         name = _name;
         symbol = _symbol;
