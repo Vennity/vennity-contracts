@@ -17,15 +17,55 @@ contract VennityBadge is ERC1155 {
     // Contract symbol
     string public symbol;
 
+    // /**
+    //  * @dev Once deployed, we will be able to query the deployer's (i.e. the 
+    //  * `VennityDeployer.sol` contract) balance of `VennityBadge` ERC1155 tokens.
+    //  *      
+    //  * To transfer tokens between accounts or users, use `safeTransferFrom()`.
+    //  * You can confirm that the specified tokens were transferred successfully 
+    //  * by comparing the recipient and deployer's balances: 
+    //  * `VennityBadge.balanceOf(recipientAddress, tokenID) 
+    //  *   > VennityBadge.balanceOf(deployerAddress, tokenID)`
+    //  * 
+    //  * To batch transfer 
+    //  * @param _name Name of this VennityBadge
+    //  * @param _symbol Symbol of this VennityBadge
+    //  * @param _proxyRegistryAddress Address of the proxy registry contract 
+    //  */
+    // constructor(
+    //     string memory _name,
+    //     string memory _symbol,
+    //     address _proxyRegistryAddress
+    // ) ERC1155("ipfs://vennity-contracts-url") {
+    // ) public {
+    //     name = _name;
+    //     symbol = _symbol;
+    //     proxyRegistryAddress = _proxyRegistryAddress;
+    // }
+
+    /**
+     * @dev Once deployed, we will be able to query the deployer's (i.e. the 
+     * `VennityDeployer.sol` contract) balance of `VennityBadge` ERC1155 tokens.
+     *      
+     * To transfer tokens between accounts or users, use `safeTransferFrom()`.
+     * You can confirm that the specified tokens were transferred successfully 
+     * by comparing the recipient and deployer's balances: 
+     * `VennityBadge.balanceOf(recipientAddress, tokenID) 
+     *   > VennityBadge.balanceOf(deployerAddress, tokenID)`
+     * 
+     * To batch transfer 
+     * @param _name Name of this VennityBadge
+     * @param _symbol Symbol of this VennityBadge
+     */
     constructor(
-       string memory _name,
-        string memory _symbol,
-        address _proxyRegistryAddress
-    ) ERC1155("ipfs://vennity-contracts-url") {
+        string memory _name,
+        string memory _symbol
+    ) ERC1155(
+        "https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka"
+    ) {
     ) public {
         name = _name;
         symbol = _symbol;
-        proxyRegistryAddress = _proxyRegistryAddress;
     }
 
     function someFunction(address _address) public returns (bool) {
