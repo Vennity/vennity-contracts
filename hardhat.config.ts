@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
+import '@typechain/hardhat'
 import 'hardhat-deploy'
 
 const config: HardhatUserConfig = {
@@ -16,6 +17,10 @@ const config: HardhatUserConfig = {
         }
       }
     ]
+  },
+  typechain: {
+    outDir: './types',
+    target: 'ethers-v5',
   },
   mocha: {
     timeout: 5000

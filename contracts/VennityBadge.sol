@@ -9,6 +9,7 @@ contract VennityBadge is ERC1155 {
 
     address proxyRegistryAddress;
     uint256 private _currentTokenID = 0;
+
     mapping(uint256 => address) public creators;
     mapping(uint256 => uint256) public tokenSupply;
 
@@ -18,19 +19,19 @@ contract VennityBadge is ERC1155 {
     string public symbol;
 
     // /**
-    //  * @dev Once deployed, we will be able to query the deployer's (i.e. the 
+    //  * @dev Once deployed, we will be able to query the deployer's (i.e. the
     //  * `VennityDeployer.sol` contract) balance of `VennityBadge` ERC1155 tokens.
-    //  *      
+    //  *
     //  * To transfer tokens between accounts or users, use `safeTransferFrom()`.
-    //  * You can confirm that the specified tokens were transferred successfully 
-    //  * by comparing the recipient and deployer's balances: 
-    //  * `VennityBadge.balanceOf(recipientAddress, tokenID) 
+    //  * You can confirm that the specified tokens were transferred successfully
+    //  * by comparing the recipient and deployer's balances:
+    //  * `VennityBadge.balanceOf(recipientAddress, tokenID)
     //  *   > VennityBadge.balanceOf(deployerAddress, tokenID)`
-    //  * 
-    //  * To batch transfer 
+    //  *
+    //  * To batch transfer
     //  * @param _name Name of this VennityBadge
     //  * @param _symbol Symbol of this VennityBadge
-    //  * @param _proxyRegistryAddress Address of the proxy registry contract 
+    //  * @param _proxyRegistryAddress Address of the proxy registry contract
     //  */
     // constructor(
     //     string memory _name,
@@ -44,31 +45,29 @@ contract VennityBadge is ERC1155 {
     // }
 
     /**
-     * @dev Once deployed, we will be able to query the deployer's (i.e. the 
+     * @dev Once deployed, we will be able to query the deployer's (i.e. the
      * `VennityDeployer.sol` contract) balance of `VennityBadge` ERC1155 tokens.
-     *      
+     *
      * To transfer tokens between accounts or users, use `safeTransferFrom()`.
-     * You can confirm that the specified tokens were transferred successfully 
-     * by comparing the recipient and deployer's balances: 
-     * `VennityBadge.balanceOf(recipientAddress, tokenID) 
+     * You can confirm that the specified tokens were transferred successfully
+     * by comparing the recipient and deployer's balances:
+     * `VennityBadge.balanceOf(recipientAddress, tokenID)
      *   > VennityBadge.balanceOf(deployerAddress, tokenID)`
-     * 
-     * To batch transfer 
+     *
+     * To batch transfer
      * @param _name Name of this VennityBadge
      * @param _symbol Symbol of this VennityBadge
      */
     constructor(
         string memory _name,
-        string memory _symbol
-    ) ERC1155(
-        "https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka"
-    ) {
-    ) public {
+        string memory _symbol,
+        string memory _uri
+    ) ERC1155(_uri) {
         name = _name;
         symbol = _symbol;
     }
 
-    function someFunction(address _address) public returns (bool) {
+    function getTokenID(address _address) public returns (bool) {
         require(_address == msg.sender, "Can only be called by msg.sender!");
 
         return true;

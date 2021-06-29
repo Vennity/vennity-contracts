@@ -1,7 +1,7 @@
 # ----------- Project specific ---------------
 contracts/proxies
 contracts/tokens
-
+types
 
 # dependencies
 /node_modules
