@@ -2,21 +2,15 @@
 pragma solidity >=0.8.4 <=0.9.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "./token/ERC1155.sol";
 
 contract VennityBadge is ERC1155 {
     using Strings for string;
 
-    address proxyRegistryAddress;
+    address _proxyRegistryAddress;
     uint256 private _currentTokenID = 0;
 
-    mapping(uint256 => address) public creators;
-    mapping(uint256 => uint256) public tokenSupply;
-
-    // Contract name
-    string public name;
-    // Contract symbol
-    string public symbol;
+    mapping(uint256 => address) public _creators;
 
     // /**
     //  * @dev Once deployed, we will be able to query the deployer's (i.e. the
@@ -55,21 +49,8 @@ contract VennityBadge is ERC1155 {
      *   > VennityBadge.balanceOf(deployerAddress, tokenID)`
      *
      * To batch transfer
-     * @param _name Name of this VennityBadge
-     * @param _symbol Symbol of this VennityBadge
+     * @param name_ Name of this VennityBadge
+     * @param uri_ Token URI of this VennityBadge
      */
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        string memory _uri
-    ) ERC1155(_uri) {
-        name = _name;
-        symbol = _symbol;
-    }
-
-    function getTokenID(address _address) public returns (bool) {
-        require(_address == msg.sender, "Can only be called by msg.sender!");
-
-        return true;
-    }
+    constructor(string memory name_, string memory uri_) ERC1155(name_, uri_) {}
 }
