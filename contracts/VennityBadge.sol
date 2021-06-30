@@ -52,5 +52,20 @@ contract VennityBadge is ERC1155 {
      * @param name_ Name of this VennityBadge
      * @param uri_ Token URI of this VennityBadge
      */
-    constructor(string memory name_, string memory uri_) ERC1155(name_, uri_) {}
+    constructor(
+        string memory name_,
+        string memory uri_,
+        uint256 id_,
+        uint256 amount_,
+        string memory tokenUUID_
+    ) ERC1155(name_, uri_) {
+        address _account;
+        bytes memory data;
+
+        _account = msg.sender;
+
+        data = keccak256(abi.encodePacked(tokenUUID_));
+
+        _mint(_account, id_, amount_, data);
+    }
 }

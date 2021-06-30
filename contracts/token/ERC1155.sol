@@ -39,11 +39,18 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     string private _name;
 
     /**
+     * @dev Not part of ERC1155 standard.
+     * Admin of the contract. Is the only one who can call `_mint()`.
+     */
+    address _admin;
+
+    /**
      * @dev See {_setURI}.
      */
     constructor(string memory name_, string memory uri_) {
         _name = name_;
         _setURI(uri_);
+        _admin = msg.sender;
     }
 
     /**
@@ -302,10 +309,14 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) internal virtual {
+    ) public {
         require(
             account != address(0),
             "ERC1155: cannot mint to the zero address"
+        );
+        require(
+            msg.sender == _admin,
+            "ERC1155: only the admin can call `_mint()`!"
         );
         bytes memory tokenData;
 
