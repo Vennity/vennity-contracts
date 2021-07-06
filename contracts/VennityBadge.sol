@@ -7,7 +7,7 @@ import "./token/ERC1155.sol";
 contract VennityBadge is ERC1155 {
     using Strings for string;
 
-    address _proxyRegistryAddress;
+    // address _proxyRegistryAddress;
     uint256 private _currentTokenID = 0;
 
     mapping(uint256 => address) public _creators;
@@ -55,7 +55,7 @@ contract VennityBadge is ERC1155 {
     constructor(
         string memory name_,
         string memory uri_,
-        uint256 id_,
+        // uint256 id_,
         uint256 amount_,
         string memory tokenUUID_
     ) ERC1155(name_, uri_) {
@@ -64,8 +64,9 @@ contract VennityBadge is ERC1155 {
 
         _account = msg.sender;
 
-        data = keccak256(abi.encodePacked(tokenUUID_));
+        // Get the bytes of the token UUID.
+        data = abi.encode(tokenUUID_);
 
-        _mint(_account, id_, amount_, data);
+        _mint(_account, amount_, data);
     }
 }

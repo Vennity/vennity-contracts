@@ -21,13 +21,22 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
 
-    // Mapping ERC1155 token data to its token ID.
+    // Mapping ERC1155 token ID to its token data (in bytes)
     mapping(uint256 => bytes) private _tokenData;
+
+    // Mapping ERC1155 token data (in bytes) to its token IDs
+    mapping(bytes => uint256) private _tokenIDs;
 
     // Mapping from account to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    mapping(string => uint256) public _tokenSupply;
+    // Mapping from token ID to its total supply
+    mapping(uint256 => uint256) public _tokenSupply;
+
+    // Used to keep track of how many times `_mint()` method is called.
+    // We use this `mintCount` to assign `id`s in the call stack of the
+    // `_mint()` method.
+    uint256 private mintCount;
 
     // Used as the URI for all token types by relying on ID substitution, e.g. https://token-cdn-domain/{id}.json
     string private _uri;
@@ -61,15 +70,18 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /**
-     * @dev See {IERC20-totalSupply}.
+     * @dev Inspired by IERC20-totalSupply.
+     * @param tokenUUID The token's UUID
      */
-    function tokenSupply(string memory id_)
+    function tokenSupply(string memory tokenUUID)
         public
         view
         virtual
         returns (uint256)
     {
-        return _tokenSupply[id_];
+        bytes memory tokenData = abi.encode(tokenUUID);
+        uint256 id = _tokenIDs[tokenData];
+        return _tokenSupply[id];
     }
 
     /**
@@ -303,10 +315,12 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * - `account` cannot be the zero address.
      * - If `account` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
      * acceptance magic value.
+     *
+     * NOTE: `data` param is equal to `keccak256(abi.encode(tokenUUID_))`.
      */
     function _mint(
         address account,
-        uint256 id,
+        // uint256 id,
         uint256 amount,
         bytes memory data
     ) public {
@@ -318,16 +332,45 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
             msg.sender == _admin,
             "ERC1155: only the admin can call `_mint()`!"
         );
-        bytes memory tokenData;
 
-        tokenData = _tokenData[id];
+        // used to set `tokenID` to the number of times `_mint` has been called.
+        uint256 id;
+        // Used to get the sha256 of the token data
+        bytes memory tokenData_;
+
+        // Setting the token ID to `mintCount`.
+        if (mintCount != 0) {
+            mintCount += 1;
+            id = mintCount;
+        } else {
+            mintCount = 0;
+            id = mintCount;
+        }
+
+        // Variables with `<NAME>_` notation represent variables that I
+        // create from inputs.
+        tokenData_ = _tokenData[id];
 
         // If ERC1155 token data is not already mapped, create mapping.
-        if (keccak256(tokenData) != keccak256(data)) {
+        if (keccak256(tokenData_) != keccak256(data)) {
             _tokenData[id] = data;
+            tokenData_ = _tokenData[id];
+        }
+
+        // For this token data (in bytes), set its token ID.
+        _tokenIDs[tokenData_] = id;
+
+        // Set the total token supply for these ERC1155 tokens that are minted.
+        if (_tokenSupply[id] != 0) {
+            _tokenSupply[id] += amount;
+        } else {
+            _tokenSupply[id] = 0;
+            _tokenSupply[id] += amount;
         }
 
         address operator = _msgSender();
+        // Decode `data` to get the original bytes of the token UUID.
+        bytes memory _data = abi.decode(data, (bytes));
 
         _beforeTokenTransfer(
             operator,
@@ -335,7 +378,7 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account,
             _asSingletonArray(id),
             _asSingletonArray(amount),
-            data
+            _data
         );
 
         _balances[id][account] += amount;
@@ -347,7 +390,7 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account,
             id,
             amount,
-            data
+            _data
         );
     }
 

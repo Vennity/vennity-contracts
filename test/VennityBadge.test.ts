@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { VennityBadge } from '../types/VennityBadge'
 
 describe(`VennityBadge`, () => {
+  const TOKEN_UUID_0 = uuidv4()
   const TOKEN_NAME_0 = 'First Vennity Badge'
   const MAX_MINT_CAP_0 = 100
   const PROXY_ADDRESS_0 = '<PROXY_ADDRESS>'
@@ -33,6 +34,8 @@ describe(`VennityBadge`, () => {
     VennityBadge = await Factory__VennityBadge.connect(deployer).deploy(
       TOKEN_NAME_0,
       TOKEN_URI_0,
+      100,
+      TOKEN_UUID_0
       // BADGE_PROXY_ADDRESS
     ) as VennityBadge
 
@@ -52,12 +55,12 @@ describe(`VennityBadge`, () => {
 
 
     describe(`_mint(...)`, () => {
-      let TOKEN_ID_0: string,
-        TOKEN_ID_1: string
+      let TOKEN_UUID_1: string,
+        TOKEN_UUID_2: string
 
       before(`minting ERC1155 token`, async () => {
-        TOKEN_ID_0 = uuidv4() // some random uuid
-        TOKEN_ID_1 = uuidv4() // some random uuid
+        TOKEN_UUID_1 = uuidv4() // some random uuid
+        TOKEN_UUID_2 = uuidv4() // some random uuid
       })
 
       it(`should mint 100 tokens`, async () => {
@@ -70,9 +73,7 @@ describe(`VennityBadge`, () => {
        * @dev Max minting cap can be thought of as the initial supply of the 
        *      token.
        */
-      const totalSupply0 = await VennityBadge.tokenSupply(TOKEN_ID_0)
-      console.log('Total supply of token: ', totalSupply0)
-
+      const totalSupply0 = await VennityBadge.tokenSupply(TOKEN_UUID_0)
       expect(totalSupply0).to.eq(MAX_MINT_CAP_0)
     })
   })
@@ -168,4 +169,4 @@ describe(`VennityBadge`, () => {
   //   // })
   // })
 })
-})
+// })
