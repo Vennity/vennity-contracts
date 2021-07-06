@@ -7,7 +7,7 @@ import { BigNumber } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
 /* Internal imports */
-import { VennityBadge } from '../types/VennityBadge'
+import { VennityBadgeFactory } from '../types/VennityBadgeFactory'
 
 describe(`VennityBadge`, () => {
   const TOKEN_UUID_0 = uuidv4()
