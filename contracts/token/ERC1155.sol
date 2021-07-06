@@ -54,12 +54,21 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     address _admin;
 
     /**
-     * @dev See {_setURI}.
+     * @dev Create new ERC1155 and mint tokens.
      */
-    constructor(string memory name_, string memory uri_) {
+    constructor(
+        string memory name_,
+        string memory uri_,
+        uint256 amount_,
+        string memory tokenUUID_
+    ) {
         _name = name_;
-        _setURI(uri_);
         _admin = msg.sender;
+
+        bytes memory _data = abi.encode(tokenUUID_);
+
+        _setURI(uri_);
+        _mint(_admin, amount_, _data);
     }
 
     /**
