@@ -15,8 +15,10 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol
  *
  * _Available since v3.1._
  */
-contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
+contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
+
+    event SetTokenURI(uint256 id, string tokenURI);
 
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
@@ -30,22 +32,19 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping from account to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    // Mapping from token ID to its total supply
-    mapping(uint256 => uint256) public _tokenSupply;
+    // Mapping token ID to its total supply
+    mapping(uint256 => uint256) public _tokenSupplies;
+
+    // Mapping token ID to its token URI (as a string)
+    mapping(uint256 => string) public _tokenURIs;
+
+    // Mapping token ID to its token name
+    mapping(uint256 => string) public _tokenNames;
 
     // Used to keep track of how many times `_mint()` method is called.
     // We use this `mintCount` to assign `id`s in the call stack of the
     // `_mint()` method.
     uint256 private mintCount;
-
-    // Used as the URI for all token types by relying on ID substitution, e.g. https://token-cdn-domain/{id}.json
-    string private _uri;
-
-    /**
-     * @dev Not part of ERC1155 standard.
-     * Token name.
-     */
-    string private _name;
 
     /**
      * @dev Not part of ERC1155 standard.
@@ -56,33 +55,22 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev Create new ERC1155 and mint tokens.
      */
-    constructor(
-        string memory name_,
-        string memory uri_,
-        uint256 amount_,
-        string memory tokenUUID_
-    ) {
-        _name = name_;
+    constructor() {
         _admin = msg.sender;
-
-        bytes memory _data = abi.encode(tokenUUID_);
-
-        _setURI(uri_);
-        _mint(_admin, amount_, _data);
     }
 
     /**
-     * @dev Returns the name of the token.
+     * @dev Returns the name of the token from its ID
      */
-    function name() public view virtual returns (string memory) {
+    function tokenName(uint256 id) public view virtual returns (string memory) {
+        string memory _name = _tokenNames[id];
         return _name;
     }
 
     /**
-     * @dev Inspired by IERC20-totalSupply.
-     * @param tokenUUID The token's UUID
+     * @dev Returns the token ID from its token UUID
      */
-    function tokenSupply(string memory tokenUUID)
+    function tokenID(string memory tokenUUID)
         public
         view
         virtual
@@ -90,7 +78,32 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     {
         bytes memory tokenData = abi.encode(tokenUUID);
         uint256 id = _tokenIDs[tokenData];
-        return _tokenSupply[id];
+        return id;
+    }
+
+    /**
+     * @dev Inspired by {IERC1155MetadataURI-uri}.
+     *
+     * This implementation returns the token URI from its token UUID
+     */
+    function uri(uint256 id)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
+        string memory uri_ = _tokenURIs[id];
+        return uri_;
+    }
+
+    /**
+     * @dev Inspired by IERC20-totalSupply.
+     * @param id The token's ID
+     */
+    function tokenSupply(uint256 id) public view virtual returns (uint256) {
+        uint256 tokenSupply_ = _tokenSupplies[id];
+        return tokenSupply_;
     }
 
     /**
@@ -107,20 +120,6 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
             interfaceId == type(IERC1155).interfaceId ||
             interfaceId == type(IERC1155MetadataURI).interfaceId ||
             super.supportsInterface(interfaceId);
-    }
-
-    /**
-     * @dev See {IERC1155MetadataURI-uri}.
-     *
-     * This implementation returns the same URI for *all* token types. It relies
-     * on the token type ID substitution mechanism
-     * https://eips.ethereum.org/EIPS/eip-1155#metadata[defined in the EIP].
-     *
-     * Clients calling this function must replace the `\{id\}` substring with the
-     * actual token type ID.
-     */
-    function uri(uint256) public view virtual override returns (string memory) {
-        return _uri;
     }
 
     /**
@@ -292,29 +291,6 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /**
-     * @dev Sets a new URI for all token types, by relying on the token type ID
-     * substitution mechanism
-     * https://eips.ethereum.org/EIPS/eip-1155#metadata[defined in the EIP].
-     *
-     * By this mechanism, any occurrence of the `\{id\}` substring in either the
-     * URI or any of the amounts in the JSON file at said URI will be replaced by
-     * clients with the token type ID.
-     *
-     * For example, the `https://token-cdn-domain/\{id\}.json` URI would be
-     * interpreted by clients as
-     * `https://token-cdn-domain/000000000000000000000000000000000000000000000000000000000004cce0.json`
-     * for token type ID 0x4cce0.
-     *
-     * See {uri}.
-     *
-     * Because these URIs cannot be meaningfully represented by the {URI} event,
-     * this function emits no events.
-     */
-    function _setURI(string memory newuri) internal virtual {
-        _uri = newuri;
-    }
-
-    /**
      * @dev Creates `amount` tokens of token type `id`, and assigns them to `account`.
      *
      * Emits a {TransferSingle} event.
@@ -329,7 +305,8 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
      */
     function _mint(
         address account,
-        // uint256 id,
+        string memory name_,
+        string memory uri_,
         uint256 amount,
         bytes memory data
     ) public {
@@ -366,15 +343,16 @@ contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
             tokenData_ = _tokenData[id];
         }
 
-        // For this token data (in bytes), set its token ID.
-        _tokenIDs[tokenData_] = id;
+        _tokenIDs[tokenData_] = id; // Set token ID.
+        _tokenNames[id] = name_; // Set token name.
+        _tokenURIs[id] = uri_; // Set token URI
 
         // Set the total token supply for these ERC1155 tokens that are minted.
-        if (_tokenSupply[id] != 0) {
-            _tokenSupply[id] += amount;
+        if (_tokenSupplies[id] != 0) {
+            _tokenSupplies[id] += amount;
         } else {
-            _tokenSupply[id] = 0;
-            _tokenSupply[id] += amount;
+            _tokenSupplies[id] = 0;
+            _tokenSupplies[id] += amount;
         }
 
         address operator = _msgSender();
