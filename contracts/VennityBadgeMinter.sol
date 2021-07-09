@@ -2,10 +2,10 @@
 pragma solidity >=0.8.4 <=0.9.0;
 
 import {VennityBadge} from "./token/VennityBadge.sol";
+import "hardhat/console.sol";
 
 contract VennityBadgeMinter {
     address admin;
-    VennityBadge vennityBadge;
 
     event VennityBadgeCreated(address indexed vennityBadge, string tokenUUID);
 
@@ -26,54 +26,52 @@ contract VennityBadgeMinter {
     /**
      * @dev Creates a new VennityBadge as an ERC1155 token.
      */
-    function create(string memory _tokenUUID) public {
+    function create(
+        string memory _tokenUUID,
+        string memory _name,
+        string memory _uri,
+        uint256 _amount
+    ) public returns (VennityBadge badgeAddress) {
         require(
             msg.sender == admin,
             "VennityBadgeMinter: msg.sender is not the admin!"
         );
 
         // NOTE: `vennityBadge` is a new instance of an ERC1155 token.
-        vennityBadge = new VennityBadge();
+        VennityBadge vennityBadge = new VennityBadge();
 
         Badge memory badge = Badge(address(vennityBadge), _tokenUUID);
         badges.push(badge);
 
         // Emit event of token creation to retrieve event data on FE.
         emit VennityBadgeCreated(badge.badgeAddress, badge.badgeUUID);
+
+        mint(vennityBadge, _name, _uri, _amount, _tokenUUID);
+
+        return vennityBadge;
     }
 
     /**
-     * TODO: Need to be able to transfer minted tokens from the recieving
+     * TODO: Need to be able to transfer minted tokens from the receiving
      *       address
      */
     function mint(
-        address _account,
+        VennityBadge badgeAddress,
         string memory _name,
         string memory _uri,
         uint256 _amount,
-        bytes memory _data
+        string memory _tokenUUID
     ) public {
+        // console.log("Admin address of VennityBadgeMinter: ", admin);
+        // // console.log("The calling address of VennityBadgeMinter: ", msg.sender);
+        // console.log("Address of VennityBadgeMinter contract: ", address(this));
         require(
             msg.sender == admin,
             "VennityBadgeFactory: msg.sender is not the admin!"
         );
 
-        vennityBadge._mint(_account, _name, _uri, _amount, _data);
-    }
+        bytes memory data = abi.encode(_tokenUUID);
 
-    /**
-     * TODO: Need to be able to transfer minted tokens from the recieving
-     *       address
-     */
-    function createThenMint(
-        string memory _tokenUUID,
-        address _account,
-        string memory _name,
-        string memory _uri,
-        uint256 _amount,
-        bytes memory _data
-    ) external {
-        create(_tokenUUID);
-        mint(_account, _name, _uri, _amount, _data);
+        badgeAddress._mint(msg.sender, _name, _uri, _amount, data);
     }
 }

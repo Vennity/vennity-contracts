@@ -8,6 +8,9 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
 
+import "../VennityBadgeMinter.sol";
+import "hardhat/console.sol";
+
 /**
  * @dev Implementation of the basic standard multi-token.
  * See https://eips.ethereum.org/EIPS/eip-1155
@@ -51,12 +54,25 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * Admin of the contract. Is the only one who can call `_mint()`.
      */
     address _admin;
+    // Used to reference the contract that created this `VennityBadge` contract
+    VennityBadgeMinter creator;
 
     /**
      * @dev Create new ERC1155 and mint tokens.
      */
     constructor() {
-        _admin = msg.sender;
+        // console.log(
+        //     "Msg.sender address when creating VennityBadge cntract: ",
+        //     msg.sender
+        // );
+        // _admin = msg.sender;
+        // console.log(
+        //     "ADmin address after setting the admin address from msg.sender when creating the VennityBadge contract: ",
+        //     _admin
+        // );
+        // See the docs for more info:
+        // https://docs.soliditylang.org/en/v0.8.6/contracts.html#creating-contracts
+        creator = VennityBadgeMinter(msg.sender);
     }
 
     /**
@@ -314,9 +330,17 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account != address(0),
             "ERC1155: cannot mint to the zero address"
         );
+        // console.log(
+        //     "msg.sender address of VennityBadge contract: ",
+        //     msg.sender
+        // );
+        // console.log("Admin address: ", _admin);
+        // console.log("Address of the creating contract: ", address(creator));
+        // console.log("Address of VennityBadge contract: ", address(this));
+
         require(
-            msg.sender == _admin,
-            "ERC1155: only the admin can call `_mint()`!"
+            msg.sender == address(creator),
+            "ERC1155: only the creator of this contract can call `_mint()`!"
         );
 
         // used to set `tokenID` to the number of times `_mint` has been called.
@@ -356,8 +380,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         }
 
         address operator = _msgSender();
-        // Decode `data` to get the original bytes of the token UUID.
-        bytes memory _data = abi.decode(data, (bytes));
 
         _beforeTokenTransfer(
             operator,
@@ -365,7 +387,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account,
             _asSingletonArray(id),
             _asSingletonArray(amount),
-            _data
+            data
         );
 
         _balances[id][account] += amount;
@@ -377,7 +399,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account,
             id,
             amount,
-            _data
+            data
         );
     }
 

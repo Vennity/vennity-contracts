@@ -12,11 +12,11 @@ import { VennityBadge } from '../types/VennityBadge'
 
 describe(`VennityBadge`, () => {
   const TOKEN_UUID_0 = uuidv4()
-  const TOKEN_NAME_0 = 'First Vennity Badge'
-  const MAX_MINT_CAP_0 = 100
-  const PROXY_ADDRESS_0 = '<PROXY_ADDRESS>'
-  const TOKEN_URI_0 = // should conform to the ERC-1155 Metadata URI JSON Schema
-    'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
+  const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
+  const TOKEN_AMOUNT_0 = 100
+  // should conform to the ERC-1155 Metadata URI JSON Schema
+  const TOKEN_URI_0 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
+  // const PROXY_ADDRESS_0 = '<PROXY_ADDRESS>'
 
   // Signers and addresses
   let deployer: SignerWithAddress,
@@ -44,14 +44,26 @@ describe(`VennityBadge`, () => {
 
   describe(`VennityBadgeMinter`, async () => {
     let VennityBadge: VennityBadge
+    let TOKEN_UUID_1: string,
+      TOKEN_UUID_2: string
 
-    it(`should create new VennityBadge as an ERC1155 token`, async () => {
-      let tx = await VennityBadgeMinter
+    before(`minting ERC1155 token`, async () => {
+      TOKEN_UUID_1 = uuidv4() // some random uuid
+      TOKEN_UUID_2 = uuidv4() // some random uuid
+    })
+
+    it(`should create new VennityBadge contract`, async () => {
+      let createTx = await VennityBadgeMinter
         .connect(deployer)
-        .createThenMint(TOKEN_UUID_0)
+        .create(
+          TOKEN_UUID_0,
+          TOKEN_NAME_0,
+          TOKEN_URI_0,
+          TOKEN_AMOUNT_0
+        )
 
       // Get tx receipt to retrieve `VennityBadgeCreated` event.
-      let receipt: ContractReceipt = await tx.wait()
+      let receipt: ContractReceipt = await createTx.wait()
       let eventArgs = receipt.events?.filter((x) => {
         return x.event == 'VennityBadgeCreated'
       })[0].args
@@ -63,48 +75,24 @@ describe(`VennityBadge`, () => {
         ? eventArgs[1]
         : undefined
 
-      expect(VennityBadgeUUID).to.eq(TOKEN_UUID_0)
-
       VennityBadge = await ethers.getContractAt(
         'VennityBadge',
         VennityBadgeAddress
       ) as VennityBadge
+
+      expect(VennityBadgeUUID).to.eq(TOKEN_UUID_0)
     })
 
-
-
     describe(`VennityBadge 0th Edition`, async () => {
-      it(`should mint a new VennityBadge with a specified name`, async () => {
-        VennityBadge
-          .connect(deployer)
-          ._mint(
-
-          )
-
+      it(`should have minted 100 VennityBadge 0th Edition tokens after creation of VennityBadge contract`, async () => {
         const tokenID = await VennityBadge.tokenID(TOKEN_UUID_0)
         const tokenName0: string = await VennityBadge.tokenName(tokenID)
         expect(tokenName0).to.eq(TOKEN_NAME_0)
       })
 
-
       it(`should give the initial supply to the creator's address`, async () => {
         const balance = await VennityBadge.balanceOf(deployerAddress, 0)
-        expect(balance).to.eq(MAX_MINT_CAP_0)
-      })
-
-
-      describe(`_mint(...)`, () => {
-        let TOKEN_UUID_1: string,
-          TOKEN_UUID_2: string
-
-        before(`minting ERC1155 token`, async () => {
-          TOKEN_UUID_1 = uuidv4() // some random uuid
-          TOKEN_UUID_2 = uuidv4() // some random uuid
-        })
-
-        it(`should mint 100 tokens`, async () => {
-          const tx = await VennityBadge.connect(deployer)
-        })
+        expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
       it(`should have a total supply equal to the max minting cap`, async () => {
@@ -112,8 +100,9 @@ describe(`VennityBadge`, () => {
          * @dev Max minting cap can be thought of as the initial supply of the 
          *      token.
          */
-        // const totalSupply0 = await VennityBadgeMinter.tokenSupply(TOKEN_UUID_0)
-        // expect(totalSupply0).to.eq(MAX_MINT_CAP_0)
+        const tokenID0: BigNumber = await VennityBadge.tokenID(TOKEN_UUID_0)
+        const totalSupply0 = await VennityBadge.tokenSupply(tokenID0)
+        expect(totalSupply0).to.eq(TOKEN_AMOUNT_0)
       })
     })
 
