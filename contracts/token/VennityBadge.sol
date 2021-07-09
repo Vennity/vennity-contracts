@@ -228,6 +228,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         bytes memory data
     ) public virtual override {
         require(to != address(0), "ERC1155: transfer to the zero address");
+        console.log("Admin address of the VennityBadge contract: ", _admin);
         console.log(
             "Msg.sender on safeTransferFrom on VennityBadge: ",
             msg.sender
