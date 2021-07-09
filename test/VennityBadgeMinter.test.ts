@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 /* Internal imports */
 import { VennityBadgeMinter } from '../types/VennityBadgeMinter'
 import { VennityBadge } from '../types/VennityBadge'
+import { connect } from 'http2'
 
 describe(`VennityBadge`, () => {
   const TOKEN_UUID_0 = uuidv4()
@@ -84,117 +85,109 @@ describe(`VennityBadge`, () => {
     })
 
     describe(`VennityBadge 0th Edition`, async () => {
+      let tokenID0: BigNumber
+
       it(`should have minted 100 VennityBadge 0th Edition tokens after creation of VennityBadge contract`, async () => {
-        const tokenID = await VennityBadge.tokenID(TOKEN_UUID_0)
-        const tokenName0: string = await VennityBadge.tokenName(tokenID)
+        tokenID0 = await VennityBadge.tokenID(TOKEN_UUID_0)
+        const tokenName0: string = await VennityBadge.tokenName(tokenID0)
         expect(tokenName0).to.eq(TOKEN_NAME_0)
       })
 
       it(`should give the initial supply to the creator's address`, async () => {
-        const balance = await VennityBadge.balanceOf(deployerAddress, 0)
+        const balance = await VennityBadge.balanceOf(deployerAddress, tokenID0)
         expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
       it(`should have a total supply equal to the max minting cap`, async () => {
-        /**
-         * @dev Max minting cap can be thought of as the initial supply of the 
-         *      token.
-         */
-        const tokenID0: BigNumber = await VennityBadge.tokenID(TOKEN_UUID_0)
         const totalSupply0 = await VennityBadge.tokenSupply(tokenID0)
         expect(totalSupply0).to.eq(TOKEN_AMOUNT_0)
       })
+
+      describe(`safeTransferFrom(...)`, () => {
+        it(`should revert when the sender does not have enough balance`, async () => {
+          const tx = VennityBadgeMinter
+            .safeTransferFrom(
+              VennityBadge.address,
+              recipientAddress,
+              deployerAddress,
+              tokenID0,
+              TOKEN_AMOUNT_0 + 1,
+              '0x0000000000000000000000000000000000000000'
+            )
+
+          await expect(tx).to.be.revertedWith(
+            `You don't have enough balance to make this transfer!`
+          )
+        })
+
+        it(`should succeed when the sender has enough balance`, async () => {
+          const tx = await VennityBadgeMinter
+            .safeTransferFrom(
+              VennityBadge.address,
+              deployerAddress,
+              recipientAddress,
+              tokenID0,
+              TOKEN_AMOUNT_0,
+              '0x0000000000000000000000000000000000000000'
+            )
+
+          await tx.wait()
+
+          const deployerBalance: BigNumber = await VennityBadge.balanceOf(
+            deployerAddress,
+            tokenID0
+          )
+          const recipientBalance: BigNumber = await VennityBadge.balanceOf(
+            recipientAddress,
+            tokenID0
+          )
+
+          expect(deployerBalance).to.eq(0)
+          expect(recipientBalance).to.eq(TOKEN_AMOUNT_0)
+        })
+      })
     })
 
-    // describe(`safeTransferFrom(...)`, () => {
+
+    // describe(`batchTransferFrom(...)`, async () => {
     //   let tokenID: number
     //   before(`get tokenID`, async () => {
     //     tokenID = await VennityBadge.getTokenID(BADGE_NAME_0)
     //   })
 
-    //   it(`should revert when the sender does not have enough balance`, async () => {
-    //     const tx = VennityBadge.connect(deployer).safeTransferFrom(
-    //       // address from,
-    //       // address to,
-    //       // uint256 id,
-    //       // uint256 amount,
-    //       // bytes memory data
-    //       deployerAddress,
+    //   it(`should revert when the sender does not have enough of an allowance`, async () => {
+    //     const tx = VennityBadge.connect(recipient).batchTransferFrom(
     //       recipientAddress,
-    //       tokenID,
-    //       BADGE_MAX_MINT_CAP_0 + 1,
-    //       '0x0'
-    //     )
-
-    //     await expect(tx).to.be.revertedWith(
-    //       `You don't have enough balance to make this transfer!`
-    //     )
-    //   })
-
-    //   it(`should succeed when the sender has enough balance`, async () => {
-    //     const tx = await VennityBadge.connect(recipient).safeTransferFrom(
     //       deployerAddress,
-    //       recipientAddress,
     //       tokenID,
     //       BADGE_MAX_MINT_CAP_0,
     //       '0x0'
     //     )
 
-    //     await tx.wait()
-
-    //     const deployerBalance: BigNumber = await VennityBadge.balanceOf(
-    //       deployerAddress,
-    //       tokenID
+    //     await expect(tx).to.be.revertedWith(
+    //       "Can't transfer from the desired account because you don't have enough of an allowance."
     //     )
-    //     const recipientBalance: BigNumber = await VennityBadge.balanceOf(
-    //       recipientAddress,
-    //       tokenID
-    //     )
-
-    //     expect(deployerBalance).to.eq(0)
-    //     expect(recipientBalance).to.eq(BADGE_MAX_MINT_CAP_0)
     //   })
 
-    //   // describe(`batchTransferFrom(...)`, async () => {
-    //   //   let tokenID: number
-    //   //   before(`get tokenID`, async () => {
-    //   //     tokenID = await VennityBadge.getTokenID(BADGE_NAME_0)
-    //   //   })
+    //   it(`should succeed when the owner has enough balance and the sender has a large enough allowance`, async () => {
+    //     const setApprovalForAll_Tx = await VennityBadge.connect(deployer).setApprovalForAll(
+    //       // address operator, // `operator` cannot be the caller
+    //       // bool approved
 
-    //   //   it(`should revert when the sender does not have enough of an allowance`, async () => {
-    //   //     const tx = VennityBadge.connect(recipient).batchTransferFrom(
-    //   //       recipientAddress,
-    //   //       deployerAddress,
-    //   //       tokenID,
-    //   //       BADGE_MAX_MINT_CAP_0,
-    //   //       '0x0'
-    //   //     )
+    //     )
 
-    //   //     await expect(tx).to.be.revertedWith(
-    //   //       "Can't transfer from the desired account because you don't have enough of an allowance."
-    //   //     )
-    //   //   })
+    //     await setApprovalForAll_Tx.wait()
 
-    //   //   it(`should succeed when the owner has enough balance and the sender has a large enough allowance`, async () => {
-    //   //     const setApprovalForAll_Tx = await VennityBadge.connect(deployer).setApprovalForAll(
-    //   //       // address operator, // `operator` cannot be the caller
-    //   //       // bool approved
+    //     const safeTransferFrom_Tx = await VennityBadge.connect(recipient).safeTransferFrom(
+    //       recipient,
+    //       deployer,
+    //       tokenID,
+    //       BADGE_MAX_MINT_CAP_0,
+    //       '0x0'
+    //     )
 
-    //   //     )
-
-    //   //     await setApprovalForAll_Tx.wait()
-
-    //   //     const safeTransferFrom_Tx = await VennityBadge.connect(recipient).safeTransferFrom(
-    //   //       recipient,
-    //   //       deployer,
-    //   //       tokenID,
-    //   //       BADGE_MAX_MINT_CAP_0,
-    //   //       '0x0'
-    //   //     )
-
-    //   //     await safeTransferFrom_Tx.wait()
-    //   //   })
-    //   // })
+    //     await safeTransferFrom_Tx.wait()
+    //   })
     // })
   })
 })

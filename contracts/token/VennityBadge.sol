@@ -228,9 +228,14 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         bytes memory data
     ) public virtual override {
         require(to != address(0), "ERC1155: transfer to the zero address");
+        console.log(
+            "Msg.sender on safeTransferFrom on VennityBadge: ",
+            msg.sender
+        );
+        console.log("Creator address of VennityBadge: ", address(creator));
         require(
-            from == _msgSender() || isApprovedForAll(from, _msgSender()),
-            "ERC1155: caller is not owner nor approved"
+            msg.sender == address(creator),
+            "ERC1155: caller is not the contract creator!"
         );
 
         address operator = _msgSender();
@@ -330,14 +335,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account != address(0),
             "ERC1155: cannot mint to the zero address"
         );
-        // console.log(
-        //     "msg.sender address of VennityBadge contract: ",
-        //     msg.sender
-        // );
-        // console.log("Admin address: ", _admin);
-        // console.log("Address of the creating contract: ", address(creator));
-        // console.log("Address of VennityBadge contract: ", address(this));
-
         require(
             msg.sender == address(creator),
             "ERC1155: only the creator of this contract can call `_mint()`!"

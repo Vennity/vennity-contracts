@@ -47,6 +47,7 @@ contract VennityBadgeMinter {
         emit VennityBadgeCreated(badge.badgeAddress, badge.badgeUUID);
 
         mint(vennityBadge, _name, _uri, _amount, _tokenUUID);
+        setApprovalForAll(vennityBadge, admin, true);
 
         return vennityBadge;
     }
@@ -73,5 +74,42 @@ contract VennityBadgeMinter {
         bytes memory data = abi.encode(_tokenUUID);
 
         badgeAddress._mint(msg.sender, _name, _uri, _amount, data);
+    }
+
+    function setApprovalForAll(
+        VennityBadge _badgeAddress,
+        address _operator,
+        bool _approved
+    ) public {
+        require(
+            msg.sender == admin,
+            "VennityBadgeFactory: msg.sender is not the admin!"
+        );
+
+        _badgeAddress.setApprovalForAll(_operator, _approved);
+    }
+
+    function safeTransferFrom(
+        address _badgeAddress,
+        address _from,
+        address _to,
+        uint256 _id,
+        uint256 _amount,
+        bytes memory _data
+    ) public {
+        console.log("Admin address of VennityBadgeMinter contract: ", admin);
+        require(
+            msg.sender == admin,
+            "VennityBadgeFactory: msg.sender is not the admin!"
+        );
+
+        VennityBadge vennityBadge = VennityBadge(_badgeAddress);
+
+        console.log(
+            "Address of instantiated contract instance: ",
+            address(vennityBadge)
+        );
+
+        vennityBadge.safeTransferFrom(_from, _to, _id, _amount, _data);
     }
 }
