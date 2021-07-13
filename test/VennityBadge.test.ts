@@ -7,7 +7,6 @@ import { BigNumber, ContractReceipt, providers, utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
 /* Internal imports */
-import { VennityBadgeMinter } from '../types/VennityBadgeMinter'
 import { VennityBadge } from '../types/VennityBadge'
 import { connect } from 'http2'
 
@@ -32,19 +31,18 @@ describe(`VennityBadge`, () => {
     recipientAddress = await recipient.getAddress()
   })
 
-  let VennityBadgeMinter: VennityBadgeMinter
-  beforeEach(`deploy VennityBadge contract`, async () => {
-    const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadgeMinter')
+  let VennityBadge: VennityBadge
+  before(`deploy VennityBadge contract`, async () => {
+    const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
 
-    VennityBadgeMinter = await Factory__VennityBadgeFactory
+    VennityBadge = await Factory__VennityBadgeFactory
       .connect(deployer)
-      .deploy() as VennityBadgeMinter
+      .deploy() as VennityBadge
 
-    await VennityBadgeMinter.deployTransaction.wait()
+    await VennityBadge.deployTransaction.wait()
   })
 
   describe(`VennityBadgeMinter`, async () => {
-    let VennityBadge: VennityBadge
     let TOKEN_UUID_1: string,
       TOKEN_UUID_2: string
 
@@ -54,34 +52,31 @@ describe(`VennityBadge`, () => {
     })
 
     it(`should create new VennityBadge contract`, async () => {
-      let createTx = await VennityBadgeMinter
+      let createTx = await VennityBadge
         .connect(deployer)
-        .create(
-          TOKEN_UUID_0,
+        ._mint(
+          deployer.address,
           TOKEN_NAME_0,
           TOKEN_URI_0,
-          TOKEN_AMOUNT_0
+          TOKEN_AMOUNT_0,
+          TOKEN_UUID_0
         )
 
-      // Get tx receipt to retrieve `VennityBadgeCreated` event.
+      // Get tx receipt to retrieve `VennityBadgeMinted` event.
       let receipt: ContractReceipt = await createTx.wait()
       let eventArgs = receipt.events?.filter((x) => {
-        return x.event == 'VennityBadgeCreated'
+        return x.event == 'VennityBadgeMinted'
       })[0].args
 
-      let VennityBadgeAddress: string = eventArgs
-        ? eventArgs[0]
+      let VennityTokenUUID: string = eventArgs
+        ? eventArgs[1].tokenUUID
         : undefined
-      let VennityBadgeUUID: string = eventArgs
-        ? eventArgs[1]
+      let VennityTokenURI: string = eventArgs
+        ? eventArgs[1].tokenURI
         : undefined
 
-      VennityBadge = await ethers.getContractAt(
-        'VennityBadge',
-        VennityBadgeAddress
-      ) as VennityBadge
-
-      expect(VennityBadgeUUID).to.eq(TOKEN_UUID_0)
+      expect(VennityTokenUUID).to.eq(TOKEN_UUID_0)
+      expect(VennityTokenURI).to.eq(TOKEN_URI_0)
     })
 
     describe(`VennityBadge 0th Edition`, async () => {
@@ -104,10 +99,14 @@ describe(`VennityBadge`, () => {
       })
 
       describe(`safeTransferFrom(...)`, () => {
+        /**
+         * @dev Note that the caller must be the contract admin, i.e. the
+         *      `deployer` address.
+         */
         it(`should revert when the sender does not have enough balance`, async () => {
-          const tx = VennityBadgeMinter
+          const tx = VennityBadge
+            .connect(deployer)
             .safeTransferFrom(
-              VennityBadge.address,
               recipientAddress,
               deployerAddress,
               tokenID0,
@@ -116,14 +115,14 @@ describe(`VennityBadge`, () => {
             )
 
           await expect(tx).to.be.revertedWith(
-            `You don't have enough balance to make this transfer!`
+            `ERC1155: insufficient balance for transfer`
           )
         })
 
         it(`should succeed when the sender has enough balance`, async () => {
-          const tx = await VennityBadgeMinter
+          const tx = await VennityBadge
+            .connect(deployer)
             .safeTransferFrom(
-              VennityBadge.address,
               deployerAddress,
               recipientAddress,
               tokenID0,

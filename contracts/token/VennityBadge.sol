@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
 
-import "../VennityBadgeMinter.sol";
 import "hardhat/console.sol";
 
 /**
@@ -21,7 +20,17 @@ import "hardhat/console.sol";
 contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
 
-    event SetTokenURI(uint256 id, string tokenURI);
+    struct Badge {
+        string tokenUUID;
+        string name;
+        string tokenURI;
+        uint256 tokenSupply;
+        uint256 tokenID;
+        bytes tokenData;
+    }
+
+    event SetTokenURI(uint256 id, string tokenURI, string tokenUUID);
+    event VennityBadgeMinted(uint256 index, Badge badge);
 
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
@@ -44,6 +53,11 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping token ID to its token name
     mapping(uint256 => string) public _tokenNames;
 
+    /**
+     * TODO: Need events for minting of badges
+     */
+    Badge[] public badges;
+
     // Used to keep track of how many times `_mint()` method is called.
     // We use this `mintCount` to assign `id`s in the call stack of the
     // `_mint()` method.
@@ -54,25 +68,20 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * Admin of the contract. Is the only one who can call `_mint()`.
      */
     address _admin;
-    // Used to reference the contract that created this `VennityBadge` contract
-    VennityBadgeMinter creator;
 
     /**
-     * @dev Create new ERC1155 and mint tokens.
+     * @dev Create new ERC1155 contract named `VennityBadge`.
      */
     constructor() {
-        // console.log(
-        //     "Msg.sender address when creating VennityBadge cntract: ",
-        //     msg.sender
-        // );
-        // _admin = msg.sender;
-        // console.log(
-        //     "ADmin address after setting the admin address from msg.sender when creating the VennityBadge contract: ",
-        //     _admin
-        // );
-        // See the docs for more info:
-        // https://docs.soliditylang.org/en/v0.8.6/contracts.html#creating-contracts
-        creator = VennityBadgeMinter(msg.sender);
+        console.log(
+            "Msg.sender address when creating VennityBadge cntract: ",
+            msg.sender
+        );
+        _admin = msg.sender;
+        console.log(
+            "ADmin address after setting the admin address from msg.sender when creating the VennityBadge contract: ",
+            _admin
+        );
     }
 
     /**
@@ -111,6 +120,21 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     {
         string memory uri_ = _tokenURIs[id];
         return uri_;
+    }
+
+    /**
+     * @dev Inspired by {IERC1155MetadataURI-uri}.
+     *
+     * This implementation returns the token URI from its token UUID
+     */
+    function setURI(string memory _tokenUUID, string memory _uri)
+        public
+        virtual
+    {
+        uint256 id = tokenID(_tokenUUID);
+        _tokenURIs[id] = _uri;
+
+        emit SetTokenURI(id, _uri, _tokenUUID);
     }
 
     /**
@@ -228,15 +252,9 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         bytes memory data
     ) public virtual override {
         require(to != address(0), "ERC1155: transfer to the zero address");
-        console.log("Admin address of the VennityBadge contract: ", _admin);
-        console.log(
-            "Msg.sender on safeTransferFrom on VennityBadge: ",
-            msg.sender
-        );
-        console.log("Creator address of VennityBadge: ", address(creator));
         require(
-            msg.sender == address(creator),
-            "ERC1155: caller is not the contract creator!"
+            msg.sender == _admin,
+            "ERC1155: caller is not the contract admin!"
         );
 
         address operator = _msgSender();
@@ -326,22 +344,24 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * NOTE: `data` param is equal to `keccak256(abi.encode(tokenUUID_))`.
      */
     function _mint(
-        address account,
+        address account_,
         string memory name_,
         string memory uri_,
-        uint256 amount,
-        bytes memory data
+        uint256 amount_,
+        string memory tokenUUID_
     ) public {
         require(
-            account != address(0),
+            account_ != address(0),
             "ERC1155: cannot mint to the zero address"
         );
         require(
-            msg.sender == address(creator),
-            "ERC1155: only the creator of this contract can call `_mint()`!"
+            msg.sender == _admin,
+            "ERC1155: only the admin of this contract can call `_mint()`!"
         );
 
-        // used to set `tokenID` to the number of times `_mint` has been called.
+        // Get the bytes of `tokenUUID`.
+        bytes memory data = abi.encode(tokenUUID_);
+        // Used to set `tokenID` to the number of times `_mint` has been called.
         uint256 id;
         // Used to get the sha256 of the token data
         bytes memory tokenData_;
@@ -371,32 +391,39 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
         // Set the total token supply for these ERC1155 tokens that are minted.
         if (_tokenSupplies[id] != 0) {
-            _tokenSupplies[id] += amount;
+            _tokenSupplies[id] += amount_;
         } else {
             _tokenSupplies[id] = 0;
-            _tokenSupplies[id] += amount;
+            _tokenSupplies[id] += amount_;
         }
+
+        Badge memory badge = Badge(tokenUUID_, name_, uri_, amount_, id, data);
+        // Push new badge struct to storage.
+        badges.push(badge);
 
         address operator = _msgSender();
 
         _beforeTokenTransfer(
             operator,
             address(0),
-            account,
+            account_,
             _asSingletonArray(id),
-            _asSingletonArray(amount),
+            _asSingletonArray(amount_),
             data
         );
 
-        _balances[id][account] += amount;
-        emit TransferSingle(operator, address(0), account, id, amount);
+        _balances[id][account_] += amount_;
+
+        emit TransferSingle(operator, address(0), account_, id, amount_);
+        // Emit event of token creation to retrieve event data on FE.
+        emit VennityBadgeMinted(badges.length - 1, badge);
 
         _doSafeTransferAcceptanceCheck(
             operator,
             address(0),
-            account,
+            account_,
             id,
-            amount,
+            amount_,
             data
         );
     }

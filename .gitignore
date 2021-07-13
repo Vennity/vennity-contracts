@@ -1,6 +1,8 @@
 # ----------- Project specific ---------------
 contracts/proxies
 contracts/tokens
+contracts/VennityBadgeMinter.sol
+contracts/VennityBadgeMinter.txt
 types
 
 # dependencies
