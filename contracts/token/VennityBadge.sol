@@ -73,15 +73,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * @dev Create new ERC1155 contract named `VennityBadge`.
      */
     constructor() {
-        console.log(
-            "Msg.sender address when creating VennityBadge cntract: ",
-            msg.sender
-        );
         _admin = msg.sender;
-        console.log(
-            "ADmin address after setting the admin address from msg.sender when creating the VennityBadge contract: ",
-            _admin
-        );
     }
 
     /**
