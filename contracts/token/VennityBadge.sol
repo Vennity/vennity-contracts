@@ -53,9 +53,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping token ID to its token name
     mapping(uint256 => string) public _tokenNames;
 
-    /**
-     * TODO: Need events for minting of badges
-     */
+    // Used to track badges that are minted.
     Badge[] public badges;
 
     // Used to keep track of how many times `_mint()` method is called.
@@ -333,7 +331,8 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * - If `account` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
      * acceptance magic value.
      *
-     * NOTE: `data` param is equal to `keccak256(abi.encode(tokenUUID_))`.
+     *  TODO: Token IDs are curerntly returning the same token ID for all
+     *             tokens that are minted -- token ID = 0 for all token IDs
      */
     function _mint(
         address account_,
@@ -359,13 +358,8 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         bytes memory tokenData_;
 
         // Setting the token ID to `mintCount`.
-        if (mintCount != 0) {
-            mintCount += 1;
-            id = mintCount;
-        } else {
-            mintCount = 0;
-            id = mintCount;
-        }
+        mintCount += 1;
+        id = mintCount - 1;
 
         // Variables with `<NAME>_` notation represent variables that I
         // create from inputs.
