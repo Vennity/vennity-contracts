@@ -347,24 +347,32 @@ describe(`VennityBadge`, () => {
 
           await tx.wait()
 
-          const deployerBalance0: BigNumber = await VennityBadge.balanceOf(deployerAddress, tokenID0)
-          const deployerBalance1: BigNumber = await VennityBadge.balanceOf(deployerAddress, tokenID1)
-          const deployerBalance2: BigNumber = await VennityBadge.balanceOf(deployerAddress, tokenID2)
+          // Array of token amounts for recipient balances.
+          const tokenAmount0BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_0)
+          const tokenAmount1BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_1)
+          const tokenAmount2BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_2)
+          const TOKEN_AMOUNTS: BigNumber[] = [tokenAmount0BN, tokenAmount1BN, tokenAmount2BN]
 
-          const recipientBalance0: BigNumber = await VennityBadge.balanceOf(recipientAddress, tokenID0)
-          const recipientBalance1: BigNumber = await VennityBadge.balanceOf(recipientAddress, tokenID1)
-          const recipientBalance2: BigNumber = await VennityBadge.balanceOf(recipientAddress, tokenID2)
+          // Array of zeroes for deployer balances.
+          const zeroBN = ethers.BigNumber.from(0)
+          const ARRAY_OF_ZEROES = [zeroBN, zeroBN, zeroBN]
 
-          const TOKEN_TOTAL_AMOUNT =
-            TOKEN_AMOUNT_0 + TOKEN_AMOUNT_1 + TOKEN_AMOUNT_2
+          const deployerBalances: BigNumber[] = await VennityBadge.balanceOfBatch(
+            [deployerAddress, deployerAddress, deployerAddress],
+            [tokenID0, tokenID1, tokenID2]
+          )
+          const recipientBalances: BigNumber[] = await VennityBadge.balanceOfBatch(
+            [recipientAddress, recipientAddress, recipientAddress],
+            [tokenID0, tokenID1, tokenID2]
+          )
 
-          expect(deployerBalance0).to.eq(0)
-          expect(deployerBalance1).to.eq(0)
-          expect(deployerBalance2).to.eq(0)
-
-          expect(recipientBalance0).to.eq(TOKEN_AMOUNT_0)
-          expect(recipientBalance1).to.eq(TOKEN_AMOUNT_1)
-          expect(recipientBalance2).to.eq(TOKEN_AMOUNT_2)
+          // Check that individual balances are equal to the expected value.
+          for (let i = 0; i < deployerBalances.length; i++) {
+            expect(deployerBalances[i]).to.eq(ARRAY_OF_ZEROES[i])
+          }
+          for (let i = 0; i < recipientBalances.length; i++) {
+            expect(recipientBalances[i]).to.eq(TOKEN_AMOUNTS[i])
+          }
         })
       })
     })
