@@ -316,10 +316,6 @@ describe(`VennityBadge`, () => {
        *      tokens.
        */
       describe(`safeBatchTransferFrom(...)`, () => {
-
-        /**
-         * @todo `deployer` is not the `admin` for some reason.
-         */
         it(`should revert when the sender does not have enough of an allowance`, async () => {
           const tx = VennityBadge
             .connect(deployer)
