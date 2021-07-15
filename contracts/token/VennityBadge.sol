@@ -41,8 +41,11 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping ERC1155 token data (in bytes) to its token IDs
     mapping(bytes => uint256) private _tokenIDs;
 
-    // Mapping from account to operator approvals
-    mapping(address => mapping(address => bool)) private _operatorApprovals;
+    /******************
+     * @dev Not in use!
+     *****************/
+    // // Mapping from account to operator approvals
+    // mapping(address => mapping(address => bool)) private _operatorApprovals;
 
     // Mapping token ID to its total supply
     mapping(uint256 => uint256) public _tokenSupplies;
@@ -72,6 +75,13 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      */
     constructor() {
         _admin = msg.sender;
+    }
+
+    /**
+     * @dev Returns the `_admin` address of this contract.
+     */
+    function getAdmin() public view virtual returns (address admin_) {
+        return _admin;
     }
 
     /**
@@ -201,35 +211,35 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         return batchBalances;
     }
 
-    /**
-     * @dev See {IERC1155-setApprovalForAll}.
-     */
-    function setApprovalForAll(address operator, bool approved)
-        public
-        virtual
-        override
-    {
-        require(
-            _msgSender() != operator,
-            "ERC1155: setting approval status for self"
-        );
+    /******************
+     * @dev Not in use!
+     *****************/
+    // function setApprovalForAll(address operator, bool approved)
+    //     public
+    //     virtual
+    //     override
+    // {
+    //     require(
+    //         _msgSender() != operator,
+    //         "ERC1155: setting approval status for self"
+    //     );
 
-        _operatorApprovals[_msgSender()][operator] = approved;
-        emit ApprovalForAll(_msgSender(), operator, approved);
-    }
+    //     _operatorApprovals[_msgSender()][operator] = approved;
+    //     emit ApprovalForAll(_msgSender(), operator, approved);
+    // }
 
-    /**
-     * @dev See {IERC1155-isApprovedForAll}.
-     */
-    function isApprovedForAll(address account, address operator)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
-        return _operatorApprovals[account][operator];
-    }
+    /******************
+     * @dev Not in use!
+     *****************/
+    // function isApprovedForAll(address account, address operator)
+    //     public
+    //     view
+    //     virtual
+    //     override
+    //     returns (bool)
+    // {
+    //     return _operatorApprovals[account][operator];
+    // }
 
     /**
      * @dev See {IERC1155-safeTransferFrom}.
@@ -287,8 +297,8 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         );
         require(to != address(0), "ERC1155: transfer to the zero address");
         require(
-            from == _msgSender() || isApprovedForAll(from, _msgSender()),
-            "ERC1155: transfer caller is not owner nor approved"
+            msg.sender == _admin,
+            "ERC1155: caller is not the contract admin!"
         );
 
         address operator = _msgSender();
@@ -330,9 +340,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * - `account` cannot be the zero address.
      * - If `account` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
      * acceptance magic value.
-     *
-     *  TODO: Token IDs are curerntly returning the same token ID for all
-     *             tokens that are minted -- token ID = 0 for all token IDs
      */
     function _mint(
         address account_,
