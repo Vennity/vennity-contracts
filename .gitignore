@@ -4,6 +4,7 @@ contracts/tokens
 contracts/VennityBadgeMinter.sol
 contracts/VennityBadgeMinter.txt
 types
+ERC1155-Metadata-URI-JSON-Schemas
 
 # dependencies
 /node_modules

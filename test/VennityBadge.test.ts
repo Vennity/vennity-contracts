@@ -8,14 +8,25 @@ import { v4 as uuidv4 } from 'uuid'
 
 /* Internal imports */
 import { VennityBadge } from '../types/VennityBadge'
-import { connect } from 'http2'
 
 describe(`VennityBadge`, () => {
+  /**
+   * @todo Do we want to include token UUID in the token's JSON metadata?
+   *       
+   *       Need to think about how the JSON metadata is created _before_ the
+   *       tokens are minted.
+   */
   const TOKEN_UUID_0 = uuidv4()
   const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
   const TOKEN_AMOUNT_0 = 100
-  // should conform to the ERC-1155 Metadata URI JSON Schema
+  // Token uris
   const TOKEN_URI_0 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
+  const TOKEN_URI_1 = TOKEN_URI_0
+  const TOKEN_URI_2 = TOKEN_URI_0
+  // Token metadata
+  const TOKEN_METADATA_0 = 'https://ipfs.fleek.co/ipfs/bafybeidsd2qmgoue33czk3se7p47yz26xn6lwywtpqiajxz6oz2uo2op3a'
+  const TOKEN_METADATA_1 = 'https://ipfs.fleek.co/ipfs/bafybeigxvdqccezxii3u66tssx6rscmlnqqdc2nwk4w5ksk566afwb3ayi'
+  const TOKEN_METADATA_2 = 'https://ipfs.fleek.co/ipfs/bafybeiexw3i342yjzykljhbakz7njlabsvm62ed6zt2bzhb7xh7tlfnbqy'
   // const PROXY_ADDRESS_0 = '<PROXY_ADDRESS>'
 
   // Signers and addresses
@@ -31,30 +42,12 @@ describe(`VennityBadge`, () => {
     recipientAddress = await recipient.getAddress()
   })
 
-  let VennityBadge: VennityBadge
-  before(`deploy VennityBadge contract`, async () => {
-    const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
-
-    VennityBadge = await Factory__VennityBadgeFactory
-      .connect(deployer)
-      .deploy() as VennityBadge
-
-    await VennityBadge.deployTransaction.wait()
-  })
-
   describe(`VennityBadge`, () => {
-    let TOKEN_UUID_1: string,
-      TOKEN_UUID_2: string
-
-    before(`minting ERC1155 token`, async () => {
-      TOKEN_UUID_1 = uuidv4() // some random uuid
-      TOKEN_UUID_2 = uuidv4() // some random uuid
-    })
-
     describe(`VennityBadge 0th Edition`, () => {
-      let createTx0: ContractTransaction
-      let createTx1: ContractTransaction
-      let createTx2: ContractTransaction
+      let createTx0: ContractTransaction,
+        createTx1: ContractTransaction,
+        createTx2: ContractTransaction
+      let VennityBadge: VennityBadge
 
       before(`deploy VennityBadge contract and mint ERC1155 tokens`, async () => {
         const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
@@ -97,8 +90,8 @@ describe(`VennityBadge`, () => {
 
       it(`should have minted 100 VennityBadge 0th Edition tokens after creation of VennityBadge contract`, async () => {
         tokenID0 = await VennityBadge.tokenID(TOKEN_UUID_0)
-        const tokenName0: string = await VennityBadge.tokenName(tokenID0)
-        expect(tokenName0).to.eq(TOKEN_NAME_0)
+        const tokenName: string = await VennityBadge.tokenName(tokenID0)
+        expect(tokenName).to.eq(TOKEN_NAME_0)
       })
 
       it(`should give the initial supply to the creator's address`, async () => {
@@ -106,9 +99,9 @@ describe(`VennityBadge`, () => {
         expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
-      it(`should have a total supply equal to the max minting cap`, async () => {
-        const totalSupply0 = await VennityBadge.tokenSupply(tokenID0)
-        expect(totalSupply0).to.eq(TOKEN_AMOUNT_0)
+      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+        const totalSupply = await VennityBadge.tokenSupply(tokenID0)
+        expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
       })
 
       describe(`safeTransferFrom(...)`, () => {
@@ -158,59 +151,165 @@ describe(`VennityBadge`, () => {
           expect(recipientBalance).to.eq(TOKEN_AMOUNT_0)
         })
       })
+    })
 
-      // let TOKEN_NAME_1: string = 'VennityBadge 1th Edition',
-      //   TOKEN_AMOUNT_1: number = 150,
-      //   /**
-      //    * @todo TODO: The following IPFS url needs to conform to the ERC-1155 
-      //    *       Metadata URI JSON Schema 
-      //    */
-      //   TOKEN_URI_1 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka',
-      //   TOKEN_NAME_2: string = 'VennityBadge 1th Edition',
-      //   TOKEN_AMOUNT_2: number = 200,
-      //   /**
-      //    * @todo TODO: The following IPFS url needs to conform to the ERC-1155 
-      //    *       Metadata URI JSON Schema 
-      //    */
-      //   TOKEN_URI_2 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
+    describe(`VennityBadge 0th, 1st, and 2nd Editions`, () => {
+      let VennityBadge: VennityBadge
 
-      // before(`deploy VennityBadge contract and mint ERC1155 tokens`, async () => {
-      //   const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
+      let createTx0: ContractTransaction,
+        createTx1: ContractTransaction,
+        createTx2: ContractTransaction
 
-      //   VennityBadge = await Factory__VennityBadgeFactory
-      //     .connect(deployer)
-      //     .deploy() as VennityBadge
+      // Token information
+      let TOKEN_NAME_1: string = 'VennityBadge 1st Edition',
+        TOKEN_NAME_2: string = 'VennityBadge 2nd Edition'
 
-      //   await VennityBadge.deployTransaction.wait()
+      let TOKEN_AMOUNT_1: number = 150,
+        TOKEN_AMOUNT_2: number = 200
 
-      //   createTx0 = await VennityBadge
-      //     .connect(deployer)
-      //     ._mint(
-      //       deployer.address,
-      //       TOKEN_NAME_0,
-      //       TOKEN_URI_0,
-      //       TOKEN_AMOUNT_0,
-      //       TOKEN_UUID_0
-      //     )
-      //   createTx1 = await VennityBadge
-      //     .connect(deployer)
-      //     ._mint(
-      //       deployer.address,
-      //       TOKEN_NAME_1,
-      //       TOKEN_URI_1,
-      //       TOKEN_AMOUNT_1,
-      //       TOKEN_UUID_1
-      //     )
-      //   createTx2 = await VennityBadge
-      //     .connect(deployer)
-      //     ._mint(
-      //       deployer.address,
-      //       TOKEN_NAME_2,
-      //       TOKEN_URI_2,
-      //       TOKEN_AMOUNT_2,
-      //       TOKEN_UUID_2
-      //     )
-      // })
+      const TOKEN_UUID_1: string = uuidv4()
+      const TOKEN_UUID_2: string = uuidv4()
+
+      before(`deploy VennityBadge contract and mint ERC1155 tokens`, async () => {
+        const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
+
+        VennityBadge = await Factory__VennityBadgeFactory
+          .connect(deployer)
+          .deploy() as VennityBadge
+
+        await VennityBadge.deployTransaction.wait()
+
+        createTx0 = await VennityBadge
+          .connect(deployer)
+          ._mint(
+            deployer.address,
+            TOKEN_NAME_0,
+            TOKEN_URI_0,
+            TOKEN_AMOUNT_0,
+            TOKEN_UUID_0
+          )
+        createTx1 = await VennityBadge
+          .connect(deployer)
+          ._mint(
+            deployer.address,
+            TOKEN_NAME_1,
+            TOKEN_URI_1,
+            TOKEN_AMOUNT_1,
+            TOKEN_UUID_1
+          )
+        createTx2 = await VennityBadge
+          .connect(deployer)
+          ._mint(
+            deployer.address,
+            TOKEN_NAME_2,
+            TOKEN_URI_2,
+            TOKEN_AMOUNT_2,
+            TOKEN_UUID_2
+          )
+      })
+
+      it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
+        let receipt0: ContractReceipt = await createTx0.wait()
+        let eventArgs0 = receipt0.events?.filter((x) => {
+          return x.event == 'VennityBadgeMinted'
+        })[0].args
+
+        let VennityTokenUUID0: string = eventArgs0
+          ? eventArgs0[1].tokenUUID
+          : undefined
+        let VennityTokenURI0: string = eventArgs0
+          ? eventArgs0[1].tokenURI
+          : undefined
+
+
+        let receipt1: ContractReceipt = await createTx1.wait()
+        let eventArgs1 = receipt1.events?.filter((x) => {
+          return x.event == 'VennityBadgeMinted'
+        })[0].args
+
+        let VennityTokenUUID1: string = eventArgs1
+          ? eventArgs1[1].tokenUUID
+          : undefined
+        let VennityTokenURI1: string = eventArgs1
+          ? eventArgs1[1].tokenURI
+          : undefined
+
+
+        let receipt2: ContractReceipt = await createTx2.wait()
+        let eventArgs2 = receipt2.events?.filter((x) => {
+          return x.event == 'VennityBadgeMinted'
+        })[0].args
+
+        let VennityTokenUUID2: string = eventArgs2
+          ? eventArgs2[1].tokenUUID
+          : undefined
+        let VennityTokenURI2: string = eventArgs2
+          ? eventArgs2[1].tokenURI
+          : undefined
+
+        expect(VennityTokenUUID0).to.eq(TOKEN_UUID_0)
+        expect(VennityTokenURI0).to.eq(TOKEN_URI_0)
+        expect(VennityTokenUUID1).to.eq(TOKEN_UUID_1)
+        expect(VennityTokenURI1).to.eq(TOKEN_URI_1)
+        expect(VennityTokenUUID2).to.eq(TOKEN_UUID_2)
+        expect(VennityTokenURI2).to.eq(TOKEN_URI_2)
+      })
+
+      let tokenID0: BigNumber,
+        tokenID1: BigNumber,
+        tokenID2: BigNumber
+
+
+      it(`should have minted 100 VennityBadge 0th Edition tokens`, async () => {
+        tokenID0 = await VennityBadge.tokenID(TOKEN_UUID_0)
+        console.log('Token ID 0: ', tokenID0)
+        const tokenName: string = await VennityBadge.tokenName(tokenID0)
+        expect(tokenName).to.eq(TOKEN_NAME_0)
+      })
+
+      it(`should have minted 150 VennityBadge 1st Edition tokens`, async () => {
+        tokenID1 = await VennityBadge.tokenID(TOKEN_UUID_1)
+        console.log('Token ID 1: ', tokenID1)
+        const tokenName: string = await VennityBadge.tokenName(tokenID1)
+        expect(tokenName).to.eq(TOKEN_NAME_1)
+      })
+
+      it(`should have minted 200 VennityBadge 2nd Edition tokens`, async () => {
+        tokenID2 = await VennityBadge.tokenID(TOKEN_UUID_2)
+        console.log('Token ID 2: ', tokenID2)
+        const tokenName: string = await VennityBadge.tokenName(tokenID2)
+        expect(tokenName).to.eq(TOKEN_NAME_2)
+      })
+
+      it(`should give initial supply of VennityBadge 0th Edition to creator's address`, async () => {
+        const balance = await VennityBadge.balanceOf(deployerAddress, tokenID0)
+        expect(balance).to.eq(TOKEN_AMOUNT_0)
+      })
+
+      it(`should give initial supply of VennityBadge 1st Edition to creator's address`, async () => {
+        const balance = await VennityBadge.balanceOf(deployerAddress, tokenID1)
+        expect(balance).to.eq(TOKEN_AMOUNT_1)
+      })
+
+      it(`should give initial supply of VennityBadge 1st Edition to creator's address`, async () => {
+        const balance = await VennityBadge.balanceOf(deployerAddress, tokenID2)
+        expect(balance).to.eq(TOKEN_AMOUNT_2)
+      })
+
+      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+        const totalSupply = await VennityBadge.tokenSupply(tokenID0)
+        expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
+      })
+
+      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+        const totalSupply = await VennityBadge.tokenSupply(tokenID1)
+        expect(totalSupply).to.eq(TOKEN_AMOUNT_1)
+      })
+
+      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+        const totalSupply = await VennityBadge.tokenSupply(tokenID2)
+        expect(totalSupply).to.eq(TOKEN_AMOUNT_2)
+      })
 
       /**
        * @dev This step requires for `_mint()` to be called twice so that the
@@ -218,66 +317,15 @@ describe(`VennityBadge`, () => {
        *      tokens.
        */
       describe(`safeBatchTransferFrom(...)`, () => {
-        let tokenID0: BigNumber
-        // let tokenID2: BigNumber
-        // before(`get tokenID`, async () => {
-        //   tokenID1 = await VennityBadge.tokenID(TOKEN_UUID_1)
-        // })
-
-        it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with a name and token URI`, async () => {
-          let receipt0: ContractReceipt = await createTx1.wait()
-          let eventArgs0 = receipt0.events?.filter((x) => {
-            return x.event == 'VennityBadgeMinted'
-          })[0].args
-
-          let VennityTokenUUID0: string = eventArgs0
-            ? eventArgs0[1].tokenUUID
-            : undefined
-          let VennityTokenURI0: string = eventArgs0
-            ? eventArgs0[1].tokenURI
-            : undefined
-
-          // let receipt1: ContractReceipt = await createTx1.wait()
-          // let eventArg1 = receipt1.events?.filter((x) => {
-          //   return x.event == 'VennityBadgeMinted'
-          // })[0].args
-
-          // let VennityTokenUUI1: string = eventArg1
-          //   ? eventArg1[1].tokenUUID
-          //   : undefined
-          // let VennityTokenUR1: string = eventArg1
-          //   ? eventArg1[1].tokenURI
-          //   : undefined
-
-          // let receipt2: ContractReceipt = await createTx2.wait()
-          // let eventArg2 = receipt2.events?.filter((x) => {
-          //   return x.event == 'VennityBadgeMinted'
-          // })[0].args
-
-          // let VennityTokenUUI2: string = eventArg2
-          //   ? eventArg2[1].tokenUUID
-          //   : undefined
-          // let VennityTokenUR2: string = eventArg2
-          //   ? eventArg2[1].tokenURI
-          //   : undefined
-
-          expect(VennityTokenUUID0).to.eq(TOKEN_UUID_0)
-          expect(VennityTokenURI0).to.eq(TOKEN_URI_0)
-          // expect(VennityTokenUUI1).to.eq(TOKEN_UUID_1)
-          // expect(VennityTokenUR1).to.eq(TOKEN_URI_1)
-          // expect(VennityTokenUUI2).to.eq(TOKEN_UUID_2)
-          // expect(VennityTokenUR2).to.eq(TOKEN_URI_2)
-        })
 
         it(`should revert when the sender does not have enough of an allowance`, async () => {
-          tokenID0 = await VennityBadge.tokenID(TOKEN_UUID_1)
           const tx = VennityBadge
             .connect(deployer)
             .safeBatchTransferFrom(
               recipientAddress,
               deployerAddress,
-              [tokenID0],
-              [TOKEN_AMOUNT_0 /* , TOKEN_AMOUNT_1 */],
+              [tokenID0, tokenID1, tokenID2],
+              [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
               '0x0000000000000000000000000000000000000000'
             )
 
@@ -290,26 +338,33 @@ describe(`VennityBadge`, () => {
           const tx = await VennityBadge
             .connect(deployer)
             .safeBatchTransferFrom(
-              recipientAddress,
               deployerAddress,
-              [tokenID0],
-              [TOKEN_AMOUNT_0 /* , TOKEN_AMOUNT_1 */],
+              recipientAddress,
+              [tokenID0, tokenID1, tokenID2],
+              [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
               '0x0000000000000000000000000000000000000000'
             )
 
           await tx.wait()
 
-          const deployerBalance: BigNumber = await VennityBadge.balanceOf(
-            deployerAddress,
-            tokenID0
-          )
-          const recipientBalance: BigNumber = await VennityBadge.balanceOf(
-            recipientAddress,
-            tokenID0
-          )
+          const deployerBalance0: BigNumber = await VennityBadge.balanceOf(deployerAddress, tokenID0)
+          const deployerBalance1: BigNumber = await VennityBadge.balanceOf(deployerAddress, tokenID1)
+          const deployerBalance2: BigNumber = await VennityBadge.balanceOf(deployerAddress, tokenID2)
 
-          expect(deployerBalance).to.eq(0)
-          expect(recipientBalance).to.eq(TOKEN_AMOUNT_0)
+          const recipientBalance0: BigNumber = await VennityBadge.balanceOf(recipientAddress, tokenID0)
+          const recipientBalance1: BigNumber = await VennityBadge.balanceOf(recipientAddress, tokenID1)
+          const recipientBalance2: BigNumber = await VennityBadge.balanceOf(recipientAddress, tokenID2)
+
+          const TOKEN_TOTAL_AMOUNT =
+            TOKEN_AMOUNT_0 + TOKEN_AMOUNT_1 + TOKEN_AMOUNT_2
+
+          expect(deployerBalance0).to.eq(0)
+          expect(deployerBalance1).to.eq(0)
+          expect(deployerBalance2).to.eq(0)
+
+          expect(recipientBalance0).to.eq(TOKEN_TOTAL_AMOUNT)
+          expect(recipientBalance1).to.eq(TOKEN_TOTAL_AMOUNT)
+          expect(recipientBalance1).to.eq(TOKEN_TOTAL_AMOUNT)
         })
       })
     })
