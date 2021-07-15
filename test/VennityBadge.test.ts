@@ -249,8 +249,10 @@ describe(`VennityBadge`, () => {
 
         expect(VennityTokenUUID0).to.eq(TOKEN_UUID_0)
         expect(VennityTokenURI0).to.eq(TOKEN_URI_0)
+
         expect(VennityTokenUUID1).to.eq(TOKEN_UUID_1)
         expect(VennityTokenURI1).to.eq(TOKEN_URI_1)
+
         expect(VennityTokenUUID2).to.eq(TOKEN_UUID_2)
         expect(VennityTokenURI2).to.eq(TOKEN_URI_2)
       })
@@ -293,17 +295,17 @@ describe(`VennityBadge`, () => {
         expect(balance).to.eq(TOKEN_AMOUNT_2)
       })
 
-      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+      it(`should have a total supply of 100`, async () => {
         const totalSupply = await VennityBadge.tokenSupply(tokenID0)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
       })
 
-      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+      it(`should have a total supply of 150`, async () => {
         const totalSupply = await VennityBadge.tokenSupply(tokenID1)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_1)
       })
 
-      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+      it(`should have a total supply of 200`, async () => {
         const totalSupply = await VennityBadge.tokenSupply(tokenID2)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_2)
       })
