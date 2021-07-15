@@ -10,12 +10,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { VennityBadge } from '../types/VennityBadge'
 
 describe(`VennityBadge`, () => {
-  /**
-   * @todo Do we want to include token UUID in the token's JSON metadata?
-   *       
-   *       Need to think about how the JSON metadata is created _before_ the
-   *       tokens are minted.
-   */
   const TOKEN_UUID_0 = uuidv4()
   const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
   const TOKEN_AMOUNT_0 = 100
