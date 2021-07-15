@@ -1,14 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.4 <=0.9.0;
 
-import "@openzeppelin/contracts/utils/Context.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
-
+/*******************
+ * External imports
+ ******************/
+// import "@openzeppelin/contracts/utils/Context.sol";
+// import "@openzeppelin/contracts/utils/Address.sol";
+// import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+// import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+// import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
+// import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "hardhat/console.sol";
+
+/****************
+ * Local imports
+ ***************/
+import "../utils/Context.sol";
+import "../utils/Address.sol";
+import "../utils/introspection/ERC165.sol";
+import "./IERC1155Receiver.sol";
+import "./extensions/IERC1155MetadataURI.sol";
+import "./IERC1155.sol";
 
 /**
  * @dev Implementation of the basic standard multi-token.
