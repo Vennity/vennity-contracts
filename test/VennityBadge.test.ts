@@ -3,7 +3,13 @@ import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { Contract } from '@ethersproject/contracts'
-import { BigNumber, ContractReceipt, ContractTransaction, providers, utils } from 'ethers'
+import {
+  BigNumber,
+  ContractReceipt,
+  ContractTransaction,
+  providers,
+  utils
+} from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
 /* Internal imports */
