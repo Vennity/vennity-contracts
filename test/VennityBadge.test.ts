@@ -8,7 +8,8 @@ import {
   ContractReceipt,
   ContractTransaction,
   providers,
-  utils
+  utils,
+  Wallet
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -35,11 +36,22 @@ describe(`VennityBadge`, () => {
     deployerAddress: string,
     recipientAddress: string
 
+  let kovanProvider = new ethers.providers.JsonRpcProvider(process.env.INFURA_KOVAN_URL)
+  
+  let privateKey1: string = process.env.KOVAN_WALLET_PRIVATE_KEY_1 as string
+  let privateKey2: string = process.env.KOVAN_WALLET_PRIVATE_KEY_2 as string
+
+  let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, kovanProvider)
+  let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, kovanProvider)
+  
   before(`load accounts`, async () => {
-    // Get signers
-    ;[deployer, recipient] = await ethers.getSigners()
-    deployerAddress = await deployer.getAddress()
-    recipientAddress = await recipient.getAddress()
+    console.log('First kovan wallet: ', (await l1Wallet1.getBalance()).toString())
+    console.log('Second kovan wallet: ', (await l1Wallet2.getBalance()).toString())
+
+    // // Get signers
+    // ;[deployer, recipient] = await ethers.getSigners()
+    // deployerAddress = await deployer.getAddress()
+    // recipientAddress = await recipient.getAddress()
   })
 
   describe(`VennityBadge`, () => {
@@ -47,32 +59,44 @@ describe(`VennityBadge`, () => {
       let createTx0: ContractTransaction,
         createTx1: ContractTransaction,
         createTx2: ContractTransaction
+      
       let VennityBadge: VennityBadge
+      let receipt: ContractReceipt
 
       before(`deploy VennityBadge contract and mint ERC1155 tokens`, async () => {
         const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
 
         VennityBadge = await Factory__VennityBadgeFactory
-          .connect(deployer)
-          .deploy() as VennityBadge
+          .connect(l1Wallet1)
+          .deploy({
+            gasLimit: 12487794,
+            gasPrice: 0
+          }) as VennityBadge
 
-        await VennityBadge.deployTransaction.wait()
+        console.log('VennityBadge contract address: ', VennityBadge.address)
+        await VennityBadge.deployTransaction.wait(2)
 
         createTx0 = await VennityBadge
-          .connect(deployer)
+          .connect(l1Wallet1)
           ._mint(
-            deployer.address,
+            l1Wallet1.address,
             TOKEN_NAME_0,
             TOKEN_URI_0,
             TOKEN_AMOUNT_0,
-            TOKEN_UUID_0
+            TOKEN_UUID_0,
+            {
+              gasLimit: 12487794
+            }
           )
+
+        console.log('First mint transaction submitted for _mint function: ', createTx0)
+          
+        receipt = await createTx0.wait(2)
       })
 
       let tokenID0: BigNumber
 
       it(`should have created new VennityBadge contract and minted 1 set of an ERC1155 token with a name and token URI`, async () => {
-        let receipt: ContractReceipt = await createTx0.wait()
         let eventArgs = receipt.events?.filter((x) => {
           return x.event == 'VennityBadgeMinted'
         })[0].args
@@ -95,7 +119,7 @@ describe(`VennityBadge`, () => {
       })
 
       it(`should give the initial supply to the creator's address`, async () => {
-        const balance = await VennityBadge.balanceOf(deployerAddress, tokenID0)
+        const balance = await VennityBadge.balanceOf(l1Wallet1.address, tokenID0)
         expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
@@ -111,10 +135,10 @@ describe(`VennityBadge`, () => {
          */
         it(`should revert when the sender does not have enough balance`, async () => {
           const tx = VennityBadge
-            .connect(deployer)
+            .connect(l1Wallet1)
             .safeTransferFrom(
-              recipientAddress,
-              deployerAddress,
+              l1Wallet2.address,
+              l1Wallet1.address,
               tokenID0,
               TOKEN_AMOUNT_0 + 1,
               '0x0000000000000000000000000000000000000000'
@@ -127,23 +151,23 @@ describe(`VennityBadge`, () => {
 
         it(`should succeed when the sender has enough balance`, async () => {
           const tx = await VennityBadge
-            .connect(deployer)
+            .connect(l1Wallet1)
             .safeTransferFrom(
-              deployerAddress,
-              recipientAddress,
+              l1Wallet1.address,
+              l1Wallet2.address,
               tokenID0,
               TOKEN_AMOUNT_0,
               '0x0000000000000000000000000000000000000000'
             )
 
-          await tx.wait()
+          await tx.wait(2)
 
           const deployerBalance: BigNumber = await VennityBadge.balanceOf(
-            deployerAddress,
+            l1Wallet1.address,
             tokenID0
           )
           const recipientBalance: BigNumber = await VennityBadge.balanceOf(
-            recipientAddress,
+            l1Wallet2.address,
             tokenID0
           )
 
@@ -174,42 +198,61 @@ describe(`VennityBadge`, () => {
         const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
 
         VennityBadge = await Factory__VennityBadgeFactory
-          .connect(deployer)
-          .deploy() as VennityBadge
+          .connect(l1Wallet1)
+          .deploy({
+            gasLimit: 12487794,
+            gasPrice: 0
+          }) as VennityBadge
 
-        await VennityBadge.deployTransaction.wait()
+        console.log('VennityBadge contract address: ', VennityBadge.address)
+
+        await VennityBadge.deployTransaction.wait(2)
 
         createTx0 = await VennityBadge
-          .connect(deployer)
+          .connect(l1Wallet1)
           ._mint(
-            deployer.address,
+            l1Wallet1.address,
             TOKEN_NAME_0,
             TOKEN_URI_0,
             TOKEN_AMOUNT_0,
-            TOKEN_UUID_0
+            TOKEN_UUID_0, 
+            {
+              gasLimit: 12487794
+            }
           )
+
+        console.log('Second mint transaction submitted for _mint function: ', createTx0)
+
         createTx1 = await VennityBadge
-          .connect(deployer)
+          .connect(l1Wallet1)
           ._mint(
-            deployer.address,
+            l1Wallet1.address,
             TOKEN_NAME_1,
             TOKEN_URI_1,
             TOKEN_AMOUNT_1,
-            TOKEN_UUID_1
+            TOKEN_UUID_1, 
+            {
+              gasLimit: 12487794,
+              gasPrice: 0
+            }
           )
         createTx2 = await VennityBadge
-          .connect(deployer)
+          .connect(l1Wallet1)
           ._mint(
-            deployer.address,
+            l1Wallet1.address,
             TOKEN_NAME_2,
             TOKEN_URI_2,
             TOKEN_AMOUNT_2,
-            TOKEN_UUID_2
+            TOKEN_UUID_2,
+            {
+              gasLimit: 12487794,
+              gasPrice: 0
+            }
           )
       })
 
       it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
-        let receipt0: ContractReceipt = await createTx0.wait()
+        let receipt0: ContractReceipt = await createTx0.wait(2)
         let eventArgs0 = receipt0.events?.filter((x) => {
           return x.event == 'VennityBadgeMinted'
         })[0].args
@@ -318,10 +361,10 @@ describe(`VennityBadge`, () => {
       describe(`safeBatchTransferFrom(...)`, () => {
         it(`should revert when the sender does not have enough of an allowance`, async () => {
           const tx = VennityBadge
-            .connect(deployer)
+            .connect(l1Wallet1)
             .safeBatchTransferFrom(
-              recipientAddress,
-              deployerAddress,
+              l1Wallet2.address,
+              l1Wallet1.address,
               [tokenID0, tokenID1, tokenID2],
               [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
               '0x0000000000000000000000000000000000000000'
@@ -334,10 +377,10 @@ describe(`VennityBadge`, () => {
 
         it(`should succeed when the owner has enough balance and the sender has a large enough allowance`, async () => {
           const tx = await VennityBadge
-            .connect(deployer)
+            .connect(l1Wallet1)
             .safeBatchTransferFrom(
-              deployerAddress,
-              recipientAddress,
+              l1Wallet1.address,
+              l1Wallet2.address,
               [tokenID0, tokenID1, tokenID2],
               [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
               '0x0000000000000000000000000000000000000000'
@@ -356,11 +399,11 @@ describe(`VennityBadge`, () => {
           const ARRAY_OF_ZEROES = [zeroBN, zeroBN, zeroBN]
 
           const deployerBalances: BigNumber[] = await VennityBadge.balanceOfBatch(
-            [deployerAddress, deployerAddress, deployerAddress],
+            [l1Wallet1.address, l1Wallet1.address, l1Wallet1.address],
             [tokenID0, tokenID1, tokenID2]
           )
           const recipientBalances: BigNumber[] = await VennityBadge.balanceOfBatch(
-            [recipientAddress, recipientAddress, recipientAddress],
+            [l1Wallet2.address, l1Wallet2.address, l1Wallet2.address],
             [tokenID0, tokenID1, tokenID2]
           )
 

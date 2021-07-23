@@ -18,7 +18,9 @@
     "clean": "rimraf ./cache ./artifacts ./types",
     "compile": "npm run clean && npx hardhat compile",
     "test": "npx hardhat test",
-    "deploy": "npx hardhat deploy"
+    "deploy": "npx hardhat deploy",
+    "test:kovan": "npx hardhat test --network kovan",
+    "deploy:kovan": "npx hardhat deploy --network kovan"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
@@ -30,6 +32,7 @@
     "@types/node": "^15.12.4",
     "@types/uuid": "^8.3.0",
     "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.4.0",
     "hardhat-deploy": "^0.8.9",
