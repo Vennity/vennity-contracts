@@ -37,13 +37,13 @@ describe(`VennityBadge`, () => {
     recipientAddress: string
 
   let kovanProvider = new ethers.providers.JsonRpcProvider(process.env.INFURA_KOVAN_URL)
-  
+
   let privateKey1: string = process.env.KOVAN_WALLET_PRIVATE_KEY_1 as string
   let privateKey2: string = process.env.KOVAN_WALLET_PRIVATE_KEY_2 as string
 
   let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, kovanProvider)
   let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, kovanProvider)
-  
+
   before(`load accounts`, async () => {
     console.log('First kovan wallet: ', (await l1Wallet1.getBalance()).toString())
     console.log('Second kovan wallet: ', (await l1Wallet2.getBalance()).toString())
@@ -59,9 +59,9 @@ describe(`VennityBadge`, () => {
       let createTx0: ContractTransaction,
         createTx1: ContractTransaction,
         createTx2: ContractTransaction
-      
-      let VennityBadge: VennityBadge
-      let receipt: ContractReceipt
+
+      let VennityBadge: VennityBadge,
+        receipt: ContractReceipt
 
       before(`deploy VennityBadge contract and mint ERC1155 tokens`, async () => {
         const Factory__VennityBadgeFactory = await ethers.getContractFactory('VennityBadge')
@@ -69,12 +69,11 @@ describe(`VennityBadge`, () => {
         VennityBadge = await Factory__VennityBadgeFactory
           .connect(l1Wallet1)
           .deploy({
-            gasLimit: 12487794,
-            gasPrice: 0
+            gasLimit: 12487794
           }) as VennityBadge
 
-        console.log('VennityBadge contract address: ', VennityBadge.address)
         await VennityBadge.deployTransaction.wait(2)
+        console.log('First VennityBadge contract address: ', VennityBadge.address)
 
         createTx0 = await VennityBadge
           .connect(l1Wallet1)
@@ -89,8 +88,6 @@ describe(`VennityBadge`, () => {
             }
           )
 
-        console.log('First mint transaction submitted for _mint function: ', createTx0)
-          
         receipt = await createTx0.wait(2)
       })
 
@@ -141,7 +138,10 @@ describe(`VennityBadge`, () => {
               l1Wallet1.address,
               tokenID0,
               TOKEN_AMOUNT_0 + 1,
-              '0x0000000000000000000000000000000000000000'
+              '0x0000000000000000000000000000000000000000',
+              {
+                gasLimit: 12487794
+              }
             )
 
           await expect(tx).to.be.revertedWith(
@@ -157,7 +157,10 @@ describe(`VennityBadge`, () => {
               l1Wallet2.address,
               tokenID0,
               TOKEN_AMOUNT_0,
-              '0x0000000000000000000000000000000000000000'
+              '0x0000000000000000000000000000000000000000',
+              {
+                gasLimit: 12487794
+              }
             )
 
           await tx.wait(2)
@@ -200,11 +203,10 @@ describe(`VennityBadge`, () => {
         VennityBadge = await Factory__VennityBadgeFactory
           .connect(l1Wallet1)
           .deploy({
-            gasLimit: 12487794,
-            gasPrice: 0
+            gasLimit: 12487794
           }) as VennityBadge
 
-        console.log('VennityBadge contract address: ', VennityBadge.address)
+        console.log('Second VennityBadge contract address: ', VennityBadge.address)
 
         await VennityBadge.deployTransaction.wait(2)
 
@@ -215,14 +217,11 @@ describe(`VennityBadge`, () => {
             TOKEN_NAME_0,
             TOKEN_URI_0,
             TOKEN_AMOUNT_0,
-            TOKEN_UUID_0, 
+            TOKEN_UUID_0,
             {
               gasLimit: 12487794
             }
           )
-
-        console.log('Second mint transaction submitted for _mint function: ', createTx0)
-
         createTx1 = await VennityBadge
           .connect(l1Wallet1)
           ._mint(
@@ -230,10 +229,9 @@ describe(`VennityBadge`, () => {
             TOKEN_NAME_1,
             TOKEN_URI_1,
             TOKEN_AMOUNT_1,
-            TOKEN_UUID_1, 
+            TOKEN_UUID_1,
             {
-              gasLimit: 12487794,
-              gasPrice: 0
+              gasLimit: 12487794
             }
           )
         createTx2 = await VennityBadge
@@ -245,8 +243,7 @@ describe(`VennityBadge`, () => {
             TOKEN_AMOUNT_2,
             TOKEN_UUID_2,
             {
-              gasLimit: 12487794,
-              gasPrice: 0
+              gasLimit: 12487794
             }
           )
       })
@@ -265,7 +262,7 @@ describe(`VennityBadge`, () => {
           : undefined
 
 
-        let receipt1: ContractReceipt = await createTx1.wait()
+        let receipt1: ContractReceipt = await createTx1.wait(2)
         let eventArgs1 = receipt1.events?.filter((x) => {
           return x.event == 'VennityBadgeMinted'
         })[0].args
@@ -278,7 +275,7 @@ describe(`VennityBadge`, () => {
           : undefined
 
 
-        let receipt2: ContractReceipt = await createTx2.wait()
+        let receipt2: ContractReceipt = await createTx2.wait(2)
         let eventArgs2 = receipt2.events?.filter((x) => {
           return x.event == 'VennityBadgeMinted'
         })[0].args
@@ -367,7 +364,10 @@ describe(`VennityBadge`, () => {
               l1Wallet1.address,
               [tokenID0, tokenID1, tokenID2],
               [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
-              '0x0000000000000000000000000000000000000000'
+              '0x0000000000000000000000000000000000000000',
+              {
+                gasLimit: 12487794
+              }
             )
 
           await expect(tx).to.be.revertedWith(
@@ -383,10 +383,13 @@ describe(`VennityBadge`, () => {
               l1Wallet2.address,
               [tokenID0, tokenID1, tokenID2],
               [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
-              '0x0000000000000000000000000000000000000000'
+              '0x0000000000000000000000000000000000000000',
+              {
+                gasLimit: 12487794
+              }
             )
 
-          await tx.wait()
+          await tx.wait(2)
 
           // Array of token amounts for recipient balances.
           const tokenAmount0BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_0)

@@ -36,6 +36,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         string tokenUUID;
         string name;
         string tokenURI;
+        string tokenMetadata;
         uint256 tokenSupply;
         uint256 tokenID;
         bytes tokenData;
@@ -53,17 +54,14 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping ERC1155 token data (in bytes) to its token IDs
     mapping(bytes => uint256) private _tokenIDs;
 
-    /******************
-     * @dev Not in use!
-     *****************/
-    // // Mapping from account to operator approvals
-    // mapping(address => mapping(address => bool)) private _operatorApprovals;
-
     // Mapping token ID to its total supply
     mapping(uint256 => uint256) public _tokenSupplies;
 
     // Mapping token ID to its token URI (as a string)
     mapping(uint256 => string) public _tokenURIs;
+
+    // Mapping ERC1155 token ID to its token metadata URL (as a string)
+    mapping(uint256 => string) private _tokenMetadatas;
 
     // Mapping token ID to its token name
     mapping(uint256 => string) public _tokenNames;
@@ -260,9 +258,8 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         address from,
         address to,
         uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public virtual override {
+        uint256 amount // bytes memory data // OMIT this to save on gas.
+    ) public virtual {
         require(to != address(0), "ERC1155: transfer to the zero address");
         require(
             msg.sender == _admin,
@@ -270,6 +267,8 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         );
 
         address operator = _msgSender();
+
+        bytes memory data = _tokenData[id];
 
         _beforeTokenTransfer(
             operator,
@@ -343,7 +342,8 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /**
-     * @dev Creates `amount` tokens of token type `id`, and assigns them to `account`.
+     * @dev Creates `amount` tokens of token type `id`, and holds on to them in
+     *      this contract.
      *
      * Emits a {TransferSingle} event.
      *
@@ -354,20 +354,19 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * acceptance magic value.
      */
     function _mint(
-        address account_,
         string memory name_,
         string memory uri_,
+        string memory tokenMetadata_,
         uint256 amount_,
         string memory tokenUUID_
     ) public {
         require(
-            account_ != address(0),
-            "ERC1155: cannot mint to the zero address"
-        );
-        require(
             msg.sender == _admin,
             "ERC1155: only the admin of this contract can call `_mint()`!"
         );
+
+        // Set account to transfer to to be this VennityBadge contract.
+        address account_ = address(this);
 
         // Get the bytes of `tokenUUID`.
         bytes memory data = abi.encode(tokenUUID_);
@@ -390,19 +389,28 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             tokenData_ = _tokenData[id];
         }
 
-        _tokenIDs[tokenData_] = id; // Set token ID.
-        _tokenNames[id] = name_; // Set token name.
-        _tokenURIs[id] = uri_; // Set token URI
+        _tokenIDs[tokenData_] = id; // Set token's ID.
+        _tokenNames[id] = name_; // Set token's name.
+        _tokenURIs[id] = uri_; // Set token's URI
+        _tokenMetadatas[id] = tokenMetadata_; // Set the token's metadata.
 
         // Set the total token supply for these ERC1155 tokens that are minted.
         if (_tokenSupplies[id] != 0) {
-            _tokenSupplies[id] += amount_;
+            _tokenSupplies[id] = amount_;
         } else {
             _tokenSupplies[id] = 0;
-            _tokenSupplies[id] += amount_;
+            _tokenSupplies[id] = amount_;
         }
 
-        Badge memory badge = Badge(tokenUUID_, name_, uri_, amount_, id, data);
+        Badge memory badge = Badge(
+            tokenUUID_,
+            name_,
+            uri_,
+            tokenMetadata_,
+            amount_,
+            id,
+            data
+        );
         // Push new badge struct to storage.
         badges.push(badge);
 
