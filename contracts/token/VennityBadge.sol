@@ -36,7 +36,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         string tokenUUID;
         string name;
         string tokenURI;
-        string tokenMetadata;
         uint256 tokenSupply;
         uint256 tokenID;
         bytes tokenData;
@@ -59,9 +58,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
     // Mapping token ID to its token URI (as a string)
     mapping(uint256 => string) public _tokenURIs;
-
-    // Mapping ERC1155 token ID to its token metadata URL (as a string)
-    mapping(uint256 => string) private _tokenMetadatas;
 
     // Mapping token ID to its token name
     mapping(uint256 => string) public _tokenNames;
@@ -356,7 +352,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     function _mint(
         string memory name_,
         string memory uri_,
-        string memory tokenMetadata_,
         uint256 amount_,
         string memory tokenUUID_
     ) public {
@@ -392,7 +387,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         _tokenIDs[tokenData_] = id; // Set token's ID.
         _tokenNames[id] = name_; // Set token's name.
         _tokenURIs[id] = uri_; // Set token's URI
-        _tokenMetadatas[id] = tokenMetadata_; // Set the token's metadata.
 
         // Set the total token supply for these ERC1155 tokens that are minted.
         if (_tokenSupplies[id] != 0) {
@@ -402,15 +396,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             _tokenSupplies[id] = amount_;
         }
 
-        Badge memory badge = Badge(
-            tokenUUID_,
-            name_,
-            uri_,
-            tokenMetadata_,
-            amount_,
-            id,
-            data
-        );
+        Badge memory badge = Badge(tokenUUID_, name_, uri_, amount_, id, data);
         // Push new badge struct to storage.
         badges.push(badge);
 

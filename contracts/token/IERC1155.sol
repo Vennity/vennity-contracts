@@ -71,16 +71,6 @@ interface IERC1155 is IERC165 {
         view
         returns (uint256[] memory);
 
-    /******************
-     * @dev Not in use!
-     *****************/
-    // function setApprovalForAll(address operator, bool approved) external;
-
-    /******************
-     * @dev Not in use!
-     *****************/
-    // function isApprovedForAll(address account, address operator) external view returns (bool);
-
     /**
      * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
      *
