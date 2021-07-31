@@ -53,6 +53,12 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping ERC1155 token data (in bytes) to its token IDs
     mapping(bytes => uint256) private _tokenIDs;
 
+    /******************
+     * @dev Not in use!
+     *****************/
+    // // Mapping from account to operator approvals
+    // mapping(address => mapping(address => bool)) private _operatorApprovals;
+
     // Mapping token ID to its total supply
     mapping(uint256 => uint256) public _tokenSupplies;
 
@@ -255,7 +261,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         address to,
         uint256 id,
         uint256 amount // bytes memory data // OMIT this to save on gas.
-    ) public virtual {
+    ) public virtual override {
         require(to != address(0), "ERC1155: transfer to the zero address");
         require(
             msg.sender == _admin,
@@ -295,8 +301,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         address from,
         address to,
         uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
+        uint256[] memory amounts // bytes memory data // OMIT this to save on gas.
     ) public virtual override {
         require(
             ids.length == amounts.length,
@@ -309,6 +314,10 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         );
 
         address operator = _msgSender();
+        /**
+         * @todo Need a better way to create data for this call!
+         */
+        bytes memory data = _tokenData[ids[0]];
 
         _beforeTokenTransfer(operator, from, to, ids, amounts, data);
 
@@ -354,7 +363,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         string memory uri_,
         uint256 amount_,
         string memory tokenUUID_
-    ) public {
+    ) public payable {
         require(
             msg.sender == _admin,
             "ERC1155: only the admin of this contract can call `_mint()`!"
@@ -362,6 +371,15 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
         // Set account to transfer to to be this VennityBadge contract.
         address account_ = address(this);
+
+        console.log(
+            "This is the address of the VennityBadge contract as `account_`: ",
+            account_
+        );
+        console.log(
+            "This is the address of VennityBadge as `address(this)`: ",
+            address(this)
+        );
 
         // Get the bytes of `tokenUUID`.
         bytes memory data = abi.encode(tokenUUID_);
@@ -384,16 +402,16 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             tokenData_ = _tokenData[id];
         }
 
-        _tokenIDs[tokenData_] = id; // Set token's ID.
-        _tokenNames[id] = name_; // Set token's name.
-        _tokenURIs[id] = uri_; // Set token's URI
+        _tokenIDs[tokenData_] = id; // Set token ID.
+        _tokenNames[id] = name_; // Set token name.
+        _tokenURIs[id] = uri_; // Set token URI
 
         // Set the total token supply for these ERC1155 tokens that are minted.
         if (_tokenSupplies[id] != 0) {
-            _tokenSupplies[id] = amount_;
+            _tokenSupplies[id] += amount_;
         } else {
             _tokenSupplies[id] = 0;
-            _tokenSupplies[id] = amount_;
+            _tokenSupplies[id] += amount_;
         }
 
         Badge memory badge = Badge(tokenUUID_, name_, uri_, amount_, id, data);

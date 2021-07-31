@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 import "../utils/introspection/IERC165.sol";
 
@@ -32,11 +32,6 @@ interface IERC1155 is IERC165 {
         uint256[] ids,
         uint256[] values
     );
-
-    /******************
-     * @dev Not in use!
-     *****************/
-    // event ApprovalForAll(address indexed account, address indexed operator, bool approved);
 
     /**
      * @dev Emitted when the URI for token type `id` changes to `value`, if it is a non-programmatic URI.
@@ -88,8 +83,7 @@ interface IERC1155 is IERC165 {
         address from,
         address to,
         uint256 id,
-        uint256 amount,
-        bytes calldata data
+        uint256 amount
     ) external;
 
     /**
@@ -107,7 +101,6 @@ interface IERC1155 is IERC165 {
         address from,
         address to,
         uint256[] calldata ids,
-        uint256[] calldata amounts,
-        bytes calldata data
+        uint256[] calldata amounts
     ) external;
 }
