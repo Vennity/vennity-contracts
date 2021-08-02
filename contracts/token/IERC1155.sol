@@ -49,7 +49,7 @@ interface IERC1155 is IERC165 {
      *
      * - `account` cannot be the zero address.
      */
-    function balanceOf(address account, uint256 id)
+    function balanceOf(address account, string memory tokenUUID)
         external
         view
         returns (uint256);
@@ -61,10 +61,10 @@ interface IERC1155 is IERC165 {
      *
      * - `accounts` and `ids` must have the same length.
      */
-    function balanceOfBatch(address[] calldata accounts, uint256[] calldata ids)
-        external
-        view
-        returns (uint256[] memory);
+    function balanceOfBatch(
+        address[] calldata accounts,
+        string[] calldata tokenUUIDs
+    ) external view returns (uint256[] memory);
 
     /**
      * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.

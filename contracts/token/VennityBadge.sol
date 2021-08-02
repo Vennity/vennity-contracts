@@ -181,7 +181,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      *
      * - `account` cannot be the zero address.
      */
-    function balanceOf(address account, uint256 id)
+    function balanceOf(address account, string memory tokenUUID)
         public
         view
         virtual
@@ -192,6 +192,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             account != address(0),
             "ERC1155: balance query for the zero address"
         );
+        uint256 id = tokenID(tokenUUID);
         return _balances[id][account];
     }
 
@@ -202,22 +203,19 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      *
      * - `accounts` and `ids` must have the same length.
      */
-    function balanceOfBatch(address[] memory accounts, uint256[] memory ids)
-        public
-        view
-        virtual
-        override
-        returns (uint256[] memory)
-    {
+    function balanceOfBatch(
+        address[] memory accounts,
+        string[] memory tokenUUIDs
+    ) public view virtual override returns (uint256[] memory) {
         require(
-            accounts.length == ids.length,
+            accounts.length == tokenUUIDs.length,
             "ERC1155: accounts and ids length mismatch"
         );
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
         for (uint256 i = 0; i < accounts.length; ++i) {
-            batchBalances[i] = balanceOf(accounts[i], ids[i]);
+            batchBalances[i] = balanceOf(accounts[i], tokenUUIDs[i]);
         }
 
         return batchBalances;
