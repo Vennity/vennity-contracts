@@ -57,9 +57,9 @@ describe(`VennityBadge`, () => {
 
   describe(`VennityBadge`, () => {
     describe(`VennityBadge 0th Edition`, () => {
-      let createTx0: ContractTransaction,
-        createTx1: ContractTransaction,
-        createTx2: ContractTransaction
+      let mintTx0: ContractTransaction,
+        mintTx1: ContractTransaction,
+        mintTx2: ContractTransaction
 
       let VennityBadge: VennityBadge
 
@@ -78,7 +78,7 @@ describe(`VennityBadge`, () => {
         /**
          * @todo Throws a CALL_EXCEPTION error
          */
-        createTx0 = await VennityBadge
+        mintTx0 = await VennityBadge
           .connect(l1Wallet1)
           ._mint(
             TOKEN_NAME_0,
@@ -90,7 +90,9 @@ describe(`VennityBadge`, () => {
             }
           )
 
-        receipt = await createTx0.wait(2)
+        // console.log('First Mint transaction object: ', mintTx0)
+
+        receipt = await mintTx0.wait(5)
         console.log('THis is the transaction receipt for the first mint call: ', receipt)
       })
 
@@ -119,7 +121,7 @@ describe(`VennityBadge`, () => {
       })
 
       it(`should give the initial supply to the creator's address`, async () => {
-        const balance = await VennityBadge.balanceOf(VennityBadge.address, tokenID0)
+        const balance = await VennityBadge.balanceOf(VennityBadge.address, TOKEN_UUID_0)
         expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
@@ -168,11 +170,11 @@ describe(`VennityBadge`, () => {
 
           const deployerBalance: BigNumber = await VennityBadge.balanceOf(
             l1Wallet1.address,
-            tokenID0
+            TOKEN_UUID_0
           )
           const recipientBalance: BigNumber = await VennityBadge.balanceOf(
             l1Wallet2.address,
-            tokenID0
+            TOKEN_UUID_0
           )
 
           expect(deployerBalance).to.eq(0)
@@ -184,9 +186,9 @@ describe(`VennityBadge`, () => {
     // describe(`VennityBadge 0th, 1st, and 2nd Editions`, () => {
     //   let VennityBadge: VennityBadge
 
-    //   let createTx0: ContractTransaction,
-    //     createTx1: ContractTransaction,
-    //     createTx2: ContractTransaction
+    //   let mintTx0: ContractTransaction,
+    //     mintTx1: ContractTransaction,
+    //     mintTx2: ContractTransaction
 
     //   // Token information
     //   let TOKEN_NAME_1: string = 'VennityBadge 1st Edition',
@@ -211,7 +213,7 @@ describe(`VennityBadge`, () => {
 
     //     await VennityBadge.deployTransaction.wait(2)
 
-    //     createTx0 = await VennityBadge
+    //     mintTx0 = await VennityBadge
     //       .connect(l1Wallet1)
     //       ._mint(
     //         TOKEN_NAME_0,
@@ -222,7 +224,7 @@ describe(`VennityBadge`, () => {
     //           gasLimit: 12487794
     //         }
     //       )
-    //     createTx1 = await VennityBadge
+    //     mintTx1 = await VennityBadge
     //       .connect(l1Wallet1)
     //       ._mint(
     //         TOKEN_NAME_1,
@@ -233,7 +235,7 @@ describe(`VennityBadge`, () => {
     //           gasLimit: 12487794
     //         }
     //       )
-    //     createTx2 = await VennityBadge
+    //     mintTx2 = await VennityBadge
     //       .connect(l1Wallet1)
     //       ._mint(
     //         TOKEN_NAME_2,
@@ -247,7 +249,7 @@ describe(`VennityBadge`, () => {
     //   })
 
     //   it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
-    //     let receipt0: ContractReceipt = await createTx0.wait(2)
+    //     let receipt0: ContractReceipt = await mintTx0.wait(2)
     //     let eventArgs0 = receipt0.events?.filter((x) => {
     //       return x.event == 'VennityBadgeMinted'
     //     })[0].args
@@ -260,7 +262,7 @@ describe(`VennityBadge`, () => {
     //       : undefined
 
 
-    //     let receipt1: ContractReceipt = await createTx1.wait(2)
+    //     let receipt1: ContractReceipt = await mintTx1.wait(2)
     //     let eventArgs1 = receipt1.events?.filter((x) => {
     //       return x.event == 'VennityBadgeMinted'
     //     })[0].args
@@ -273,7 +275,7 @@ describe(`VennityBadge`, () => {
     //       : undefined
 
 
-    //     let receipt2: ContractReceipt = await createTx2.wait(2)
+    //     let receipt2: ContractReceipt = await mintTx2.wait(2)
     //     let eventArgs2 = receipt2.events?.filter((x) => {
     //       return x.event == 'VennityBadgeMinted'
     //     })[0].args
