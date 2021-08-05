@@ -2,13 +2,12 @@ import { HardhatUserConfig } from "hardhat/config";
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
-import 'hardhat-deploy'
 import 'dotenv/config'
 
 const config: HardhatUserConfig = {
   networks: {
     kovan: {
-      url: process.env.INFURA_KOVAN_URL,
+      url: process.env.INFURA_KOVAN_URL
     },
   },
   solidity: {
@@ -31,9 +30,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 100000
   },
-  // namedAccounts: {
-  //   deployer: 0
-  // },
 }
 
 export default config

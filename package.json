@@ -11,13 +11,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.1.0",
-    "hardhat": "^2.4.1"
+    "@openzeppelin/contracts": "4.2.0",
+    "hardhat": "2.5.0"
   },
   "scripts": {
     "clean": "rimraf ./cache ./artifacts ./types",
     "compile": "npm run clean && npx hardhat compile",
-    "test": "npm run clean && npx hardhat test",
+    "test": "npx hardhat test",
     "deploy": "npx hardhat deploy",
     "test:kovan": "npx hardhat test --network kovan",
     "deploy:kovan": "npx hardhat deploy --network kovan"
@@ -35,7 +35,6 @@
     "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.4.0",
-    "hardhat-deploy": "^0.8.9",
     "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
     "typechain": "^5.1.1",
