@@ -23,7 +23,10 @@ const config: HardhatUserConfig = {
             runs: 200
           }
         }
-      }
+      },
+      {
+        version: '0.5.2',
+      },
     ]
   },
   typechain: {

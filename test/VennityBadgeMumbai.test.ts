@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 /* Internal imports */
 import { VennityBadge } from '../types/VennityBadge'
+import { MaticToken } from '../types/MaticToken'
 
 
 /**
@@ -33,7 +34,8 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
   const TOKEN_METADATA_2 = 'https://ipfs.fleek.co/ipfs/bafybeiexw3i342yjzykljhbakz7njlabsvm62ed6zt2bzhb7xh7tlfnbqy'
 
 
-  let receipt: ContractReceipt
+  let receipt: ContractReceipt,
+    matic
 
   let mumbaiProvider = new ethers.providers.JsonRpcProvider(
     process.env.INFURA_MUMBAI_URL
@@ -45,21 +47,26 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
   let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, mumbaiProvider)
   let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, mumbaiProvider)
 
-  console.log('This is the first Mumbai wallet: ', l1Wallet1)
-  console.log('This is the second Mumbai wallet: ', l1Wallet2)
+  // console.log('This is the first Mumbai wallet: ', l1Wallet1)
+  // console.log('This is the second Mumbai wallet: ', l1Wallet2)
 
   const adminAddress = l1Wallet1.address
   const recipientAddress = l1Wallet2.address
 
   before(`inspect Mumbai MATIC balances: `, async () => {
-    // console.log(
-    //   'First mumbai wallet balance: ',
-    //   (await l1Wallet1.getBalance()).toString()
-    // )
-    // console.log(
-    //   'Second mumbai wallet balance: ',
-    //   (await l1Wallet2.getBalance()).toString()
-    // )
+    matic = await ethers.getContractAt(
+      'IERC20',
+      '0x0000000000000000000000000000000000001010'
+    ) as MaticToken
+
+    console.log(
+      'First mumbai wallet balance: ',
+      (await matic.balanceOf(adminAddress)).toString()
+    )
+    console.log(
+      'Second mumbai wallet balance: ',
+      (await matic.balanceOf(recipientAddress)).toString()
+    )
   })
 
   describe(`VennityBadge NFT`, () => {
@@ -77,11 +84,9 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
 
         VennityBadge = await Factory__VennityBadgeFactory
           .connect(l1Wallet1)
-          .deploy({
-            gasLimit: 12487794
-          }) as VennityBadge
+          .deploy() as VennityBadge
 
-        await VennityBadge.deployTransaction.wait(2)
+        await VennityBadge.deployTransaction.wait()
 
         console.log(
           'First VennityBadge contract address: ',
@@ -98,10 +103,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_NAME_0,
             TOKEN_URI_0,
             TOKEN_AMOUNT_0,
-            TOKEN_UUID_0,
-            {
-              gasLimit: 12487794
-            }
+            TOKEN_UUID_0
           )
 
         /**
@@ -157,10 +159,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
               recipientAddress,
               tokenID0,
               TOKEN_AMOUNT_0 + 1000,
-              "0x0000000000000000000000000000000000000000",
-              {
-                gasLimit: 12487794
-              }
+              "0x0000000000000000000000000000000000000000"
             )
 
           await expect(tx).to.be.revertedWith(
@@ -176,10 +175,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
               recipientAddress,
               tokenID0,
               TOKEN_AMOUNT_0,
-              "0x0000000000000000000000000000000000000000",
-              {
-                gasLimit: 12487794
-              }
+              "0x0000000000000000000000000000000000000000"
             )
 
           await tx.wait()
@@ -225,9 +221,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
 
         VennityBadge = await Factory__VennityBadgeFactory
           .connect(l1Wallet1)
-          .deploy({
-            gasLimit: 12487794
-          }) as VennityBadge
+          .deploy() as VennityBadge
 
         console.log('Second VennityBadge contract address: ', VennityBadge.address)
 
@@ -240,10 +234,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_NAME_0,
             TOKEN_URI_0,
             TOKEN_AMOUNT_0,
-            TOKEN_UUID_0,
-            {
-              gasLimit: 12487794
-            }
+            TOKEN_UUID_0
           )
 
         receipt0 = await mintTx0.wait()
@@ -255,10 +246,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_NAME_1,
             TOKEN_URI_1,
             TOKEN_AMOUNT_1,
-            TOKEN_UUID_1,
-            {
-              gasLimit: 12487794
-            }
+            TOKEN_UUID_1
           )
 
         receipt1 = await mintTx1.wait()
@@ -270,10 +258,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_NAME_2,
             TOKEN_URI_2,
             TOKEN_AMOUNT_2,
-            TOKEN_UUID_2,
-            {
-              gasLimit: 12487794
-            }
+            TOKEN_UUID_2
           )
 
         receipt2 = await mintTx1.wait()
@@ -390,10 +375,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
               recipientAddress,
               [tokenID0, tokenID1, tokenID2],
               [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
-              "0x0000000000000000000000000000000000000000",
-              {
-                gasLimit: 12487794
-              }
+              "0x0000000000000000000000000000000000000000"
             )
 
           await expect(tx).to.be.revertedWith(
@@ -409,10 +391,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
               recipientAddress,
               [tokenID0, tokenID1, tokenID2],
               [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
-              "0x0000000000000000000000000000000000000000",
-              {
-                gasLimit: 12487794
-              }
+              "0x0000000000000000000000000000000000000000"
             )
 
           await tx.wait()
