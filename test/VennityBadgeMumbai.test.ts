@@ -237,7 +237,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_UUID_0
           )
 
-        receipt0 = await mintTx0.wait()
+        receipt0 = await mintTx0.wait(2)
 
         mintTx1 = await VennityBadge
           .connect(l1Wallet1)
@@ -249,7 +249,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_UUID_1
           )
 
-        receipt1 = await mintTx1.wait()
+        receipt1 = await mintTx1.wait(2)
 
         mintTx2 = await VennityBadge
           .connect(l1Wallet1)
@@ -261,7 +261,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_UUID_2
           )
 
-        receipt2 = await mintTx1.wait()
+        receipt2 = await mintTx1.wait(2)
       })
 
       it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
