@@ -268,6 +268,11 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             from == admin,
             "ERC1155: `from` address must be the contract admin!"
         );
+        uint256 fromBalance = _balances[id][from];
+        require(
+            fromBalance >= amount,
+            "ERC1155: insufficient balance for transfer"
+        );
 
         address operator = _msgSender();
 
@@ -280,11 +285,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             data
         );
 
-        uint256 fromBalance = _balances[id][from];
-        require(
-            fromBalance >= amount,
-            "ERC1155: insufficient balance for transfer"
-        );
         _balances[id][from] = fromBalance - amount;
         _balances[id][to] += amount;
 
@@ -313,14 +313,9 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             "ERC1155: caller is not the contract admin!"
         );
         require(
-            to == admin,
+            from == admin,
             "ERC1155: `from` address must be the contract admin!"
         );
-
-        address operator = _msgSender();
-
-        _beforeTokenTransfer(operator, from, to, ids, amounts, data);
-
         for (uint256 i = 0; i < ids.length; ++i) {
             uint256 id = ids[i];
             uint256 amount = amounts[i];
@@ -333,6 +328,11 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
             _balances[id][from] = fromBalance - amount;
             _balances[id][to] += amount;
         }
+
+        address operator = _msgSender();
+
+        _beforeTokenTransfer(operator, from, to, ids, amounts, data);
+
 
         emit TransferBatch(operator, from, to, ids, amounts);
 

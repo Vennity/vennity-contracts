@@ -9,6 +9,9 @@ const config: HardhatUserConfig = {
     kovan: {
       url: process.env.INFURA_KOVAN_URL
     },
+    mumbai: {
+      url: process.env.INFURA_MUMBAI_URL
+    },
   },
   solidity: {
     compilers: [

@@ -18,9 +18,8 @@
     "clean": "rimraf ./cache ./artifacts ./types",
     "compile": "npm run clean && npx hardhat compile",
     "test": "npx hardhat test",
-    "deploy": "npx hardhat deploy",
     "test:kovan": "npx hardhat test --network kovan",
-    "deploy:kovan": "npx hardhat deploy --network kovan"
+    "test:mumbai": "npx hardhat test --network mumbai"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",

@@ -15,7 +15,11 @@ import { v4 as uuidv4 } from 'uuid'
 /* Internal imports */
 import { VennityBadge } from '../types/VennityBadge'
 
-describe(`VennityBadge`, () => {
+
+/**
+ * @dev This set of unit tests are to be run on Ethereum's Kovan testnet.
+ */
+describe(`VennityBadge (Kovan testnet)`, () => {
   const TOKEN_UUID_0 = uuidv4()
   const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
   const TOKEN_AMOUNT_0 = 100
@@ -44,7 +48,7 @@ describe(`VennityBadge`, () => {
   const adminAddress = l1Wallet1.address
   const recipientAddress = l1Wallet2.address
 
-  before(`load accounts`, async () => {
+  before(`inspect Kovan ETH balances of accounts`, async () => {
     console.log(
       'First kovan wallet: ',
       (await l1Wallet1.getBalance()).toString()
@@ -385,7 +389,7 @@ describe(`VennityBadge`, () => {
               [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
               "0x0000000000000000000000000000000000000000",
               {
-                gasLimit: 12487794,
+                gasLimit: 12487794
               }
             )
 
