@@ -25,12 +25,8 @@ describe(`VennityBadge (Kovan testnet)`, () => {
   const TOKEN_AMOUNT_0 = 100
   // Token uris
   const TOKEN_URI_0 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
-  const TOKEN_URI_1 = TOKEN_URI_0
-  const TOKEN_URI_2 = TOKEN_URI_0
-  // Token metadata
-  const TOKEN_METADATA_0 = 'https://ipfs.fleek.co/ipfs/bafybeidsd2qmgoue33czk3se7p47yz26xn6lwywtpqiajxz6oz2uo2op3a'
-  const TOKEN_METADATA_1 = 'https://ipfs.fleek.co/ipfs/bafybeigxvdqccezxii3u66tssx6rscmlnqqdc2nwk4w5ksk566afwb3ayi'
-  const TOKEN_METADATA_2 = 'https://ipfs.fleek.co/ipfs/bafybeiexw3i342yjzykljhbakz7njlabsvm62ed6zt2bzhb7xh7tlfnbqy'
+  const TOKEN_URI_1 = 'https://ipfs.fleek.co/ipfs/bafybeiahrj5dy3zqno5na4pi22lqqvd327mv76oklgxs576e2mxzbohkne'
+  const TOKEN_URI_2 = 'https://ipfs.fleek.co/ipfs/bafybeie5mzmitctjwcvyap5bzw5btw3n2umge5plvcpr6rbdkjbke524me'
 
 
   let receipt: ContractReceipt

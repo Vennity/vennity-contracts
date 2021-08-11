@@ -12,6 +12,9 @@ const config: HardhatUserConfig = {
     mumbai: {
       url: process.env.INFURA_MUMBAI_URL
     },
+    rinkeby: {
+      url: process.env.INFURA_RINKEBY_URL
+    },
   },
   solidity: {
     compilers: [

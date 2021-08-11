@@ -14,13 +14,11 @@ import { v4 as uuidv4 } from 'uuid'
 
 /* Internal imports */
 import { VennityBadge } from '../types/VennityBadge'
-import { MaticToken } from '../types/MaticToken'
-
 
 /**
  * @dev This set of unit tests are to be run on Polygon's Mumbai testnet.
  */
-describe(`VennityBadge (Mumbai testnet)`, () => {
+describe(`VennityBadge (Rinkeby testnet)`, () => {
   const TOKEN_UUID_0 = uuidv4()
   const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
   const TOKEN_AMOUNT_0 = 100
@@ -30,38 +28,46 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
   const TOKEN_URI_2 = 'https://ipfs.fleek.co/ipfs/bafybeie5mzmitctjwcvyap5bzw5btw3n2umge5plvcpr6rbdkjbke524me'
 
 
-  let receipt: ContractReceipt,
-    matic
+  let receipt: ContractReceipt
 
-  let mumbaiProvider = new ethers.providers.JsonRpcProvider(
-    process.env.INFURA_MUMBAI_URL
+  let rinkebyProvider = new ethers.providers.JsonRpcProvider(
+    process.env.INFURA_RINKEBY_URL
   )
 
   let privateKey1: string = process.env.METAMASK_WALLET_PRIVATE_KEY_1 as string
   let privateKey2: string = process.env.METAMASK_WALLET_PRIVATE_KEY_2 as string
 
-  let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, mumbaiProvider)
-  let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, mumbaiProvider)
+  let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, rinkebyProvider)
+  let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, rinkebyProvider)
 
-  // console.log('This is the first Mumbai wallet: ', l1Wallet1)
-  // console.log('This is the second Mumbai wallet: ', l1Wallet2)
+  // console.log('This is the first Rinkeby wallet: ', l1Wallet1)
+  // console.log('This is the second Rinkeby wallet: ', l1Wallet2)
 
   const adminAddress = l1Wallet1.address
   const recipientAddress = l1Wallet2.address
 
   before(`inspect Mumbai MATIC balances: `, async () => {
-    matic = await ethers.getContractAt(
-      'IERC20',
-      '0x0000000000000000000000000000000000001010'
-    ) as MaticToken
+    // matic = await ethers.getContractAt(
+    //   'IERC20',
+    //   '0x0000000000000000000000000000000000001010'
+    // ) as MaticToken
+
+    // console.log(
+    //   'First mumbai wallet balance: ',
+    //   (await matic.balanceOf(adminAddress)).toString()
+    // )
+    // console.log(
+    //   'Second mumbai wallet balance: ',
+    //   (await matic.balanceOf(recipientAddress)).toString()
+    // )
 
     console.log(
-      'First mumbai wallet balance: ',
-      (await matic.balanceOf(adminAddress)).toString()
+      'First rinkeby wallet balance: ',
+      (await l1Wallet1.getBalance()).toString()
     )
     console.log(
-      'Second mumbai wallet balance: ',
-      (await matic.balanceOf(recipientAddress)).toString()
+      'Second rinkeby wallet balance: ',
+      (await l1Wallet2.getBalance()).toString()
     )
   })
 
@@ -82,7 +88,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
           .connect(l1Wallet1)
           .deploy() as VennityBadge
 
-        await VennityBadge.deployTransaction.wait()
+        await VennityBadge.deployTransaction.wait(2)
 
         console.log(
           'First VennityBadge contract address: ',
@@ -105,7 +111,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
         /**
          * @todo Receipt never gets returned.
          */
-        receipt = await mintTx0.wait()
+        receipt = await mintTx0.wait(2)
       })
 
       let tokenID0: BigNumber
@@ -174,7 +180,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
               "0x0000000000000000000000000000000000000000"
             )
 
-          await tx.wait()
+          await tx.wait(2)
 
           const deployerBalance: BigNumber = await VennityBadge.balanceOf(
             adminAddress,
@@ -221,7 +227,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
 
         console.log('Second VennityBadge contract address: ', VennityBadge.address)
 
-        await VennityBadge.deployTransaction.wait()
+        await VennityBadge.deployTransaction.wait(2)
 
         mintTx0 = await VennityBadge
           .connect(l1Wallet1)
@@ -233,7 +239,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_UUID_0
           )
 
-        receipt0 = await mintTx0.wait()
+        receipt0 = await mintTx0.wait(2)
 
         mintTx1 = await VennityBadge
           .connect(l1Wallet1)
@@ -245,7 +251,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_UUID_1
           )
 
-        receipt1 = await mintTx1.wait()
+        receipt1 = await mintTx1.wait(2)
 
         mintTx2 = await VennityBadge
           .connect(l1Wallet1)
@@ -257,7 +263,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
             TOKEN_UUID_2
           )
 
-        receipt2 = await mintTx1.wait()
+        receipt2 = await mintTx1.wait(2)
       })
 
       it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
@@ -390,7 +396,7 @@ describe(`VennityBadge (Mumbai testnet)`, () => {
               "0x0000000000000000000000000000000000000000"
             )
 
-          await tx.wait()
+          await tx.wait(2)
 
           // Array of token amounts for recipient balances.
           const tokenAmount0BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_0)

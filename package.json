@@ -19,6 +19,7 @@
     "compile": "npm run clean && npx hardhat compile",
     "test": "npx hardhat test",
     "test:kovan": "npx hardhat test --network kovan",
+    "test:rinkeby": "npx hardhat test --network rinkeby",
     "test:mumbai": "npx hardhat test --network mumbai"
   },
   "devDependencies": {

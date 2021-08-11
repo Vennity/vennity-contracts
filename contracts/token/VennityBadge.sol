@@ -44,6 +44,9 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping ERC1155 token data (in bytes) to its token IDs
     mapping(bytes => uint256) private _tokenIDs;
 
+    // Mapping from account to operator approvals
+    mapping(address => mapping(address => bool)) private _operatorApprovals;
+
     /******************
      * @dev Not in use!
      *****************/
@@ -119,7 +122,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
      *
      * This implementation returns the token URI from its token UUID
      */
-    function getURI(uint256 id)
+    function uri(uint256 id)
         public
         view
         virtual
@@ -222,32 +225,32 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /******************
      * @dev Not in use!
      *****************/
-    // function setApprovalForAll(address operator, bool approved)
-    //     public
-    //     virtual
-    //     override
-    // {
-    //     require(
-    //         _msgSender() != operator,
-    //         "ERC1155: setting approval status for self"
-    //     );
+    function setApprovalForAll(address operator, bool approved)
+        public
+        virtual
+        override
+    {
+        require(
+            _msgSender() != operator,
+            "ERC1155: setting approval status for self"
+        );
 
-    //     _operatorApprovals[_msgSender()][operator] = approved;
-    //     emit ApprovalForAll(_msgSender(), operator, approved);
-    // }
+        _operatorApprovals[_msgSender()][operator] = approved;
+        emit ApprovalForAll(_msgSender(), operator, approved);
+    }
 
     /******************
      * @dev Not in use!
      *****************/
-    // function isApprovedForAll(address account, address operator)
-    //     public
-    //     view
-    //     virtual
-    //     override
-    //     returns (bool)
-    // {
-    //     return _operatorApprovals[account][operator];
-    // }
+    function isApprovedForAll(address account, address operator)
+        public
+        view
+        virtual
+        override
+        returns (bool)
+    {
+        return _operatorApprovals[account][operator];
+    }
 
     /**
      * @dev See {IERC1155-safeTransferFrom}.
@@ -332,7 +335,6 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
         address operator = _msgSender();
 
         _beforeTokenTransfer(operator, from, to, ids, amounts, data);
-
 
         emit TransferBatch(operator, from, to, ids, amounts);
 

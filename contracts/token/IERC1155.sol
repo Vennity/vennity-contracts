@@ -33,6 +33,15 @@ interface IERC1155 is IERC165 {
         uint256[] values
     );
 
+    /******************
+     * @dev Not in use!
+     *****************/
+    event ApprovalForAll(
+        address indexed account,
+        address indexed operator,
+        bool approved
+    );
+
     /**
      * @dev Emitted when the URI for token type `id` changes to `value`, if it is a non-programmatic URI.
      *
@@ -65,6 +74,19 @@ interface IERC1155 is IERC165 {
         external
         view
         returns (uint256[] memory);
+
+    /******************
+     * @dev Not in use!
+     *****************/
+    function setApprovalForAll(address operator, bool approved) external;
+
+    /******************
+     * @dev Not in use!
+     *****************/
+    function isApprovedForAll(address account, address operator)
+        external
+        view
+        returns (bool);
 
     /**
      * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
