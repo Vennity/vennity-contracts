@@ -11,6 +11,7 @@ import {
   Wallet
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
+import 'dotenv/config'
 
 /* Internal imports */
 import { VennityBadge } from '../types/VennityBadge'
@@ -24,9 +25,9 @@ describe(`VennityBadge (Kovan testnet)`, () => {
   const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
   const TOKEN_AMOUNT_0 = 100
   // Token uris
-  const TOKEN_URI_0 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
-  const TOKEN_URI_1 = 'https://ipfs.fleek.co/ipfs/bafybeiahrj5dy3zqno5na4pi22lqqvd327mv76oklgxs576e2mxzbohkne'
-  const TOKEN_URI_2 = 'https://ipfs.fleek.co/ipfs/bafybeie5mzmitctjwcvyap5bzw5btw3n2umge5plvcpr6rbdkjbke524me'
+  const TOKEN_URI_0 = 'https://ipfs.io/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
+  const TOKEN_URI_1 = 'https://ipfs.io/ipfs/bafybeiahrj5dy3zqno5na4pi22lqqvd327mv76oklgxs576e2mxzbohkne'
+  const TOKEN_URI_2 = 'https://ipfs.io/ipfs/bafybeie5mzmitctjwcvyap5bzw5btw3n2umge5plvcpr6rbdkjbke524me'
 
 
   let receipt: ContractReceipt
@@ -35,8 +36,8 @@ describe(`VennityBadge (Kovan testnet)`, () => {
     process.env.INFURA_KOVAN_URL
   )
 
-  let privateKey1: string = process.env.KOVAN_WALLET_PRIVATE_KEY_1 as string
-  let privateKey2: string = process.env.KOVAN_WALLET_PRIVATE_KEY_2 as string
+  let privateKey1: string = process.env.METAMASK_WALLET_PRIVATE_KEY_1 as string
+  let privateKey2: string = process.env.METAMASK_WALLET_PRIVATE_KEY_2 as string
 
   let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, kovanProvider)
   let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, kovanProvider)

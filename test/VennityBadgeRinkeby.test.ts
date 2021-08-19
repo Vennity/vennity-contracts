@@ -23,9 +23,9 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
   const TOKEN_NAME_0 = 'VennityBadge 0th Edition'
   const TOKEN_AMOUNT_0 = 100
   // Token uris
-  const TOKEN_URI_0 = 'https://ipfs.fleek.co/ipfs/bafybeiakjlj2orkhuqv5rbenqhk2dclygbykpogbryrcjee5nxpo4ewqka'
-  const TOKEN_URI_1 = 'https://ipfs.fleek.co/ipfs/bafybeiahrj5dy3zqno5na4pi22lqqvd327mv76oklgxs576e2mxzbohkne'
-  const TOKEN_URI_2 = 'https://ipfs.fleek.co/ipfs/bafybeie5mzmitctjwcvyap5bzw5btw3n2umge5plvcpr6rbdkjbke524me'
+  const TOKEN_URI_0 = 'ipfs://bafybeif5sp7bver5s25g4riysghkv2kdccousxo2gciid3r7sjdq4oj45y'
+  const TOKEN_URI_1 = 'ipfs://bafybeih23ccdankvx33wjqacsolzrsoqwpa6fmhj4rqy4g3xnxrgk7rjpm'
+  const TOKEN_URI_2 = 'ipfs://bafybeiebpwqcewopw3xkt335kdzw5dimvwmz5yfseidy5d2cpmi4o4hrma'
 
 
   let receipt: ContractReceipt
@@ -40,26 +40,10 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
   let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, rinkebyProvider)
   let l1Wallet2: Wallet = new ethers.Wallet(privateKey2, rinkebyProvider)
 
-  // console.log('This is the first Rinkeby wallet: ', l1Wallet1)
-  // console.log('This is the second Rinkeby wallet: ', l1Wallet2)
-
   const adminAddress = l1Wallet1.address
   const recipientAddress = l1Wallet2.address
 
   before(`inspect Mumbai MATIC balances: `, async () => {
-    // matic = await ethers.getContractAt(
-    //   'IERC20',
-    //   '0x0000000000000000000000000000000000001010'
-    // ) as MaticToken
-
-    // console.log(
-    //   'First mumbai wallet balance: ',
-    //   (await matic.balanceOf(adminAddress)).toString()
-    // )
-    // console.log(
-    //   'Second mumbai wallet balance: ',
-    //   (await matic.balanceOf(recipientAddress)).toString()
-    // )
 
     console.log(
       'First rinkeby wallet balance: ',
@@ -88,11 +72,18 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
           .connect(l1Wallet1)
           .deploy() as VennityBadge
 
-        await VennityBadge.deployTransaction.wait(2)
+
+        let awaitDeployedVennityBadge = await VennityBadge.deployTransaction.wait()
 
         console.log(
           'First VennityBadge contract address: ',
           VennityBadge.address
+        )
+
+        console.log(
+          'Gas used to deploy 1st VennityBadge contract: ',
+          awaitDeployedVennityBadge.gasUsed.toString(),
+          ' gas'
         )
 
         /**
@@ -111,7 +102,13 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
         /**
          * @todo Receipt never gets returned.
          */
-        receipt = await mintTx0.wait(2)
+        receipt = await mintTx0.wait()
+
+        console.log(
+          'Gas used to call _mint: ',
+          receipt.gasUsed.toString(),
+          ' gas'
+        )
       })
 
       let tokenID0: BigNumber
@@ -180,7 +177,7 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
               "0x0000000000000000000000000000000000000000"
             )
 
-          await tx.wait(2)
+          await tx.wait()
 
           const deployerBalance: BigNumber = await VennityBadge.balanceOf(
             adminAddress,
@@ -227,7 +224,12 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
 
         console.log('Second VennityBadge contract address: ', VennityBadge.address)
 
-        await VennityBadge.deployTransaction.wait(2)
+        let awaitDeployedVennityBadge = await VennityBadge.deployTransaction.wait()
+        console.log(
+          'Gas used to deploy 2nd VennityBadge contract: ',
+          awaitDeployedVennityBadge.gasUsed.toString(),
+          ' gas'
+        )
 
         mintTx0 = await VennityBadge
           .connect(l1Wallet1)
@@ -239,7 +241,12 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
             TOKEN_UUID_0
           )
 
-        receipt0 = await mintTx0.wait(2)
+        receipt0 = await mintTx0.wait()
+        console.log(
+          'Gas used to call _mint (1/3): ',
+          receipt0.gasUsed.toString(),
+          ' gas'
+        )
 
         mintTx1 = await VennityBadge
           .connect(l1Wallet1)
@@ -251,7 +258,12 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
             TOKEN_UUID_1
           )
 
-        receipt1 = await mintTx1.wait(2)
+        receipt1 = await mintTx1.wait()
+        console.log(
+          'Gas used to call _mint (2/3): ',
+          receipt1.gasUsed.toString(),
+          ' gas'
+        )
 
         mintTx2 = await VennityBadge
           .connect(l1Wallet1)
@@ -263,7 +275,12 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
             TOKEN_UUID_2
           )
 
-        receipt2 = await mintTx1.wait(2)
+        receipt2 = await mintTx1.wait()
+        console.log(
+          'Gas used to call _mint (3/3): ',
+          receipt2.gasUsed.toString(),
+          ' gas'
+        )
       })
 
       it(`should have created new VennityBadge contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
@@ -396,7 +413,7 @@ describe(`VennityBadge (Rinkeby testnet)`, () => {
               "0x0000000000000000000000000000000000000000"
             )
 
-          await tx.wait(2)
+          await tx.wait()
 
           // Array of token amounts for recipient balances.
           const tokenAmount0BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_0)

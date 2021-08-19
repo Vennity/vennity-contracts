@@ -2,6 +2,7 @@ import { HardhatUserConfig } from "hardhat/config";
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
+import 'hardhat-gas-reporter'
 import 'dotenv/config'
 
 const config: HardhatUserConfig = {
@@ -31,6 +32,10 @@ const config: HardhatUserConfig = {
         version: '0.5.2',
       },
     ]
+  },
+  gasReporter: {
+    currency: 'USD',
+    gasPrice: 1.2, // Note: 5 this is Matic's current `fast` gasPrice
   },
   typechain: {
     outDir: './types',
