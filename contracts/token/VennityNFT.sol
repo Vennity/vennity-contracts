@@ -15,12 +15,12 @@ import "./IERC1155.sol";
 
 /**
  * @dev Implementation of the basic standard multi-token.
- * See https://eips.ethereum.org/EIPS/eip-1155 
+ * See https://eips.ethereum.org/EIPS/eip-1155
  * Originally based on code by Enjin: https://github.com/enjin/erc-1155
  *
  * _Available since v3.1._
  */
-contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
+contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
 
     struct Badge {
@@ -33,7 +33,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     event SetTokenURI(uint256 id, string tokenURI, string tokenUUID);
-    event VennityBadgeMinted(uint256 index, Badge badge);
+    event VennityNFTMinted(uint256 index, Badge badge);
 
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
@@ -77,7 +77,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
     address admin;
 
     /**
-     * @dev Create new ERC1155 contract named `VennityBadge`.
+     * @dev Create new ERC1155 contract named `VennityNFT`.
      */
     constructor() {
         admin = msg.sender;
@@ -428,7 +428,7 @@ contract VennityBadge is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
         emit TransferSingle(operator, address(0), account_, id, amount_);
         // Emit event of token creation to retrieve event data on FE.
-        emit VennityBadgeMinted(badges.length - 1, badge);
+        emit VennityNFTMinted(badges.length - 1, badge);
 
         _doSafeTransferAcceptanceCheck(
             operator,

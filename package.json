@@ -2,7 +2,7 @@
   "name": "vennity-contracts",
   "version": "0.1.0",
   "description": "Contracts and their APIs for Vennity dashboard",
-  "main": "test/VennityBadge.test.js",
+  "main": "test/VennityNFT.test.js",
   "repository": "git@github.com:platocrat/vennity-contracts.git",
   "author": {
     "name": "platocrat",
@@ -18,9 +18,9 @@
     "clean": "rimraf ./cache ./artifacts ./types",
     "compile": "npm run clean && npx hardhat compile",
     "test": "npx hardhat test",
-    "test:kovan": "npx hardhat test ./test/VennityBadgeKovan.test.ts --network kovan",
-    "test:rinkeby": "npx hardhat test ./test/VennityBadgeRinkeby.test.ts --network rinkeby",
-    "test:mumbai": "npx hardhat test ./test/VennityBadgeMumbai.test.ts --network mumbai"
+    "test:kovan": "npx hardhat test ./test/VennityNFTKovan.test.ts --network kovan",
+    "test:rinkeby": "npx hardhat test ./test/VennityNFTRinkeby.test.ts --network rinkeby",
+    "test:mumbai": "npx hardhat test ./test/VennityNFTMumbai.test.ts --network mumbai"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",

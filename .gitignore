@@ -1,8 +1,8 @@
 # ----------- Project specific ---------------
 contracts/proxies
 contracts/tokens
-contracts/VennityBadgeMinter.sol
-contracts/VennityBadgeMinter.txt
+contracts/VennityNFTMinter.sol
+contracts/VennityNFTMinter.txt
 types
 ERC1155-Metadata-URI-JSON-Schemas
 .env

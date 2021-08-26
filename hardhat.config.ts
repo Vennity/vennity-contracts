@@ -16,6 +16,9 @@ const config: HardhatUserConfig = {
     rinkeby: {
       url: process.env.INFURA_RINKEBY_URL
     },
+    polygonMainnet: {
+      url: process.env.INFURA_POLYGON_MAINNET_URL
+    }
   },
   solidity: {
     compilers: [
@@ -34,8 +37,7 @@ const config: HardhatUserConfig = {
     ]
   },
   gasReporter: {
-    currency: 'USD',
-    gasPrice: 1.2, // Note: 5 this is Matic's current `fast` gasPrice
+    currency: 'USD'
   },
   typechain: {
     outDir: './types',
