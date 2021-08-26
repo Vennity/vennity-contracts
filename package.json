@@ -20,7 +20,8 @@
     "test": "npx hardhat test",
     "test:kovan": "npx hardhat test ./test/VennityNFTKovan.test.ts --network kovan",
     "test:rinkeby": "npx hardhat test ./test/VennityNFTRinkeby.test.ts --network rinkeby",
-    "test:mumbai": "npx hardhat test ./test/VennityNFTMumbai.test.ts --network mumbai"
+    "test:mumbai": "npx hardhat test ./test/VennityNFTMumbai.test.ts --network mumbai",
+    "test:polygonMainnet": "npx hardhat test ./test/VennityNFTPolygonMainnet.test.ts --network polygonMainnet"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
