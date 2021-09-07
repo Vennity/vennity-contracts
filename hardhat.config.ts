@@ -2,6 +2,7 @@ import { HardhatUserConfig } from "hardhat/config";
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
+import '@eth-optimism/hardhat-ovm'
 import 'hardhat-gas-reporter'
 import 'dotenv/config'
 
@@ -18,6 +19,14 @@ const config: HardhatUserConfig = {
     },
     polygonMainnet: {
       url: process.env.INFURA_POLYGON_MAINNET_URL
+    },
+    optimisticMainnet: {
+      gasPrice: 15_000_000, 
+      url: process.env.INFURA_OPTIMISTIC_MAINNET_URL
+    },
+    optimisticKovan: {
+      gasPrice: 15_000_000, 
+      url: process.env.INFURA_OPTIMISTIC_KOVAN_URL
     }
   },
   solidity: {
