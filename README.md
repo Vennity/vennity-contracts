@@ -1,3 +1,6 @@
-# vennity-contracts
+# vennity-contract
 
-Contracts and their APIs for Vennity dashboard
+[Vennity](https://vennity.co) Solidity contract and unit tests.
+
+## Contributors
+@platocrat

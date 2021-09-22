@@ -86,9 +86,6 @@ describe(`VennityNFT (Rinkeby testnet)`, () => {
           ' gas'
         )
 
-        /**
-         * @todo Throws a CALL_EXCEPTION error
-         */
         mintTx0 = await VennityNFT
           .connect(l1Wallet1)
           ._mint(
@@ -99,9 +96,6 @@ describe(`VennityNFT (Rinkeby testnet)`, () => {
             TOKEN_UUID_0
           )
 
-        /**
-         * @todo Receipt never gets returned.
-         */
         receipt = await mintTx0.wait()
 
         console.log(

@@ -114,9 +114,6 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        /**
-         * @todo Throws a CALL_EXCEPTION error
-         */
         mintTx0 = await VennityNFT
           .connect(l1Wallet1)
           ._mint(
@@ -127,9 +124,6 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
             TOKEN_UUID_0
           )
 
-        /**
-         * @todo Receipt never gets returned.
-         */
         receipt = await mintTx0.wait()
 
         adminMaticBalanceAfter = await matic.balanceOf(adminAddress)

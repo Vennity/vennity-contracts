@@ -73,162 +73,156 @@ describe(`VennityNFT (Polygon Mainnet)`, () => {
   })
 
   describe(`VennityNFT NFT`, () => {
-    // describe(`VennityNFT 0th Edition`, () => {
-    //   let mintTx0: ContractTransaction,
-    //     mintTx1: ContractTransaction,
-    //     mintTx2: ContractTransaction
+    describe(`VennityNFT 0th Edition`, () => {
+      let mintTx0: ContractTransaction,
+        mintTx1: ContractTransaction,
+        mintTx2: ContractTransaction
 
-    //   let VennityNFT: VennityNFT
+      let VennityNFT: VennityNFT
 
-    //   before(`deploy VennityNFT contract and mint ERC1155 tokens`, async () => {
-    //     const Factory__VennityNFTFactory = await ethers.getContractFactory(
-    //       'VennityNFT'
-    //     )
+      before(`deploy VennityNFT contract and mint ERC1155 tokens`, async () => {
+        const Factory__VennityNFTFactory = await ethers.getContractFactory(
+          'VennityNFT'
+        )
 
-    //     adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
+        adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-    //     VennityNFT = await Factory__VennityNFTFactory
-    //       .connect(l1Wallet1)
-    //       .deploy() as VennityNFT
+        VennityNFT = await Factory__VennityNFTFactory
+          .connect(l1Wallet1)
+          .deploy() as VennityNFT
 
-    //     let awaitDeployedVennityNFT = await VennityNFT.deployTransaction.wait()
+        let awaitDeployedVennityNFT = await VennityNFT.deployTransaction.wait()
 
-    //     console.log(
-    //       'First VennityNFT contract address: ',
-    //       VennityNFT.address
-    //     )
+        console.log(
+          'First VennityNFT contract address: ',
+          VennityNFT.address
+        )
 
-    //     console.log(
-    //       'Gas used to deploy 1st VennityNFT contract: ',
-    //       awaitDeployedVennityNFT.gasUsed.toString(),
-    //       ' gas'
-    //     )
+        console.log(
+          'Gas used to deploy 1st VennityNFT contract: ',
+          awaitDeployedVennityNFT.gasUsed.toString(),
+          ' gas'
+        )
 
-    //     adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
+        adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
 
-    //     // Log MATIC balance spent to deploy contract
-    //     console.log(
-    //       'Amount of MATIC tokens spent by admin to deploy contract: ',
-    //       adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
-    //     )
+        // Log MATIC balance spent to deploy contract
+        console.log(
+          'Amount of MATIC tokens spent by admin to deploy contract: ',
+          adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        )
 
-    //     adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
+        adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-    //     /**
-    //      * @todo Throws a CALL_EXCEPTION error
-    //      */
-    //     mintTx0 = await VennityNFT
-    //       .connect(l1Wallet1)
-    //       ._mint(
-    //         l1Wallet1.address,
-    //         TOKEN_NAME_0,
-    //         TOKEN_URI_0,
-    //         TOKEN_AMOUNT_0,
-    //         TOKEN_UUID_0
-    //       )
+        mintTx0 = await VennityNFT
+          .connect(l1Wallet1)
+          ._mint(
+            l1Wallet1.address,
+            TOKEN_NAME_0,
+            TOKEN_URI_0,
+            TOKEN_AMOUNT_0,
+            TOKEN_UUID_0
+          )
 
-    //     /**
-    //      * @todo Receipt never gets returned.
-    //      */
-    //     receipt = await mintTx0.wait()
+        receipt = await mintTx0.wait()
 
-    //     adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
+        adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
 
-    //     console.log(
-    //       'Gas used to call _mint: ',
-    //       receipt.gasUsed.toString(),
-    //       ' gas'
-    //     )
+        console.log(
+          'Gas used to call _mint: ',
+          receipt.gasUsed.toString(),
+          ' gas'
+        )
 
-    //     // Log MATIC balance spent to deploy contract
-    //     console.log(
-    //       'Amount of MATIC tokens spent by admin to call `_mint` 1 time: ',
-    //       adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
-    //     )
-    //   })
+        // Log MATIC balance spent to deploy contract
+        console.log(
+          'Amount of MATIC tokens spent by admin to call `_mint` 1 time: ',
+          adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        )
+      })
 
-    //   let tokenID0: BigNumber
+      let tokenID0: BigNumber
 
-    //   it(`should have created new VennityNFT contract and minted 1 set of an ERC1155 token with a name and token URI`, async () => {
-    //     let eventArgs = receipt.events?.filter((x) => {
-    //       return x.event == 'VennityNFTMinted'
-    //     })[0].args
+      it(`should have created new VennityNFT contract and minted 1 set of an ERC1155 token with a name and token URI`, async () => {
+        let eventArgs = receipt.events?.filter((x) => {
+          return x.event == 'VennityNFTMinted'
+        })[0].args
 
-    //     let VennityTokenUUID: string = eventArgs
-    //       ? eventArgs[1].tokenUUID
-    //       : undefined
-    //     let VennityTokenURI: string = eventArgs
-    //       ? eventArgs[1].tokenURI
-    //       : undefined
+        let VennityTokenUUID: string = eventArgs
+          ? eventArgs[1].tokenUUID
+          : undefined
+        let VennityTokenURI: string = eventArgs
+          ? eventArgs[1].tokenURI
+          : undefined
 
-    //     expect(VennityTokenUUID).to.eq(TOKEN_UUID_0)
-    //     expect(VennityTokenURI).to.eq(TOKEN_URI_0)
-    //   })
+        expect(VennityTokenUUID).to.eq(TOKEN_UUID_0)
+        expect(VennityTokenURI).to.eq(TOKEN_URI_0)
+      })
 
-    //   it(`should have minted 100 VennityNFT 0th Edition tokens after creation of VennityNFT contract`, async () => {
-    //     tokenID0 = await VennityNFT.getTokenID(TOKEN_UUID_0)
-    //     const tokenName: string = await VennityNFT.getTokenName(tokenID0)
-    //     expect(tokenName).to.eq(TOKEN_NAME_0)
-    //   })
+      it(`should have minted 100 VennityNFT 0th Edition tokens after creation of VennityNFT contract`, async () => {
+        tokenID0 = await VennityNFT.getTokenID(TOKEN_UUID_0)
+        const tokenName: string = await VennityNFT.getTokenName(tokenID0)
+        expect(tokenName).to.eq(TOKEN_NAME_0)
+      })
 
-    //   it(`should give the initial supply to the creator's address`, async () => {
-    //     const balance = await VennityNFT.balanceOf(adminAddress, tokenID0)
-    //     expect(balance).to.eq(TOKEN_AMOUNT_0)
-    //   })
+      it(`should give the initial supply to the creator's address`, async () => {
+        const balance = await VennityNFT.balanceOf(adminAddress, tokenID0)
+        expect(balance).to.eq(TOKEN_AMOUNT_0)
+      })
 
-    //   it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
-    //     const totalSupply = await VennityNFT.getTokenSupply(tokenID0)
-    //     expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
-    //   })
+      it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
+        const totalSupply = await VennityNFT.getTokenSupply(tokenID0)
+        expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
+      })
 
-    //   describe(`safeTransferFrom(...)`, () => {
-    //     /**
-    //      * @dev Note that the caller must be the contract admin, i.e. the
-    //      *      `adminAddress`
-    //      */
-    //     it(`should revert when the sender does not have enough balance`, async () => {
-    //       const tx = VennityNFT
-    //         .connect(l1Wallet1)
-    //         .safeTransferFrom(
-    //           adminAddress,
-    //           recipientAddress,
-    //           tokenID0,
-    //           TOKEN_AMOUNT_0 + 1000,
-    //           "0x0000000000000000000000000000000000000000"
-    //         )
+      describe(`safeTransferFrom(...)`, () => {
+        /**
+         * @dev Note that the caller must be the contract admin, i.e. the
+         *      `adminAddress`
+         */
+        it(`should revert when the sender does not have enough balance`, async () => {
+          const tx = VennityNFT
+            .connect(l1Wallet1)
+            .safeTransferFrom(
+              adminAddress,
+              recipientAddress,
+              tokenID0,
+              TOKEN_AMOUNT_0 + 1000,
+              "0x0000000000000000000000000000000000000000"
+            )
 
-    //       await expect(tx).to.be.revertedWith(
-    //         `ERC1155: insufficient balance for transfer`
-    //       )
-    //     })
+          await expect(tx).to.be.revertedWith(
+            `ERC1155: insufficient balance for transfer`
+          )
+        })
 
-    //     it(`should succeed when the sender has enough balance`, async () => {
-    //       const tx = await VennityNFT
-    //         .connect(l1Wallet1)
-    //         .safeTransferFrom(
-    //           adminAddress,
-    //           recipientAddress,
-    //           tokenID0,
-    //           TOKEN_AMOUNT_0,
-    //           "0x0000000000000000000000000000000000000000"
-    //         )
+        it(`should succeed when the sender has enough balance`, async () => {
+          const tx = await VennityNFT
+            .connect(l1Wallet1)
+            .safeTransferFrom(
+              adminAddress,
+              recipientAddress,
+              tokenID0,
+              TOKEN_AMOUNT_0,
+              "0x0000000000000000000000000000000000000000"
+            )
 
-    //       await tx.wait()
+          await tx.wait()
 
-    //       const deployerBalance: BigNumber = await VennityNFT.balanceOf(
-    //         adminAddress,
-    //         tokenID0
-    //       )
-    //       const recipientBalance: BigNumber = await VennityNFT.balanceOf(
-    //         recipientAddress,
-    //         tokenID0
-    //       )
+          const deployerBalance: BigNumber = await VennityNFT.balanceOf(
+            adminAddress,
+            tokenID0
+          )
+          const recipientBalance: BigNumber = await VennityNFT.balanceOf(
+            recipientAddress,
+            tokenID0
+          )
 
-    //       expect(deployerBalance).to.eq(0)
-    //       expect(recipientBalance).to.eq(TOKEN_AMOUNT_0)
-    //     })
-    //   })
-    // })
+          expect(deployerBalance).to.eq(0)
+          expect(recipientBalance).to.eq(TOKEN_AMOUNT_0)
+        })
+      })
+    })
 
     describe(`VennityNFT 0th, 1st, and 2nd Editions`, () => {
       let VennityNFT: VennityNFT

@@ -1,13 +1,13 @@
 {
   "name": "vennity-contracts",
-  "version": "0.1.0",
-  "description": "Contracts and their APIs for Vennity dashboard",
+  "version": "1.0.0",
+  "description": "Vennity contracts",
   "main": "test/VennityNFT.test.js",
-  "repository": "git@github.com:platocrat/vennity-contracts.git",
+  "repository": "git@github.com:platocrat/vennity-contract.git",
   "author": {
     "name": "platocrat",
     "email": "jack.abe.winfield@gmail.com",
-    "url": "https://github.com/platocrat"
+    "url": "https://github.com/platocrat/vennity-contract"
   },
   "license": "MIT",
   "dependencies": {

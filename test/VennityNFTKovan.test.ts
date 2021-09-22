@@ -82,9 +82,6 @@ describe(`VennityNFT (Kovan testnet)`, () => {
           VennityNFT.address
         )
 
-        /**
-         * @todo Throws a CALL_EXCEPTION error
-         */
         mintTx0 = await VennityNFT
           .connect(l1Wallet1)
           ._mint(
@@ -98,9 +95,6 @@ describe(`VennityNFT (Kovan testnet)`, () => {
             }
           )
 
-        /**
-         * @todo Receipt never gets returned.
-         */
         receipt = await mintTx0.wait()
       })
 

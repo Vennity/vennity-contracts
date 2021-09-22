@@ -21,27 +21,24 @@ const config: HardhatUserConfig = {
       url: process.env.INFURA_POLYGON_MAINNET_URL
     },
     optimisticMainnet: {
-      gasPrice: 15_000_000, 
-      url: process.env.INFURA_OPTIMISTIC_MAINNET_URL
+      url: process.env.INFURA_OPTIMISTIC_MAINNET_URL,
+      ovm: true
     },
     optimisticKovan: {
-      gasPrice: 15_000_000, 
-      url: process.env.INFURA_OPTIMISTIC_KOVAN_URL
+      url: 'https://kovan.optimism.io',
+      ovm: true
     }
   },
   solidity: {
     compilers: [
       {
-        version: '0.8.4',
+        version: '0.7.6',
         settings: {
           optimizer: {
             enabled: true,
             runs: 200
           }
         }
-      },
-      {
-        version: '0.5.2',
       },
     ]
   },
@@ -55,6 +52,9 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 100000
   },
+  ovm: {
+    solcVersion: '0.7.6'
+  }
 }
 
 export default config
