@@ -3,4 +3,4 @@
 [Vennity](https://vennity.co) Solidity contract and unit tests.
 
 ## Contributors
-@platocrat
+[@platocrat](https://github.com/platocrat)
