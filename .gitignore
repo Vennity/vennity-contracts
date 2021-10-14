@@ -1,4 +1,6 @@
 # ----------- Project specific ---------------
+artifacts
+artifacts-ovm
 contracts/proxies
 contracts/tokens
 contracts/VennityNFTMinter.sol

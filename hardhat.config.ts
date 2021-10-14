@@ -22,11 +22,13 @@ const config: HardhatUserConfig = {
     },
     optimisticMainnet: {
       url: process.env.INFURA_OPTIMISTIC_MAINNET_URL,
-      ovm: true
+      gasPrice: 15000000,
+      ovm: true,
     },
     optimisticKovan: {
       url: 'https://kovan.optimism.io',
-      ovm: true
+      gasPrice: 15000000,
+      ovm: true,
     }
   },
   solidity: {

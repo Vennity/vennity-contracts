@@ -78,7 +78,7 @@ describe(`VennityNFT (Optimistic Kovan)`, () => {
 
         VennityNFT = await Factory__VennityNFTFactory
           .connect(l1Wallet1)
-          .deploy({ gasLimit: 100_000 }) as VennityNFT
+          .deploy() as VennityNFT
 
         let awaitDeployedVennityNFT = await VennityNFT.deployTransaction.wait()
 
@@ -113,8 +113,7 @@ describe(`VennityNFT (Optimistic Kovan)`, () => {
             TOKEN_NAME_0,
             TOKEN_URI_0,
             TOKEN_AMOUNT_0,
-            TOKEN_UUID_0,
-            { gasLimit: 100_000 }
+            TOKEN_UUID_0
           )
 
         /**
