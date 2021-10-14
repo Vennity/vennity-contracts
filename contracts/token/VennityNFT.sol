@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: MIT
-pragma solidity >=0.8.4 <=0.9.0;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.8.9 <=0.9.0;
 
 // import "hardhat/console.sol";
 
@@ -23,6 +23,9 @@ import "./IERC1155.sol";
 contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
 
+    event SetTokenURI(uint256 id, string tokenURI, string tokenUUID);
+    event VennityNFTMinted(uint256 index, Badge badge);
+
     struct Badge {
         string tokenUUID;
         string name;
@@ -32,8 +35,19 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         bytes tokenData;
     }
 
-    event SetTokenURI(uint256 id, string tokenURI, string tokenUUID);
-    event VennityNFTMinted(uint256 index, Badge badge);
+    /***************************
+     * Private State Variables *
+     **************************/
+    /******************
+     * @dev Not in use!
+     *****************/
+    // // Mapping from account to operator approvals
+    // mapping(address => mapping(address => bool)) private _operatorApprovals;
+
+    // Used to keep track of how many times `_mint()` method is called.
+    // We use this `mintCount` to assign `id`s in the call stack of the
+    // `_mint()` method.
+    uint256 private mintCount;
 
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
@@ -47,11 +61,19 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping from account to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    /******************
-     * @dev Not in use!
-     *****************/
-    // // Mapping from account to operator approvals
-    // mapping(address => mapping(address => bool)) private _operatorApprovals;
+    /**************************
+     * Public State Variables *
+     *************************/
+    /**
+     * @dev Not part of ERC1155 standard.
+     * Admin of the contract. Is the only one who can call `_mint()`.
+     */
+    address public admin;
+    string public name;
+    string public tokenName;
+
+    // Used to track badges that are minted.
+    Badge[] public badges;
 
     // Mapping token ID to its total supply
     mapping(uint256 => uint256) public _tokenSupplies;
@@ -62,25 +84,12 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     // Mapping token ID to its token name
     mapping(uint256 => string) public _tokenNames;
 
-    // Used to track badges that are minted.
-    Badge[] public badges;
-
-    // Used to keep track of how many times `_mint()` method is called.
-    // We use this `mintCount` to assign `id`s in the call stack of the
-    // `_mint()` method.
-    uint256 private mintCount;
-
-    /**
-     * @dev Not part of ERC1155 standard.
-     * Admin of the contract. Is the only one who can call `_mint()`.
-     */
-    address admin;
-
     /**
      * @dev Create new ERC1155 contract named `VennityNFT`.
      */
-    constructor() {
+    constructor(string memory _name) {
         admin = msg.sender;
+        name = _name;
     }
 
     /**
@@ -91,16 +100,17 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /**
-     * @dev Returns the name of the token from its ID
+     * @dev Returns the name of the contract
      */
-    function getTokenName(uint256 id)
-        public
-        view
-        virtual
-        returns (string memory)
-    {
-        string memory _name = _tokenNames[id];
-        return _name;
+    function getName() public view virtual returns (string memory) {
+        return name;
+    }
+
+    /**
+     * @dev Returns the name of the token
+     */
+    function getTokenName() public view virtual returns (string memory) {
+        return tokenName;
     }
 
     /**
@@ -146,6 +156,13 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         _tokenURIs[id] = _uri;
 
         emit SetTokenURI(id, _uri, _tokenUUID);
+    }
+
+    /**
+     * @dev Sets the name of this contract
+     */
+    function setName(string memory _name) public virtual {
+        name = _name;
     }
 
     /**
@@ -375,6 +392,8 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
             "ERC1155: only the admin of this contract can call `_mint()`!"
         );
         require(account_ == admin, "ERC1155: account must be the admin!");
+
+        tokenName = name_;
 
         // Get the bytes of `tokenUUID`.
         bytes memory data = abi.encode(tokenUUID_);

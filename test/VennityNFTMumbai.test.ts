@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import 'dotenv/config'
 
 /* Internal imports */
+import { VennityNFTFactory } from '../types/VennityNFTFactory'
 import { VennityNFT } from '../types/VennityNFT'
 import { MaticToken } from '../types/MaticToken'
 
@@ -22,6 +23,8 @@ import { MaticToken } from '../types/MaticToken'
  * @dev This set of unit tests are to be run on Polygon's Mumbai testnet.
  */
 describe(`VennityNFT (Mumbai testnet)`, () => {
+  const CONTRACT_NAME_0 = 'VennityNFT Collection Name 0'
+  const CONTRACT_NAME_1 = 'VennityNFT Collection Name 1'
   const TOKEN_UUID_0 = uuidv4()
   const TOKEN_NAME_0 = 'VennityNFT 0th Edition'
   const TOKEN_AMOUNT_0 = 100
@@ -89,7 +92,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         VennityNFT = await Factory__VennityNFTFactory
           .connect(l1Wallet1)
-          .deploy() as VennityNFT
+          .deploy(CONTRACT_NAME_0) as VennityNFT
 
         let awaitDeployedVennityNFT = await VennityNFT.deployTransaction.wait()
 
@@ -161,7 +164,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
       it(`should have minted 100 VennityNFT 0th Edition tokens after creation of VennityNFT contract`, async () => {
         tokenID0 = await VennityNFT.getTokenID(TOKEN_UUID_0)
-        const tokenName: string = await VennityNFT.getTokenName(tokenID0)
+        const tokenName: string = await VennityNFT.getTokenName()
         expect(tokenName).to.eq(TOKEN_NAME_0)
       })
 
@@ -252,7 +255,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         VennityNFT = await Factory__VennityNFTFactory
           .connect(l1Wallet1)
-          .deploy() as VennityNFT
+          .deploy(CONTRACT_NAME_1) as VennityNFT
 
         console.log('Second VennityNFT contract address: ', VennityNFT.address)
 
@@ -400,19 +403,19 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
       it(`should have minted 100 VennityNFT 0th Edition tokens`, async () => {
         tokenID0 = await VennityNFT.getTokenID(TOKEN_UUID_0)
-        const tokenName: string = await VennityNFT.getTokenName(tokenID0)
+        const tokenName: string = await VennityNFT.getTokenName()
         expect(tokenName).to.eq(TOKEN_NAME_0)
       })
 
       it(`should have minted 150 VennityNFT 1st Edition tokens`, async () => {
         tokenID1 = await VennityNFT.getTokenID(TOKEN_UUID_1)
-        const tokenName: string = await VennityNFT.getTokenName(tokenID1)
+        const tokenName: string = await VennityNFT.getTokenName()
         expect(tokenName).to.eq(TOKEN_NAME_1)
       })
 
       it(`should have minted 200 VennityNFT 2nd Edition tokens`, async () => {
         tokenID2 = await VennityNFT.getTokenID(TOKEN_UUID_2)
-        const tokenName: string = await VennityNFT.getTokenName(tokenID2)
+        const tokenName: string = await VennityNFT.getTokenName()
         expect(tokenName).to.eq(TOKEN_NAME_2)
       })
 
