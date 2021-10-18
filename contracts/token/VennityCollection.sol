@@ -20,19 +20,19 @@ import "./IERC1155.sol";
  *
  * _Available since v3.1._
  */
-contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
+contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
 
-    event SetTokenURI(uint256 id, string tokenURI, string tokenUUID);
-    event VennityNFTMinted(uint256 index, Badge badge);
+    event SetUri(uint256 id, string uri, string uuid);
+    event VennityNFTMinted(uint256 index, NFT nft);
 
-    struct Badge {
-        string tokenUUID;
+    struct NFT {
+        string uuid;
         string name;
-        string tokenURI;
-        uint256 tokenSupply;
-        uint256 tokenID;
-        bytes tokenData;
+        string uri;
+        uint256 supply;
+        uint256 id;
+        bytes data;
     }
 
     /***************************
@@ -53,10 +53,10 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     mapping(uint256 => mapping(address => uint256)) private _balances;
 
     // Mapping ERC1155 token ID to its token data (in bytes)
-    mapping(uint256 => bytes) private _tokenData;
+    mapping(uint256 => bytes) private _data;
 
     // Mapping ERC1155 token data (in bytes) to its token IDs
-    mapping(bytes => uint256) private _tokenIDs;
+    mapping(bytes => uint256) private _ids;
 
     // Mapping from account to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
@@ -70,25 +70,24 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
      */
     address public admin;
     string public name;
-    string public tokenName;
 
-    // Used to track badges that are minted.
-    Badge[] public badges;
+    // Used to track NFTs that are minted.
+    NFT[] public nfts;
 
     // Mapping token ID to its total supply
-    mapping(uint256 => uint256) public _tokenSupplies;
+    mapping(uint256 => uint256) public _supplies;
 
     // Mapping token ID to its token URI (as a string)
-    mapping(uint256 => string) public _tokenURIs;
+    mapping(uint256 => string) public _uris;
 
     // Mapping token ID to its token name
-    mapping(uint256 => string) public _tokenNames;
+    mapping(uint256 => string) public _names;
 
     /**
      * @dev Create new ERC1155 contract named `VennityNFT`.
      */
-    constructor(string memory _name) {
-        admin = msg.sender;
+    constructor(string memory _name, address _admin) {
+        admin = _admin;
         name = _name;
     }
 
@@ -102,28 +101,25 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev Returns the name of the contract
      */
-    function getName() public view virtual returns (string memory) {
+    function getCollectionName() public view virtual returns (string memory) {
         return name;
     }
 
-    /**
-     * @dev Returns the name of the token
-     */
-    function getTokenName() public view virtual returns (string memory) {
-        return tokenName;
+    function getTokenName(uint256 id)
+        public
+        view
+        virtual
+        returns (string memory)
+    {
+        return _names[id];
     }
 
     /**
      * @dev Returns the token ID from its token UUID
      */
-    function getTokenID(string memory tokenUUID)
-        public
-        view
-        virtual
-        returns (uint256)
-    {
-        bytes memory tokenData = abi.encode(tokenUUID);
-        uint256 id = _tokenIDs[tokenData];
+    function getId(string memory uuid) public view virtual returns (uint256) {
+        bytes memory data = abi.encode(uuid);
+        uint256 id = _ids[data];
         return id;
     }
 
@@ -139,7 +135,7 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         override
         returns (string memory)
     {
-        string memory uri_ = _tokenURIs[id];
+        string memory uri_ = _uris[id];
         return uri_;
     }
 
@@ -148,14 +144,11 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
      *
      * This implementation returns the token URI from its token UUID
      */
-    function setURI(string memory _tokenUUID, string memory _uri)
-        public
-        virtual
-    {
-        uint256 id = getTokenID(_tokenUUID);
-        _tokenURIs[id] = _uri;
+    function setURI(string memory _uuid, string memory _uri) public virtual {
+        uint256 id = getId(_uuid);
+        _uris[id] = _uri;
 
-        emit SetTokenURI(id, _uri, _tokenUUID);
+        emit SetUri(id, _uri, _uuid);
     }
 
     /**
@@ -169,9 +162,9 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * @dev Inspired by IERC20-totalSupply.
      * @param id The token's ID
      */
-    function getTokenSupply(uint256 id) public view virtual returns (uint256) {
-        uint256 tokenSupply_ = _tokenSupplies[id];
-        return tokenSupply_;
+    function getSupply(uint256 id) public view virtual returns (uint256) {
+        uint256 supply_ = _supplies[id];
+        return supply_;
     }
 
     /**
@@ -269,9 +262,6 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         return _operatorApprovals[account][operator];
     }
 
-    /**
-     * @dev See {IERC1155-safeTransferFrom}.
-     */
     function safeTransferFrom(
         address from,
         address to,
@@ -313,9 +303,6 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
     }
 
-    /**
-     * @dev See {IERC1155-safeBatchTransferFrom}.
-     */
     function safeBatchTransferFrom(
         address from,
         address to,
@@ -365,23 +352,12 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         );
     }
 
-    /**
-     * @dev Creates `amount` tokens of token type `id`, and assigns them to `account`.
-     *
-     * Emits a {TransferSingle} event.
-     *
-     * Requirements:
-     *
-     * - `account` cannot be the zero address.
-     * - If `account` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
-     * acceptance magic value.
-     */
     function _mint(
         address account_,
         string memory name_,
         string memory uri_,
         uint256 amount_,
-        string memory tokenUUID_
+        string memory uuid_
     ) public {
         require(
             account_ != address(0),
@@ -393,14 +369,12 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
         );
         require(account_ == admin, "ERC1155: account must be the admin!");
 
-        tokenName = name_;
-
-        // Get the bytes of `tokenUUID`.
-        bytes memory data = abi.encode(tokenUUID_);
-        // Used to set `tokenID` to the number of times `_mint` has been called.
+        // Get the bytes of `uuid`.
+        bytes memory data = abi.encode(uuid_);
+        // Used to set `id` to the number of times `_mint` has been called.
         uint256 id;
         // Used to get the sha256 of the token data
-        bytes memory tokenData_;
+        bytes memory data_;
 
         // Setting the token ID to `mintCount`.
         mintCount += 1;
@@ -408,29 +382,29 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
         // Variables with `<NAME>_` notation represent variables that I
         // create from inputs.
-        tokenData_ = _tokenData[id];
+        data_ = _data[id];
 
         // If ERC1155 token data is not already mapped, create mapping.
-        if (keccak256(tokenData_) != keccak256(data)) {
-            _tokenData[id] = data;
-            tokenData_ = _tokenData[id];
+        if (keccak256(data_) != keccak256(data)) {
+            _data[id] = data;
+            data_ = _data[id];
         }
 
-        _tokenIDs[tokenData_] = id; // Set token ID.
-        _tokenNames[id] = name_; // Set token name.
-        _tokenURIs[id] = uri_; // Set token URI
+        _ids[data_] = id; // Set token ID.
+        _names[id] = name_; // Set token name.
+        _uris[id] = uri_; // Set token URI
 
         // Set the total token supply for these ERC1155 tokens that are minted.
-        if (_tokenSupplies[id] != 0) {
-            _tokenSupplies[id] = amount_;
+        if (_supplies[id] != 0) {
+            _supplies[id] = amount_;
         } else {
-            _tokenSupplies[id] = 0;
-            _tokenSupplies[id] = amount_;
+            _supplies[id] = 0;
+            _supplies[id] = amount_;
         }
 
-        Badge memory badge = Badge(tokenUUID_, name_, uri_, amount_, id, data);
-        // Push new badge struct to storage.
-        badges.push(badge);
+        NFT memory nft = NFT(uuid_, name_, uri_, amount_, id, data);
+        // Push new nft struct to storage.
+        nfts.push(nft);
 
         address operator = _msgSender();
 
@@ -447,7 +421,7 @@ contract VennityNFT is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
         emit TransferSingle(operator, address(0), account_, id, amount_);
         // Emit event of token creation to retrieve event data on FE.
-        emit VennityNFTMinted(badges.length - 1, badge);
+        emit VennityNFTMinted(nfts.length - 1, nft);
 
         _doSafeTransferAcceptanceCheck(
             operator,

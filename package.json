@@ -19,14 +19,13 @@
     "compile": "npm run clean && npx hardhat compile",
     "compile:optimisticKovan": "npm run clean && npx hardhat compile --network optimisticKovan",
     "test": "npx hardhat test",
-    "test:kovan": "npx hardhat test ./test/VennityNFTKovan.test.ts --network kovan",
-    "test:rinkeby": "npx hardhat test ./test/VennityNFTRinkeby.test.ts --network rinkeby",
-    "test:mumbai": "npx hardhat test ./test/VennityNFTMumbai.test.ts --network mumbai",
-    "test:polygonMainnet": "npx hardhat test ./test/VennityNFTPolygonMainnet.test.ts --network polygonMainnet",
-    "test:optimisticKovan": "npx hardhat test ./test/VennityNFTOptimisticKovan.test.ts --network optimisticKovan"
+    "test:kovan": "npx hardhat test ./test/VennityCollectionKovan.test.ts --network kovan",
+    "test:rinkeby": "npx hardhat test ./test/VennityCollectionRinkeby.test.ts --network rinkeby",
+    "test:mumbai": "npx hardhat test ./test/VennityCollectionMumbai.test.ts --network mumbai",
+    "test:polygonMainnet": "npx hardhat test ./test/VennityCollectionPolygonMainnet.test.ts --network polygonMainnet",
+    "test:opKovan": "npx hardhat test ./test/VennityCollectionOptimisticKovan.test.ts --network optimisticKovan"
   },
   "devDependencies": {
-    "@eth-optimism/hardhat-ovm": "^0.2.3",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@typechain/ethers-v5": "^7.0.1",

@@ -14,19 +14,19 @@ import { v4 as uuidv4 } from 'uuid'
 import 'dotenv/config'
 
 /* Internal imports */
-import { VennityNFTFactory } from '../types/VennityNFTFactory'
-import { VennityNFT } from '../types/VennityNFT'
+import { VennityCollectionFactory } from '../types/VennityCollectionFactory'
+import { VennityCollection } from '../types/VennityCollection'
 import { MaticToken } from '../types/MaticToken'
 
 
 /**
  * @dev This set of unit tests are to be run on Polygon's Mumbai testnet.
  */
-describe(`VennityNFT (Mumbai testnet)`, () => {
-  const CONTRACT_NAME_0 = 'VennityNFT Collection Name 0'
-  const CONTRACT_NAME_1 = 'VennityNFT Collection Name 1'
+describe(`VennityCollection (Mumbai testnet)`, () => {
+  const CONTRACT_NAME_0 = 'VennityCollection Collection Name 0'
+  const CONTRACT_NAME_1 = 'VennityCollection Collection Name 1'
   const TOKEN_UUID_0 = uuidv4()
-  const TOKEN_NAME_0 = 'VennityNFT 0th Edition'
+  const TOKEN_NAME_0 = 'VennityCollection 0th Edition'
   const TOKEN_AMOUNT_0 = 100
   // Token uris
   const TOKEN_URI_0 = 'ipfs://bafybeif5sp7bver5s25g4riysghkv2kdccousxo2gciid3r7sjdq4oj45y'
@@ -56,6 +56,9 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
     recipientMaticBalanceBefore: BigNumber,
     recipientMaticBalanceAfter: BigNumber
 
+  /**
+   * @todo Add unit tests for VennityCollectionFactory
+   */
   before(`inspect Mumbai MATIC balances: `, async () => {
     matic = await ethers.getContractAt(
       'IERC20',
@@ -75,35 +78,35 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
     )
   })
 
-  describe(`VennityNFT NFT`, () => {
-    describe(`VennityNFT 0th Edition`, () => {
+  describe(`VennityCollection NFT`, () => {
+    describe(`VennityCollection 0th Edition`, () => {
       let mintTx0: ContractTransaction,
         mintTx1: ContractTransaction,
         mintTx2: ContractTransaction
 
-      let VennityNFT: VennityNFT
+      let VennityCollection: VennityCollection
 
-      before(`deploy VennityNFT contract and mint ERC1155 tokens`, async () => {
-        const Factory__VennityNFTFactory = await ethers.getContractFactory(
-          'VennityNFT'
+      before(`deploy VennityCollection contract and mint ERC1155 tokens`, async () => {
+        const Factory__VennityCollectionFactory = await ethers.getContractFactory(
+          'VennityCollection'
         )
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        VennityNFT = await Factory__VennityNFTFactory
+        VennityCollection = await Factory__VennityCollectionFactory
           .connect(l1Wallet1)
-          .deploy(CONTRACT_NAME_0) as VennityNFT
+          .deploy(CONTRACT_NAME_0) as VennityCollection
 
-        let awaitDeployedVennityNFT = await VennityNFT.deployTransaction.wait()
+        let awaitDeployedVennityCollection = await VennityCollection.deployTransaction.wait()
 
         console.log(
-          'First VennityNFT contract address: ',
-          VennityNFT.address
+          'First VennityCollection contract address: ',
+          VennityCollection.address
         )
 
         console.log(
-          'Gas used to deploy 1st VennityNFT contract: ',
-          awaitDeployedVennityNFT.gasUsed.toString(),
+          'Gas used to deploy 1st VennityCollection contract: ',
+          awaitDeployedVennityCollection.gasUsed.toString(),
           ' gas'
         )
 
@@ -117,7 +120,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        mintTx0 = await VennityNFT
+        mintTx0 = await VennityCollection
           .connect(l1Wallet1)
           ._mint(
             l1Wallet1.address,
@@ -146,9 +149,9 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
       let tokenID0: BigNumber
 
-      it(`should have created new VennityNFT contract and minted 1 set of an ERC1155 token with a name and token URI`, async () => {
+      it(`should have created new VennityCollection contract and minted 1 set of an ERC1155 token with a name and token URI`, async () => {
         let eventArgs = receipt.events?.filter((x) => {
-          return x.event == 'VennityNFTMinted'
+          return x.event == 'VennityCollectionMinted'
         })[0].args
 
         let VennityTokenUUID: string = eventArgs
@@ -162,19 +165,19 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
         expect(VennityTokenURI).to.eq(TOKEN_URI_0)
       })
 
-      it(`should have minted 100 VennityNFT 0th Edition tokens after creation of VennityNFT contract`, async () => {
-        tokenID0 = await VennityNFT.getTokenID(TOKEN_UUID_0)
-        const tokenName: string = await VennityNFT.getTokenName()
+      it(`should have minted 100 VennityCollection 0th Edition tokens after creation of VennityCollection contract`, async () => {
+        tokenID0 = await VennityCollection.getId(TOKEN_UUID_0)
+        const tokenName: string = await VennityCollection.getTokenName(tokenID0)
         expect(tokenName).to.eq(TOKEN_NAME_0)
       })
 
       it(`should give the initial supply to the creator's address`, async () => {
-        const balance = await VennityNFT.balanceOf(adminAddress, tokenID0)
+        const balance = await VennityCollection.balanceOf(adminAddress, tokenID0)
         expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
       it(`should have a total supply equal to the token amount specified when minting the tokens`, async () => {
-        const totalSupply = await VennityNFT.getTokenSupply(tokenID0)
+        const totalSupply = await VennityCollection.getSupply(tokenID0)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
       })
 
@@ -184,7 +187,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
          *      `adminAddress`
          */
         it(`should revert when the sender does not have enough balance`, async () => {
-          const tx = VennityNFT
+          const tx = VennityCollection
             .connect(l1Wallet1)
             .safeTransferFrom(
               adminAddress,
@@ -200,7 +203,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
         })
 
         it(`should succeed when the sender has enough balance`, async () => {
-          const tx = await VennityNFT
+          const tx = await VennityCollection
             .connect(l1Wallet1)
             .safeTransferFrom(
               adminAddress,
@@ -212,11 +215,11 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
           await tx.wait()
 
-          const deployerBalance: BigNumber = await VennityNFT.balanceOf(
+          const deployerBalance: BigNumber = await VennityCollection.balanceOf(
             adminAddress,
             tokenID0
           )
-          const recipientBalance: BigNumber = await VennityNFT.balanceOf(
+          const recipientBalance: BigNumber = await VennityCollection.balanceOf(
             recipientAddress,
             tokenID0
           )
@@ -227,16 +230,16 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
       })
     })
 
-    describe(`VennityNFT 0th, 1st, and 2nd Editions`, () => {
-      let VennityNFT: VennityNFT
+    describe(`VennityCollection 0th, 1st, and 2nd Editions`, () => {
+      let VennityCollection: VennityCollection
 
       let mintTx0: ContractTransaction,
         mintTx1: ContractTransaction,
         mintTx2: ContractTransaction
 
       // Token information
-      const TOKEN_NAME_1: string = 'VennityNFT 1st Edition'
-      const TOKEN_NAME_2: string = 'VennityNFT 2nd Edition'
+      const TOKEN_NAME_1: string = 'VennityCollection 1st Edition'
+      const TOKEN_NAME_2: string = 'VennityCollection 2nd Edition'
 
       const TOKEN_AMOUNT_1: number = 150
       const TOKEN_AMOUNT_2: number = 200
@@ -248,21 +251,21 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
         receipt1: ContractReceipt,
         receipt2: ContractReceipt
 
-      before(`deploy VennityNFT contract and mint ERC1155 tokens`, async () => {
-        const Factory__VennityNFTFactory = await ethers.getContractFactory('VennityNFT')
+      before(`deploy VennityCollection contract and mint ERC1155 tokens`, async () => {
+        const Factory__VennityCollectionFactory = await ethers.getContractFactory('VennityCollection')
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        VennityNFT = await Factory__VennityNFTFactory
+        VennityCollection = await Factory__VennityCollectionFactory
           .connect(l1Wallet1)
-          .deploy(CONTRACT_NAME_1) as VennityNFT
+          .deploy(CONTRACT_NAME_1) as VennityCollection
 
-        console.log('Second VennityNFT contract address: ', VennityNFT.address)
+        console.log('Second VennityCollection contract address: ', VennityCollection.address)
 
-        let awaitDeployedVennityNFT = await VennityNFT.deployTransaction.wait()
+        let awaitDeployedVennityCollection = await VennityCollection.deployTransaction.wait()
         console.log(
-          'Gas used to deploy 2nd VennityNFT contract: ',
-          awaitDeployedVennityNFT.gasUsed.toString(),
+          'Gas used to deploy 2nd VennityCollection contract: ',
+          awaitDeployedVennityCollection.gasUsed.toString(),
           ' gas'
         )
 
@@ -275,7 +278,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        mintTx0 = await VennityNFT
+        mintTx0 = await VennityCollection
           .connect(l1Wallet1)
           ._mint(
             adminAddress,
@@ -301,7 +304,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        mintTx1 = await VennityNFT
+        mintTx1 = await VennityCollection
           .connect(l1Wallet1)
           ._mint(
             adminAddress,
@@ -327,7 +330,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
 
         adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-        mintTx2 = await VennityNFT
+        mintTx2 = await VennityCollection
           .connect(l1Wallet1)
           ._mint(
             adminAddress,
@@ -352,9 +355,9 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
         )
       })
 
-      it(`should have created new VennityNFT contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
+      it(`should have created new VennityCollection contract and minted 3 sets of ERC1155 tokens with names and token URIs`, async () => {
         let eventArgs0 = receipt0.events?.filter((x) => {
-          return x.event == 'VennityNFTMinted'
+          return x.event == 'VennityCollectionMinted'
         })[0].args
 
         let VennityTokenUUID0: string = eventArgs0
@@ -365,7 +368,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
           : undefined
 
         let eventArgs1 = receipt1.events?.filter((x) => {
-          return x.event == 'VennityNFTMinted'
+          return x.event == 'VennityCollectionMinted'
         })[0].args
 
         let VennityTokenUUID1: string = eventArgs1
@@ -376,7 +379,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
           : undefined
 
         let eventArgs2 = receipt2.events?.filter((x) => {
-          return x.event == 'VennityNFTMinted'
+          return x.event == 'VennityCollectionMinted'
         })[0].args
 
         let VennityTokenUUID2: string = eventArgs2
@@ -401,51 +404,51 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
         tokenID2: BigNumber
 
 
-      it(`should have minted 100 VennityNFT 0th Edition tokens`, async () => {
-        tokenID0 = await VennityNFT.getTokenID(TOKEN_UUID_0)
-        const tokenName: string = await VennityNFT.getTokenName()
+      it(`should have minted 100 VennityCollection 0th Edition tokens`, async () => {
+        tokenID0 = await VennityCollection.getId(TOKEN_UUID_0)
+        const tokenName: string = await VennityCollection.getTokenName(tokenID0)
         expect(tokenName).to.eq(TOKEN_NAME_0)
       })
 
-      it(`should have minted 150 VennityNFT 1st Edition tokens`, async () => {
-        tokenID1 = await VennityNFT.getTokenID(TOKEN_UUID_1)
-        const tokenName: string = await VennityNFT.getTokenName()
+      it(`should have minted 150 VennityCollection 1st Edition tokens`, async () => {
+        tokenID1 = await VennityCollection.getId(TOKEN_UUID_1)
+        const tokenName: string = await VennityCollection.getTokenName(tokenID1)
         expect(tokenName).to.eq(TOKEN_NAME_1)
       })
 
-      it(`should have minted 200 VennityNFT 2nd Edition tokens`, async () => {
-        tokenID2 = await VennityNFT.getTokenID(TOKEN_UUID_2)
-        const tokenName: string = await VennityNFT.getTokenName()
+      it(`should have minted 200 VennityCollection 2nd Edition tokens`, async () => {
+        tokenID2 = await VennityCollection.getId(TOKEN_UUID_2)
+        const tokenName: string = await VennityCollection.getTokenName(tokenID2)
         expect(tokenName).to.eq(TOKEN_NAME_2)
       })
 
-      it(`should give initial supply of VennityNFT 0th Edition to creator's address`, async () => {
-        const balance = await VennityNFT.balanceOf(adminAddress, tokenID0)
+      it(`should give initial supply of VennityCollection 0th Edition to creator's address`, async () => {
+        const balance = await VennityCollection.balanceOf(adminAddress, tokenID0)
         expect(balance).to.eq(TOKEN_AMOUNT_0)
       })
 
-      it(`should give initial supply of VennityNFT 1st Edition to creator's address`, async () => {
-        const balance = await VennityNFT.balanceOf(adminAddress, tokenID1)
+      it(`should give initial supply of VennityCollection 1st Edition to creator's address`, async () => {
+        const balance = await VennityCollection.balanceOf(adminAddress, tokenID1)
         expect(balance).to.eq(TOKEN_AMOUNT_1)
       })
 
-      it(`should give initial supply of VennityNFT 2nd Edition to creator's address`, async () => {
-        const balance = await VennityNFT.balanceOf(adminAddress, tokenID2)
+      it(`should give initial supply of VennityCollection 2nd Edition to creator's address`, async () => {
+        const balance = await VennityCollection.balanceOf(adminAddress, tokenID2)
         expect(balance).to.eq(TOKEN_AMOUNT_2)
       })
 
       it(`should have a total supply of 100`, async () => {
-        const totalSupply = await VennityNFT.getTokenSupply(tokenID0)
+        const totalSupply = await VennityCollection.getSupply(tokenID0)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_0)
       })
 
       it(`should have a total supply of 150`, async () => {
-        const totalSupply = await VennityNFT.getTokenSupply(tokenID1)
+        const totalSupply = await VennityCollection.getSupply(tokenID1)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_1)
       })
 
       it(`should have a total supply of 200`, async () => {
-        const totalSupply = await VennityNFT.getTokenSupply(tokenID2)
+        const totalSupply = await VennityCollection.getSupply(tokenID2)
         expect(totalSupply).to.eq(TOKEN_AMOUNT_2)
       })
 
@@ -456,7 +459,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
        */
       describe(`safeBatchTransferFrom(...)`, () => {
         it(`should revert when the sender does not have enough of a balance`, async () => {
-          const tx = VennityNFT
+          const tx = VennityCollection
             .connect(l1Wallet1)
             .safeBatchTransferFrom(
               adminAddress,
@@ -472,7 +475,7 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
         })
 
         it(`should succeed when the owner has enough balance and the sender has a large enough balance`, async () => {
-          const tx = await VennityNFT
+          const tx = await VennityCollection
             .connect(l1Wallet1)
             .safeBatchTransferFrom(
               adminAddress,
@@ -494,11 +497,11 @@ describe(`VennityNFT (Mumbai testnet)`, () => {
           const zeroBN = ethers.BigNumber.from(0)
           const ARRAY_OF_ZEROES = [zeroBN, zeroBN, zeroBN]
 
-          const adminBalances: BigNumber[] = await VennityNFT.balanceOfBatch(
+          const adminBalances: BigNumber[] = await VennityCollection.balanceOfBatch(
             [adminAddress, adminAddress, adminAddress],
             [tokenID0, tokenID1, tokenID2]
           )
-          const recipientBalances: BigNumber[] = await VennityNFT.balanceOfBatch(
+          const recipientBalances: BigNumber[] = await VennityCollection.balanceOfBatch(
             [recipientAddress, recipientAddress, recipientAddress],
             [tokenID0, tokenID1, tokenID2]
           )

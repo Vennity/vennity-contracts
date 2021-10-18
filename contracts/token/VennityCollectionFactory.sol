@@ -6,7 +6,7 @@ pragma solidity >=0.8.9 <=0.9.0;
 /****************
  * Local imports
  ***************/
-import "./VennityNFT.sol";
+import "./VennityCollection.sol";
 import "../utils/Context.sol";
 import "../utils/Address.sol";
 import "../utils/introspection/ERC165.sol";
@@ -14,62 +14,65 @@ import "./IERC1155Receiver.sol";
 import "./extensions/IERC1155MetadataURI.sol";
 import "./IERC1155.sol";
 
-contract VennityNFTFactory {
-    struct Badge {
-        string tokenUUID;
+contract VennityCollectionFactory {
+    struct Collection {
+        address admin;
+        string uuid;
         string name;
-        string tokenURI;
-        uint256 tokenSupply;
-        uint256 tokenID;
-        bytes tokenData;
+        uint256 supply;
+        uint256 id;
+        bytes data;
     }
-
-    /***************************
-     * Private State Variables *
-     **************************/
-    // Mapping ERC1155 token ID to its token data (in bytes)
-    mapping(uint256 => bytes) private _tokenData;
-
-    // Mapping ERC1155 token data (in bytes) to its token IDs
-    mapping(bytes => uint256) private _tokenIDs;
 
     /**************************
      * Public State Variables *
      *************************/
-    /**
-     * @dev Not part of ERC1155 standard.
-     * Admin of the contract. Is the only one who can call `_mint()`.
-     */
     address public admin;
-
-    // Mapping token ID to its token URI (as a string)
-    mapping(uint256 => string) public _tokenURIs;
-
-    // Mapping token ID to its token name
-    mapping(uint256 => string) public _tokenNames;
-
     // Used to track badges that are minted.
-    Badge[] public badges;
+    Collection[] public collections;
 
-    // Mapping token ID to its total supply
-    mapping(uint256 => uint256) public _tokenSupplies;
+    constructor() {
+        admin = msg.sender;
+    }
 
     /********************
      * Public Functions *
      ********************/
+    function createCollection(
+        address _admin,
+        string memory uuid,
+        string memory name,
+        uint256 supply,
+        uint256 id,
+        bytes memory data
+    ) public returns (VennityCollection tokenAddress) {
+        require(
+            admin == msg.sender,
+            "VennityCollectionFactory: Must be the admin!"
+        );
 
-    function createToken(string memory name)
-        public
-        returns (VennityNFT tokenAddress)
-    {
         // Create a new `Token` contract and return its address.
         // From the JavaScript side, the return type
         // of this function is `address`, as this is
         // the closest type available in the ABI.
-        return new VennityNFT(name);
+        VennityCollection collection = new VennityCollection(name, _admin);
+
+        Collection memory _collection = Collection(
+            admin,
+            uuid,
+            name,
+            supply,
+            id,
+            data
+        );
+        collections.push(_collection);
+
+        return collection;
     }
 
-    function changeName(VennityNFT tokenAddress, string memory name) public {
+    function changeName(VennityCollection tokenAddress, string memory name)
+        public
+    {
         // Again, the external type of `tokenAddress` is
         // simply `address`.
         tokenAddress.setName(name);

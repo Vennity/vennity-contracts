@@ -2,7 +2,6 @@ import { HardhatUserConfig } from "hardhat/config";
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
-import '@eth-optimism/hardhat-ovm'
 import 'hardhat-gas-reporter'
 import 'dotenv/config'
 
@@ -22,13 +21,9 @@ const config: HardhatUserConfig = {
     },
     optimisticMainnet: {
       url: process.env.INFURA_OPTIMISTIC_MAINNET_URL,
-      gasPrice: 15000000,
-      ovm: true,
     },
     optimisticKovan: {
       url: 'https://kovan.optimism.io',
-      gasPrice: 15000000,
-      ovm: true,
     }
   },
   solidity: {
@@ -54,9 +49,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 100000
   },
-  ovm: {
-    solcVersion: '0.7.6'
-  }
 }
 
 export default config
