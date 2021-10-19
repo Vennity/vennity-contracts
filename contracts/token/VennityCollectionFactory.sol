@@ -20,14 +20,19 @@ contract VennityCollectionFactory {
         string uuid;
         string name;
         uint256 supply;
-        uint256 id;
-        bytes data;
     }
 
     /**************************
      * Public State Variables *
      *************************/
     address public admin;
+    // Used to keep track of how many times `_mint()` method is called.
+    // We use this `mintCount` to assign `id`s in the call stack of the
+    // `_mint()` method.
+    uint256 private mintCount;
+
+    mapping(string => uint256) public _ids;
+
     // Used to track badges that are minted.
     Collection[] public collections;
 
@@ -42,14 +47,21 @@ contract VennityCollectionFactory {
         address _admin,
         string memory uuid,
         string memory name,
-        uint256 supply,
-        uint256 id,
-        bytes memory data
+        uint256 supply
     ) public returns (VennityCollection tokenAddress) {
         require(
             admin == msg.sender,
             "VennityCollectionFactory: Must be the admin!"
         );
+
+        // Used to set `id` to the number of times `_mint` has been called.
+        uint256 id;
+
+        // Setting the token ID to `mintCount`.
+        mintCount += 1;
+        id = mintCount - 1;
+
+        _ids[uuid] = id;
 
         // Create a new `Token` contract and return its address.
         // From the JavaScript side, the return type
@@ -57,17 +69,65 @@ contract VennityCollectionFactory {
         // the closest type available in the ABI.
         VennityCollection collection = new VennityCollection(name, _admin);
 
-        Collection memory _collection = Collection(
-            admin,
-            uuid,
-            name,
-            supply,
-            id,
-            data
-        );
+        Collection memory _collection = Collection(admin, uuid, name, id);
         collections.push(_collection);
 
         return collection;
+    }
+
+    function getCollection(string memory uuid)
+        public
+        view
+        virtual
+        returns (Collection memory collectionAddress)
+    {
+        uint256 collectionId = getId(uuid);
+        Collection memory _collection = collections[collectionId];
+
+        return _collection;
+    }
+
+    function getAdmin(Collection memory collectionAddress)
+        public
+        view
+        virtual
+        returns (address)
+    {
+        return collectionAddress.admin;
+    }
+
+    function getName(Collection memory collectionAddress)
+        public
+        view
+        virtual
+        returns (string memory)
+    {
+        return collectionAddress.name;
+    }
+
+    function getUuid(Collection memory collectionAddress)
+        public
+        view
+        virtual
+        returns (string memory)
+    {
+        return collectionAddress.uuid;
+    }
+
+    function getSupply(Collection memory collectionAddress)
+        public
+        view
+        virtual
+        returns (uint256)
+    {
+        return collectionAddress.supply;
+    }
+
+    /**
+     * @dev Returns the token ID from its token UUID
+     */
+    function getId(string memory uuid) public view virtual returns (uint256) {
+        return _ids[uuid];
     }
 
     function changeName(VennityCollection tokenAddress, string memory name)
@@ -78,14 +138,12 @@ contract VennityCollectionFactory {
         tokenAddress.setName(name);
     }
 
-    // Perform checks to determine if transferring a token to the
-    // `OwnedToken` contract should proceed
-    function isTokenTransferOK(address currentOwner, address newOwner)
-        public
-        pure
-        returns (bool ok)
-    {
+    modifier isTokenTransferOK(address currentOwner, address newOwner) {
         // Check an arbitrary condition to see if transfer should proceed
-        return currentOwner != newOwner;
+        require(
+            currentOwner != newOwner,
+            "VennityCollectionFactory: Cannot transfer to the same owner!"
+        );
+        _;
     }
 }
