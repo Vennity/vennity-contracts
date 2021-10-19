@@ -15,11 +15,18 @@ import "./extensions/IERC1155MetadataURI.sol";
 import "./IERC1155.sol";
 
 contract VennityCollectionFactory {
+    event VennityCollectionCreated(
+        address admin,
+        address address_,
+        string uuid,
+        string name
+    );
+
     struct Collection {
         address admin;
+        address address_;
         string uuid;
         string name;
-        uint256 supply;
     }
 
     /**************************
@@ -46,8 +53,7 @@ contract VennityCollectionFactory {
     function createCollection(
         address _admin,
         string memory uuid,
-        string memory name,
-        uint256 supply
+        string memory name
     ) public returns (VennityCollection tokenAddress) {
         require(
             admin == msg.sender,
@@ -68,8 +74,14 @@ contract VennityCollectionFactory {
         // of this function is `address`, as this is
         // the closest type available in the ABI.
         VennityCollection collection = new VennityCollection(name, _admin);
+        emit VennityCollectionCreated(_admin, address(collection), uuid, name);
 
-        Collection memory _collection = Collection(admin, uuid, name, id);
+        Collection memory _collection = Collection(
+            admin,
+            address(collection),
+            uuid,
+            name
+        );
         collections.push(_collection);
 
         return collection;
@@ -114,15 +126,6 @@ contract VennityCollectionFactory {
         return collectionAddress.uuid;
     }
 
-    function getSupply(Collection memory collectionAddress)
-        public
-        view
-        virtual
-        returns (uint256)
-    {
-        return collectionAddress.supply;
-    }
-
     /**
      * @dev Returns the token ID from its token UUID
      */
@@ -136,14 +139,5 @@ contract VennityCollectionFactory {
         // Again, the external type of `tokenAddress` is
         // simply `address`.
         tokenAddress.setName(name);
-    }
-
-    modifier isTokenTransferOK(address currentOwner, address newOwner) {
-        // Check an arbitrary condition to see if transfer should proceed
-        require(
-            currentOwner != newOwner,
-            "VennityCollectionFactory: Cannot transfer to the same owner!"
-        );
-        _;
     }
 }
