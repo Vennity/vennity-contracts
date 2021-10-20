@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/contracts": "4.2.0",
+    "@openzeppelin/contracts": ">=4.3.2",
     "hardhat": "2.5.0"
   },
   "scripts": {
