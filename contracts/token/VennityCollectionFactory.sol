@@ -69,7 +69,7 @@ contract VennityCollectionFactory {
 
         _ids[uuid] = id;
 
-        // Create a new `Token` contract and return its address.
+        // Create a new `VennityCollection` contract and return its address.
         // From the JavaScript side, the return type
         // of this function is `address`, as this is
         // the closest type available in the ABI.
@@ -106,6 +106,15 @@ contract VennityCollectionFactory {
         returns (address)
     {
         return collectionAddress.admin;
+    }
+
+    function getAddress(Collection memory collectionAddress)
+        public
+        view
+        virtual
+        returns (address)
+    {
+        return collectionAddress.address_;
     }
 
     function getName(Collection memory collectionAddress)
