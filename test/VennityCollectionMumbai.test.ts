@@ -869,9 +869,6 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       const tk2balance1 = await VennityCollection1.balanceOf(adminAddress, vennityCollection1TokenID2)
       const tk2balance2 = await VennityCollection2.balanceOf(adminAddress, vennityCollection2TokenID2)
 
-      /**
-       * @todo Every collection has the same balance for all tokens
-       */
       console.log('VennityCollection0 balanace of tokenID0: ', tk0balance0.toString())
       console.log('VennityCollection1 balanace of tokenID0: ', tk0balance1.toString())
       console.log('VennityCollection2 balanace of tokenID0: ', tk0balance2.toString())
@@ -883,7 +880,6 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       console.log('VennityCollection0 balanace of tokenID2: ', tk2balance0.toString())
       console.log('VennityCollection1 balanace of tokenID2: ', tk2balance1.toString())
       console.log('VennityCollection2 balanace of tokenID2: ', tk2balance2.toString())
-
 
       expect(tk0balance0).to.eq(TOKEN_AMOUNT_0)
       expect(tk0balance1).to.eq(TOKEN_AMOUNT_0)
@@ -930,7 +926,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     /**
-     * @todo Finish safeBatchTransferFrom for 3 mints per collection
+     * @dev PASSES
      */
     describe(`safeBatchTransferFrom(...)`, () => {
       it(`should revert when the sender does not have enough of a balance`, async () => {
@@ -943,6 +939,9 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
             [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
             "0x0000000000000000000000000000000000000000"
           )
+        await expect(tx0).to.be.revertedWith(
+          `ERC1155: insufficient balance for transfer`
+        )
         const tx1 = VennityCollection1
           .connect(l1Wallet1)
           .safeBatchTransferFrom(
@@ -952,6 +951,9 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
             [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
             "0x0000000000000000000000000000000000000000"
           )
+        await expect(tx1).to.be.revertedWith(
+          `ERC1155: insufficient balance for transfer`
+        )
         const tx2 = VennityCollection2
           .connect(l1Wallet1)
           .safeBatchTransferFrom(
@@ -961,18 +963,15 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
             [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
             "0x0000000000000000000000000000000000000000"
           )
-
-        await expect(tx0).to.be.revertedWith(
-          `ERC1155: insufficient balance for transfer`
-        )
-        await expect(tx1).to.be.revertedWith(
-          `ERC1155: insufficient balance for transfer`
-        )
         await expect(tx2).to.be.revertedWith(
           `ERC1155: insufficient balance for transfer`
         )
       })
 
+      /**
+       * @todo Weird error:
+       *       `Error: done() called multiple times in test`
+       */
       it(`should succeed when the owner has enough balance and the sender has a large enough balance`, async () => {
         /**
          * @dev First Collection
@@ -997,7 +996,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
         const c0tokenAmount0BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_0)
         const c0tokenAmount1BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_1)
         const c0tokenAmount2BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_2)
-        const c0_TOKEN_AMOUNTS: BigNumber[] = [c0tokenAmount0BN, c0tokenAmount1BN, c0tokenAmount2BN]
+        const c0_TOKEN_AMOUNTS: BigNumber[] = [
+          c0tokenAmount0BN,
+          c0tokenAmount1BN,
+          c0tokenAmount2BN
+        ]
 
         // Array of zeroes for deployer balances.
         const zeroBN = ethers.BigNumber.from(0)
