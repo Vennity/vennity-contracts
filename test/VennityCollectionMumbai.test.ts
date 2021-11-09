@@ -56,13 +56,29 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     createTx1: ContractTransaction,
     createTx2: ContractTransaction
 
-  let mintTx0: ContractTransaction,
-    mintTx1: ContractTransaction,
-    mintTx2: ContractTransaction
+  let vennityCollection0MintTx0: ContractTransaction,
+    vennityCollection0MintTx1: ContractTransaction,
+    vennityCollection0MintTx2: ContractTransaction,
+    vennityCollection1MintTx0: ContractTransaction,
+    vennityCollection1MintTx1: ContractTransaction,
+    vennityCollection1MintTx2: ContractTransaction,
+    vennityCollection2MintTx0: ContractTransaction,
+    vennityCollection2MintTx1: ContractTransaction,
+    vennityCollection2MintTx2: ContractTransaction
 
-  let receipt0: ContractReceipt,
-    receipt1: ContractReceipt,
-    receipt2: ContractReceipt
+  let createCollectionReceipt0: ContractReceipt,
+    createCollectionReceipt1: ContractReceipt,
+    createCollectionReceipt2: ContractReceipt
+
+  let vennityCollection0MintTxReceipt0: ContractReceipt,
+    vennityCollection0MintTxReceipt1: ContractReceipt,
+    vennityCollection0MintTxReceipt2: ContractReceipt,
+    vennityCollection1MintTxReceipt0: ContractReceipt,
+    vennityCollection1MintTxReceipt1: ContractReceipt,
+    vennityCollection1MintTxReceipt2: ContractReceipt,
+    vennityCollection2MintTxReceipt0: ContractReceipt,
+    vennityCollection2MintTxReceipt1: ContractReceipt,
+    vennityCollection2MintTxReceipt2: ContractReceipt
 
   let VennityCollectionFactory: VennityCollectionFactory
 
@@ -74,9 +90,16 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     VennityCollectionAddress1: string,
     VennityCollectionAddress2: string
 
-  let tokenID0: BigNumber,
-    tokenID1: BigNumber,
-    tokenID2: BigNumber
+  let vennityCollection0TokenID0: BigNumber,
+    vennityCollection1TokenID0: BigNumber,
+    vennityCollection2TokenID0: BigNumber,
+    vennityCollection0TokenID1: BigNumber,
+    vennityCollection1TokenID1: BigNumber,
+    vennityCollection2TokenID1: BigNumber,
+    vennityCollection0TokenID2: BigNumber,
+    vennityCollection1TokenID2: BigNumber,
+    vennityCollection2TokenID2: BigNumber
+
 
   let matic: MaticToken
 
@@ -340,7 +363,10 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       // Log MATIC balance spent to deploy contract
       console.log(
         'Amount of MATIC tokens spent by admin to deploy VennityCollectionFactory contract: ',
-        adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        adminMaticBalanceBefore
+          .sub(adminMaticBalanceAfter)
+          .mul(MATIC_PRICE)
+          .toString()
       )
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
@@ -353,20 +379,24 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           COLLECTION_NAME_0
         )
 
-      receipt0 = await createTx0.wait()
+      createCollectionReceipt0 = await createTx0.wait()
 
       adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
 
       console.log(
         'Gas used to call `createCollection()`: (1/3)',
-        receipt0.gasUsed.toString(),
+        createCollectionReceipt0.gasUsed.toString(),
         ' gas'
       )
+
 
       // Log MATIC balance spent to deploy contract
       console.log(
         'Amount of MATIC tokens spent by admin to call `createCollection()` 1 time: (1/3)',
-        adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        adminMaticBalanceBefore
+          .sub(adminMaticBalanceAfter)
+          .mul(MATIC_PRICE)
+          .toString()
       )
 
       createTx1 = await VennityCollectionFactory
@@ -377,20 +407,24 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           COLLECTION_NAME_1
         )
 
-      receipt1 = await createTx1.wait()
+      createCollectionReceipt1 = await createTx1.wait()
 
       adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
 
       console.log(
         'Gas used to call `createCollection()`: (2/3)',
-        receipt1.gasUsed.toString(),
+        createCollectionReceipt1.gasUsed.toString(),
         ' gas'
       )
 
       // Log MATIC balance spent to deploy contract
       console.log(
         'Amount of MATIC tokens spent by admin to call `createCollection()` 1 time: (2/3)',
-        adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        adminMaticBalanceBefore
+
+          .sub(adminMaticBalanceAfter)
+          .mul(MATIC_PRICE)
+          .toString()
       )
 
       createTx2 = await VennityCollectionFactory
@@ -401,25 +435,28 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           COLLECTION_NAME_2
         )
 
-      receipt2 = await createTx2.wait()
+      createCollectionReceipt2 = await createTx2.wait()
 
       adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
 
       console.log(
         'Gas used to call `createCollection()`: (3/3)',
-        receipt2.gasUsed.toString(),
+        createCollectionReceipt2.gasUsed.toString(),
         ' gas'
       )
 
       // Log MATIC balance spent to deploy contract
       console.log(
         'Amount of MATIC tokens spent by admin to call `createCollection()` 1 time: (3/3)',
-        adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        adminMaticBalanceBefore
+          .sub(adminMaticBalanceAfter)
+          .mul(MATIC_PRICE)
+          .toString()
       )
     })
 
     it(`should have created 3 new VennityCollectionFactory contract and minted 3 NFTs on each`, async () => {
-      let eventArgs0 = receipt0.events?.filter((x) => {
+      let eventArgs0 = createCollectionReceipt0.events?.filter((x) => {
         return x.event == 'VennityCollectionCreated'
       })[0].args
 
@@ -439,7 +476,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
       console.log('VennityCollectionAddress0: ', VennityCollectionAddress0)
 
-      let eventArgs1 = receipt1.events?.filter((x) => {
+      let eventArgs1 = createCollectionReceipt1.events?.filter((x) => {
         return x.event == 'VennityCollectionCreated'
       })[0].args
 
@@ -460,7 +497,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       console.log('VennityCollectionAddress1: ', VennityCollectionAddress1)
 
 
-      let eventArgs2 = receipt2.events?.filter((x) => {
+      let eventArgs2 = createCollectionReceipt2.events?.filter((x) => {
         return x.event == 'VennityCollectionCreated'
       })[0].args
 
@@ -509,7 +546,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       /**
        * @dev First set of 3 mints
        */
-      mintTx0 = await VennityCollection0
+      vennityCollection0MintTx0 = await VennityCollection0
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -519,10 +556,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_0
         )
 
-      receipt0 = await mintTx0.wait()
+      vennityCollection0MintTxReceipt0 = await vennityCollection0MintTx0.wait()
+
       console.log(
         'Gas used to call _mint (1/3): ',
-        receipt0.gasUsed.toString(),
+        vennityCollection0MintTxReceipt0.gasUsed.toString(),
         ' gas'
       )
 
@@ -530,12 +568,15 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       // Log MATIC balance spent to deploy contract
       console.log(
         'Amount of MATIC tokens spent by admin to call `_mint` (1/3): ',
-        adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        adminMaticBalanceBefore
+          .sub(adminMaticBalanceAfter)
+          .mul(MATIC_PRICE)
+          .toString()
       )
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-      mintTx1 = await VennityCollection0
+      vennityCollection0MintTx1 = await VennityCollection0
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -545,10 +586,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_1
         )
 
-      receipt1 = await mintTx1.wait()
+      vennityCollection0MintTxReceipt1 = await vennityCollection0MintTx1.wait()
+
       console.log(
         'Gas used to call _mint (2/3): ',
-        receipt1.gasUsed.toString(),
+        vennityCollection0MintTxReceipt1.gasUsed.toString(),
         ' gas'
       )
 
@@ -556,12 +598,15 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       // Log MATIC balance spent to deploy contract
       console.log(
         'Amount of MATIC tokens spent by admin to call `_mint` (2/3): ',
-        adminMaticBalanceBefore.sub(adminMaticBalanceAfter).mul(MATIC_PRICE).toString()
+        adminMaticBalanceBefore
+          .sub(adminMaticBalanceAfter)
+          .mul(MATIC_PRICE)
+          .toString()
       )
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-      mintTx2 = await VennityCollection0
+      vennityCollection0MintTx2 = await VennityCollection0
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -571,10 +616,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_2
         )
 
-      receipt2 = await mintTx1.wait()
+      vennityCollection0MintTxReceipt2 = await vennityCollection0MintTx2.wait()
+
       console.log(
         'Gas used to call _mint (3/3): ',
-        receipt2.gasUsed.toString(),
+        vennityCollection0MintTxReceipt2.gasUsed.toString(),
         ' gas'
       )
 
@@ -588,7 +634,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       /**
        * @dev Second set of 3 mints
        */
-      mintTx0 = await VennityCollection1
+      vennityCollection1MintTx0 = await VennityCollection1
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -598,10 +644,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_0
         )
 
-      receipt0 = await mintTx0.wait()
+      vennityCollection1MintTxReceipt0 = await vennityCollection1MintTx0.wait()
+
       console.log(
         'Gas used to call _mint (1/3): ',
-        receipt0.gasUsed.toString(),
+        vennityCollection1MintTxReceipt0.gasUsed.toString(),
         ' gas'
       )
 
@@ -614,7 +661,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-      mintTx1 = await VennityCollection1
+      vennityCollection1MintTx1 = await VennityCollection1
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -624,10 +671,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_1
         )
 
-      receipt1 = await mintTx1.wait()
+      vennityCollection1MintTxReceipt1 = await vennityCollection1MintTx1.wait()
+
       console.log(
         'Gas used to call _mint (2/3): ',
-        receipt1.gasUsed.toString(),
+        vennityCollection1MintTxReceipt1.gasUsed.toString(),
         ' gas'
       )
 
@@ -640,7 +688,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-      mintTx2 = await VennityCollection1
+      vennityCollection1MintTx2 = await VennityCollection1
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -650,10 +698,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_2
         )
 
-      receipt2 = await mintTx1.wait()
+      vennityCollection1MintTxReceipt2 = await vennityCollection1MintTx1.wait()
+
       console.log(
         'Gas used to call _mint (3/3): ',
-        receipt2.gasUsed.toString(),
+        vennityCollection1MintTxReceipt2.gasUsed.toString(),
         ' gas'
       )
 
@@ -667,7 +716,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
       /**
        * @dev Third set of 3 mints
        */
-      mintTx0 = await VennityCollection2
+      vennityCollection2MintTx0 = await VennityCollection2
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -677,10 +726,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_0
         )
 
-      receipt0 = await mintTx0.wait()
+      vennityCollection2MintTxReceipt0 = await vennityCollection2MintTx0.wait()
+
       console.log(
         'Gas used to call _mint (1/3): ',
-        receipt0.gasUsed.toString(),
+        vennityCollection2MintTxReceipt0.gasUsed.toString(),
         ' gas'
       )
 
@@ -693,7 +743,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-      mintTx1 = await VennityCollection1
+      vennityCollection2MintTx1 = await VennityCollection2
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -703,10 +753,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_1
         )
 
-      receipt1 = await mintTx1.wait()
+      vennityCollection2MintTxReceipt1 = await vennityCollection2MintTx1.wait()
+
       console.log(
         'Gas used to call _mint (2/3): ',
-        receipt1.gasUsed.toString(),
+        vennityCollection2MintTxReceipt1.gasUsed.toString(),
         ' gas'
       )
 
@@ -719,7 +770,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
       adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
 
-      mintTx2 = await VennityCollection2
+      vennityCollection2MintTx2 = await VennityCollection2
         .connect(l1Wallet1)
         ._mint(
           adminAddress,
@@ -729,10 +780,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           TOKEN_UUID_2
         )
 
-      receipt2 = await mintTx1.wait()
+      vennityCollection2MintTxReceipt2 = await vennityCollection2MintTx2.wait()
+
       console.log(
         'Gas used to call _mint (3/3): ',
-        receipt2.gasUsed.toString(),
+        vennityCollection2MintTxReceipt2.gasUsed.toString(),
         ' gas'
       )
 
@@ -745,13 +797,19 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     it(`should have minted 100 Vennity NFT 0th Edition tokens for each VennityCollection`, async () => {
-      tokenID0 = await VennityCollection0.getId(TOKEN_UUID_0)
-      tokenID1 = await VennityCollection1.getId(TOKEN_UUID_0)
-      tokenID2 = await VennityCollection2.getId(TOKEN_UUID_0)
+      vennityCollection0TokenID0 = await VennityCollection0.getId(TOKEN_UUID_0)
+      vennityCollection1TokenID0 = await VennityCollection1.getId(TOKEN_UUID_0)
+      vennityCollection2TokenID0 = await VennityCollection2.getId(TOKEN_UUID_0)
 
-      const tokenName0: string = await VennityCollection0.getTokenName(tokenID0)
-      const tokenName1: string = await VennityCollection1.getTokenName(tokenID1)
-      const tokenName2: string = await VennityCollection2.getTokenName(tokenID2)
+      const tokenName0: string = await VennityCollection0.getTokenName(
+        vennityCollection0TokenID0
+      )
+      const tokenName1: string = await VennityCollection1.getTokenName(
+        vennityCollection1TokenID0
+      )
+      const tokenName2: string = await VennityCollection2.getTokenName(
+        vennityCollection2TokenID0
+      )
 
       expect(tokenName0).to.eq(TOKEN_NAME_0)
       expect(tokenName1).to.eq(TOKEN_NAME_0)
@@ -759,13 +817,19 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     it(`should have minted 150 Vennity NFT 1st Edition tokens for each VennityCollection`, async () => {
-      tokenID0 = await VennityCollection0.getId(TOKEN_UUID_1)
-      tokenID1 = await VennityCollection1.getId(TOKEN_UUID_1)
-      tokenID2 = await VennityCollection2.getId(TOKEN_UUID_1)
+      vennityCollection0TokenID1 = await VennityCollection0.getId(TOKEN_UUID_1)
+      vennityCollection1TokenID1 = await VennityCollection1.getId(TOKEN_UUID_1)
+      vennityCollection2TokenID1 = await VennityCollection2.getId(TOKEN_UUID_1)
 
-      const tokenName0: string = await VennityCollection0.getTokenName(tokenID0)
-      const tokenName1: string = await VennityCollection1.getTokenName(tokenID1)
-      const tokenName2: string = await VennityCollection2.getTokenName(tokenID2)
+      const tokenName0: string = await VennityCollection0.getTokenName(
+        vennityCollection0TokenID1
+      )
+      const tokenName1: string = await VennityCollection1.getTokenName(
+        vennityCollection1TokenID1
+      )
+      const tokenName2: string = await VennityCollection2.getTokenName(
+        vennityCollection2TokenID1
+      )
 
       expect(tokenName0).to.eq(TOKEN_NAME_1)
       expect(tokenName1).to.eq(TOKEN_NAME_1)
@@ -773,13 +837,19 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     it(`should have minted 200 Vennity NFT 2nd Edition tokens`, async () => {
-      tokenID0 = await VennityCollection0.getId(TOKEN_UUID_2)
-      tokenID1 = await VennityCollection1.getId(TOKEN_UUID_2)
-      tokenID2 = await VennityCollection2.getId(TOKEN_UUID_2)
+      vennityCollection0TokenID2 = await VennityCollection0.getId(TOKEN_UUID_2)
+      vennityCollection1TokenID2 = await VennityCollection1.getId(TOKEN_UUID_2)
+      vennityCollection2TokenID2 = await VennityCollection2.getId(TOKEN_UUID_2)
 
-      const tokenName0: string = await VennityCollection0.getTokenName(tokenID0)
-      const tokenName1: string = await VennityCollection1.getTokenName(tokenID1)
-      const tokenName2: string = await VennityCollection2.getTokenName(tokenID2)
+      const tokenName0: string = await VennityCollection0.getTokenName(
+        vennityCollection0TokenID2
+      )
+      const tokenName1: string = await VennityCollection1.getTokenName(
+        vennityCollection1TokenID2
+      )
+      const tokenName2: string = await VennityCollection2.getTokenName(
+        vennityCollection2TokenID2
+      )
 
       expect(tokenName0).to.eq(TOKEN_NAME_2)
       expect(tokenName1).to.eq(TOKEN_NAME_2)
@@ -787,17 +857,33 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     it(`should give initial supply of each minted NFT to creator's address for each VennityCollection`, async () => {
-      const tk0balance0 = await VennityCollection0.balanceOf(adminAddress, tokenID0)
-      const tk0balance1 = await VennityCollection1.balanceOf(adminAddress, tokenID0)
-      const tk0balance2 = await VennityCollection2.balanceOf(adminAddress, tokenID0)
+      const tk0balance0 = await VennityCollection0.balanceOf(adminAddress, vennityCollection0TokenID0)
+      const tk0balance1 = await VennityCollection1.balanceOf(adminAddress, vennityCollection0TokenID0)
+      const tk0balance2 = await VennityCollection2.balanceOf(adminAddress, vennityCollection0TokenID0)
 
-      const tk1balance0 = await VennityCollection0.balanceOf(adminAddress, tokenID1)
-      const tk1balance1 = await VennityCollection1.balanceOf(adminAddress, tokenID1)
-      const tk1balance2 = await VennityCollection2.balanceOf(adminAddress, tokenID1)
+      const tk1balance0 = await VennityCollection0.balanceOf(adminAddress, vennityCollection0TokenID1)
+      const tk1balance1 = await VennityCollection1.balanceOf(adminAddress, vennityCollection1TokenID1)
+      const tk1balance2 = await VennityCollection2.balanceOf(adminAddress, vennityCollection2TokenID1)
 
-      const tk2balance0 = await VennityCollection0.balanceOf(adminAddress, tokenID2)
-      const tk2balance1 = await VennityCollection1.balanceOf(adminAddress, tokenID2)
-      const tk2balance2 = await VennityCollection2.balanceOf(adminAddress, tokenID2)
+      const tk2balance0 = await VennityCollection0.balanceOf(adminAddress, vennityCollection0TokenID2)
+      const tk2balance1 = await VennityCollection1.balanceOf(adminAddress, vennityCollection1TokenID2)
+      const tk2balance2 = await VennityCollection2.balanceOf(adminAddress, vennityCollection2TokenID2)
+
+      /**
+       * @todo Every collection has the same balance for all tokens
+       */
+      console.log('VennityCollection0 balanace of tokenID0: ', tk0balance0.toString())
+      console.log('VennityCollection1 balanace of tokenID0: ', tk0balance1.toString())
+      console.log('VennityCollection2 balanace of tokenID0: ', tk0balance2.toString())
+
+      console.log('VennityCollection0 balanace of tokenID1: ', tk1balance0.toString())
+      console.log('VennityCollection1 balanace of tokenID1: ', tk1balance1.toString())
+      console.log('VennityCollection2 balanace of tokenID1: ', tk1balance2.toString())
+
+      console.log('VennityCollection0 balanace of tokenID2: ', tk2balance0.toString())
+      console.log('VennityCollection1 balanace of tokenID2: ', tk2balance1.toString())
+      console.log('VennityCollection2 balanace of tokenID2: ', tk2balance2.toString())
+
 
       expect(tk0balance0).to.eq(TOKEN_AMOUNT_0)
       expect(tk0balance1).to.eq(TOKEN_AMOUNT_0)
@@ -814,9 +900,9 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
 
     it(`should have a total supply of 100 for each VennityNFT 0th Edition per VennityCollection`, async () => {
-      const totalSupply0 = await VennityCollection0.getSupply(tokenID0)
-      const totalSupply1 = await VennityCollection1.getSupply(tokenID0)
-      const totalSupply2 = await VennityCollection2.getSupply(tokenID0)
+      const totalSupply0 = await VennityCollection0.getSupply(vennityCollection0TokenID0)
+      const totalSupply1 = await VennityCollection1.getSupply(vennityCollection1TokenID0)
+      const totalSupply2 = await VennityCollection2.getSupply(vennityCollection2TokenID0)
 
       expect(totalSupply0).to.eq(TOKEN_AMOUNT_0)
       expect(totalSupply1).to.eq(TOKEN_AMOUNT_0)
@@ -824,9 +910,9 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     it(`should have a total supply of 150 for each VennityNFT 1st Edition per VennityCollection`, async () => {
-      const totalSupply0 = await VennityCollection0.getSupply(tokenID1)
-      const totalSupply1 = await VennityCollection1.getSupply(tokenID1)
-      const totalSupply2 = await VennityCollection2.getSupply(tokenID1)
+      const totalSupply0 = await VennityCollection0.getSupply(vennityCollection0TokenID1)
+      const totalSupply1 = await VennityCollection1.getSupply(vennityCollection1TokenID1)
+      const totalSupply2 = await VennityCollection2.getSupply(vennityCollection2TokenID1)
 
       expect(totalSupply0).to.eq(TOKEN_AMOUNT_1)
       expect(totalSupply1).to.eq(TOKEN_AMOUNT_1)
@@ -834,9 +920,9 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
     })
 
     it(`should have a total supply of 200 for each VennityNFT 2nd Edition per VennityCollection`, async () => {
-      const totalSupply0 = await VennityCollection0.getSupply(tokenID2)
-      const totalSupply1 = await VennityCollection1.getSupply(tokenID2)
-      const totalSupply2 = await VennityCollection2.getSupply(tokenID2)
+      const totalSupply0 = await VennityCollection0.getSupply(vennityCollection0TokenID2)
+      const totalSupply1 = await VennityCollection1.getSupply(vennityCollection1TokenID2)
+      const totalSupply2 = await VennityCollection2.getSupply(vennityCollection2TokenID2)
 
       expect(totalSupply0).to.eq(TOKEN_AMOUNT_2)
       expect(totalSupply1).to.eq(TOKEN_AMOUNT_2)
@@ -853,25 +939,25 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           .safeBatchTransferFrom(
             adminAddress,
             recipientAddress,
-            [tokenID0, tokenID1, tokenID2],
+            [vennityCollection0TokenID0, vennityCollection0TokenID1, vennityCollection0TokenID2],
             [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
             "0x0000000000000000000000000000000000000000"
           )
-        const tx1 = VennityCollection0
+        const tx1 = VennityCollection1
           .connect(l1Wallet1)
           .safeBatchTransferFrom(
             adminAddress,
             recipientAddress,
-            [tokenID0, tokenID1, tokenID2],
+            [vennityCollection1TokenID0, vennityCollection1TokenID1, vennityCollection1TokenID2],
             [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
             "0x0000000000000000000000000000000000000000"
           )
-        const tx2 = VennityCollection0
+        const tx2 = VennityCollection2
           .connect(l1Wallet1)
           .safeBatchTransferFrom(
             adminAddress,
             recipientAddress,
-            [tokenID0, tokenID1, tokenID2],
+            [vennityCollection2TokenID0, vennityCollection2TokenID1, vennityCollection2TokenID2],
             [TOKEN_AMOUNT_0 + 1000, TOKEN_AMOUNT_1 + 1000, TOKEN_AMOUNT_2 + 1000],
             "0x0000000000000000000000000000000000000000"
           )
@@ -896,7 +982,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           .safeBatchTransferFrom(
             adminAddress,
             recipientAddress,
-            [tokenID0, tokenID1, tokenID2],
+            [
+              vennityCollection0TokenID0,
+              vennityCollection0TokenID1,
+              vennityCollection0TokenID2
+            ],
             [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
             "0x0000000000000000000000000000000000000000"
           )
@@ -915,11 +1005,19 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
 
         const c0adminBalances: BigNumber[] = await VennityCollection0.balanceOfBatch(
           [adminAddress, adminAddress, adminAddress],
-          [tokenID0, tokenID1, tokenID2]
+          [
+            vennityCollection0TokenID0,
+            vennityCollection0TokenID1,
+            vennityCollection0TokenID2
+          ]
         )
         const c0recipientBalances: BigNumber[] = await VennityCollection0.balanceOfBatch(
           [recipientAddress, recipientAddress, recipientAddress],
-          [tokenID0, tokenID1, tokenID2]
+          [
+            vennityCollection0TokenID0,
+            vennityCollection0TokenID1,
+            vennityCollection0TokenID2
+          ]
         )
 
         // Check that individual balances are equal to the expected value.
@@ -938,7 +1036,7 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           .safeBatchTransferFrom(
             adminAddress,
             recipientAddress,
-            [tokenID0, tokenID1, tokenID2],
+            [vennityCollection1TokenID0, vennityCollection1TokenID1, vennityCollection1TokenID2],
             [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
             "0x0000000000000000000000000000000000000000"
           )
@@ -951,13 +1049,22 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
         const c1tokenAmount2BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_2)
         const c1_TOKEN_AMOUNTS: BigNumber[] = [c1tokenAmount0BN, c1tokenAmount1BN, c1tokenAmount2BN]
 
-        const c1adminBalances: BigNumber[] = await VennityCollection0.balanceOfBatch(
+        const c1adminBalances: BigNumber[] = await VennityCollection1.balanceOfBatch(
           [adminAddress, adminAddress, adminAddress],
-          [tokenID0, tokenID1, tokenID2]
+          [
+            vennityCollection0TokenID0,
+            vennityCollection0TokenID1,
+            vennityCollection0TokenID2
+          ],
         )
-        const c1recipientBalances: BigNumber[] = await VennityCollection0.balanceOfBatch(
+        const c1recipientBalances: BigNumber[] = await VennityCollection1.balanceOfBatch(
           [recipientAddress, recipientAddress, recipientAddress],
-          [tokenID0, tokenID1, tokenID2]
+          [
+
+            vennityCollection0TokenID0,
+            vennityCollection0TokenID1,
+            vennityCollection0TokenID2
+          ],
         )
 
         // Check that individual balances are equal to the expected value.
@@ -976,7 +1083,11 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
           .safeBatchTransferFrom(
             adminAddress,
             recipientAddress,
-            [tokenID0, tokenID1, tokenID2],
+            [
+              vennityCollection2TokenID0,
+              vennityCollection2TokenID1,
+              vennityCollection2TokenID2
+            ],
             [TOKEN_AMOUNT_0, TOKEN_AMOUNT_1, TOKEN_AMOUNT_2],
             "0x0000000000000000000000000000000000000000"
           )
@@ -989,13 +1100,21 @@ describe(`VennityCollectionFactory and VennityCollection (Mumbai testnet)`, () =
         const c2tokenAmount2BN: BigNumber = ethers.BigNumber.from(TOKEN_AMOUNT_2)
         const c2_TOKEN_AMOUNTS: BigNumber[] = [c2tokenAmount0BN, c2tokenAmount1BN, c2tokenAmount2BN]
 
-        const c2adminBalances: BigNumber[] = await VennityCollection0.balanceOfBatch(
+        const c2adminBalances: BigNumber[] = await VennityCollection2.balanceOfBatch(
           [adminAddress, adminAddress, adminAddress],
-          [tokenID0, tokenID1, tokenID2]
+          [
+            vennityCollection2TokenID0,
+            vennityCollection2TokenID1,
+            vennityCollection2TokenID2]
+          ,
         )
-        const c2recipientBalances: BigNumber[] = await VennityCollection0.balanceOfBatch(
+        const c2recipientBalances: BigNumber[] = await VennityCollection2.balanceOfBatch(
           [recipientAddress, recipientAddress, recipientAddress],
-          [tokenID0, tokenID1, tokenID2]
+          [
+            vennityCollection2TokenID0,
+            vennityCollection2TokenID1,
+            vennityCollection2TokenID2
+          ],
         )
 
         // Check that individual balances are equal to the expected value.
