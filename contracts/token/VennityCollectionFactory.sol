@@ -15,6 +15,7 @@ import "./extensions/IERC1155MetadataURI.sol";
 import "./IERC1155.sol";
 
 contract VennityCollectionFactory {
+    event VennityCollectionFactoryCreated(address admin);
     event VennityCollectionCreated(
         address admin,
         address address_,
@@ -45,6 +46,7 @@ contract VennityCollectionFactory {
 
     constructor() {
         admin = msg.sender;
+        emit VennityCollectionFactoryCreated(admin);
     }
 
     /********************
