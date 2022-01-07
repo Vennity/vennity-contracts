@@ -14,7 +14,6 @@ most-especially-not-this-lmao
 daily-iteration-of-ideas
 vennity-dapptools
 package-lock.json
-types
 
 # dependencies
 /node_modules
@@ -42,4 +41,7 @@ node_modules
 
 #Hardhat files
 cache
-artifacts
+
+
+.idea
+.vscode
