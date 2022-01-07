@@ -21,6 +21,7 @@
     "test": "npx hardhat test",
     "test:kovan": "npx hardhat test ./test/VennityCollectionKovan.test.ts --network kovan",
     "test:rinkeby": "npx hardhat test ./test/VennityCollectionRinkeby.test.ts --network rinkeby",
+    "deploy:mumbai": "npx hardhat test ./deploy/Mumbai.ts --network mumbai",
     "test:mumbai": "npx hardhat test ./test/VennityCollectionMumbai.test.ts --network mumbai",
     "test:polygonMainnet": "npx hardhat test ./test/VennityCollectionFactoryPolygonMainnet.test.ts --network polygonMainnet",
     "test:opKovan": "npx hardhat test ./test/VennityCollectionOptimisticKovan.test.ts --network optimisticKovan"
