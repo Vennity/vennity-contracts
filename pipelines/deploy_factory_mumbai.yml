@@ -27,11 +27,11 @@ steps:
       INFURA_OPTIMISTIC_MAINNET_URL: ''
 
   - script: |
+      export INFURA_URL=$INFURA_URL
       export PRIVATE_KEY=$PRIVATE_KEY
       npm run deploy:mumbai
     displayName: 'deploy factory contract'
     env:
-      INFURA_URL: INFURA_URL
       INFURA_MUMBAI_URL: INFURA_URL
       INFURA_POLYGON_MAINNET_URL: ""
       METAMASK_WALLET_PRIVATE_KEY_1: PRIVATE_KEY
