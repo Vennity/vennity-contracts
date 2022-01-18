@@ -7,21 +7,21 @@ import {
 import 'dotenv/config'
 
 /* Internal imports */
-import { VennityCollectionFactory } from '../types/VennityCollectionFactory'
-import { MaticToken } from '../types/MaticToken'
+import { VennityCollectionFactory } from '../types'
+import { MaticToken } from '../types'
 
 let mumbaiProvider = new ethers.providers.JsonRpcProvider(
-    process.env.INFURA_MUMBAI_URL
+    process.env.INFURA_URL
 )
 
-let privateKey1: string = process.env.METAMASK_WALLET_PRIVATE_KEY_1 as string
+let privateKey1: string = process.env.PRIVATE_KEY as string
 let l1Wallet1: Wallet = new ethers.Wallet(privateKey1, mumbaiProvider)
 let matic: MaticToken
 const adminAddress = l1Wallet1.address
 
 let CollectionFactory: VennityCollectionFactory
 let adminMaticBalanceBefore: BigNumber,
-    adminMaticBalanceAfter: BigNumber,
+    adminMaticBalanceAfter: BigNumber
 
 const MATIC_PRICE = 1
 
