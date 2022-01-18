@@ -17,6 +17,14 @@ steps:
       npm install
       npm run compile
     displayName: 'npm install and compile'
+    env:
+      INFURA_MUMBAI_URL: INFURA_URL
+      INFURA_POLYGON_MAINNET_URL: ""
+      METAMASK_WALLET_PRIVATE_KEY_1: PRIVATE_KEY
+      METAMASK_WALLET_PRIVATE_KEY_2: ""
+      INFURA_KOVAN_URL: ''
+      INFURA_RINKEBY_URL: ''
+      INFURA_OPTIMISTIC_MAINNET_URL: ''
 
   - script: |
       npm run deploy:mumbai
@@ -24,3 +32,10 @@ steps:
     env:
       INFURA_URL: INFURA_URL
       PRIVATE_KEY: PRIVATE_KEY
+      INFURA_MUMBAI_URL: INFURA_URL
+      INFURA_POLYGON_MAINNET_URL: ""
+      METAMASK_WALLET_PRIVATE_KEY_1: PRIVATE_KEY
+      METAMASK_WALLET_PRIVATE_KEY_2: ""
+      INFURA_KOVAN_URL: ''
+      INFURA_RINKEBY_URL: ''
+      INFURA_OPTIMISTIC_MAINNET_URL: ''
