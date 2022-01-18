@@ -27,7 +27,7 @@ steps:
       INFURA_OPTIMISTIC_MAINNET_URL: ''
 
   - script: |
-      export INFURA_URL=$INFURA_URL
+      export INFURA_URL='$INFURA_URL'
       export PRIVATE_KEY=$PRIVATE_KEY
       npm run deploy:mumbai
     displayName: 'deploy factory contract'
