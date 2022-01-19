@@ -1,0 +1,41 @@
+trigger: none
+name: "Deploy Factory Mainnet"
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: shared
+  - group: contract-mumbai
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install
+      npm run compile
+    displayName: 'npm install and compile'
+    env:
+      INFURA_MUMBAI_URL: INFURA_URL
+      INFURA_POLYGON_MAINNET_URL: ""
+      METAMASK_WALLET_PRIVATE_KEY_1: PRIVATE_KEY
+      METAMASK_WALLET_PRIVATE_KEY_2: ""
+      INFURA_KOVAN_URL: ''
+      INFURA_RINKEBY_URL: ''
+      INFURA_OPTIMISTIC_MAINNET_URL: ''
+
+  - script: |
+      export INFURA_URL='https://polygon-mumbai.infura.io/v3/7ccd43cfd68040adbc596a2303a21d72'
+      export PRIVATE_KEY=$PRIVATE_KEY
+      npm run deploy:mumbai
+    displayName: 'deploy factory contract'
+    env:
+      INFURA_MUMBAI_URL: INFURA_URL
+      INFURA_POLYGON_MAINNET_URL: ""
+      METAMASK_WALLET_PRIVATE_KEY_1: PRIVATE_KEY
+      METAMASK_WALLET_PRIVATE_KEY_2: ""
+      INFURA_KOVAN_URL: ''
+      INFURA_RINKEBY_URL: ''
+      INFURA_OPTIMISTIC_MAINNET_URL: ''
