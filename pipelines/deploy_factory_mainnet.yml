@@ -30,7 +30,7 @@ steps:
       export INFURA_URL=$(INFURA_URL)
       touch .env
       echo "PRIVATE_KEY=$(PRIVATE_KEY)" > ./.env
-      npm run deploy:mainnet
+      npm run deploy
     displayName: 'deploy factory contract'
     env:
       INFURA_MUMBAI_URL: ""
