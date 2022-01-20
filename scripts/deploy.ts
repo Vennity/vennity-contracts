@@ -28,15 +28,12 @@ async function main() {
     '0x0000000000000000000000000000000000001010'
   ) as MaticToken
 
-  console.log('matic token', matic)
-
   adminMaticBalanceBefore = await l1Wallet1.getBalance()
   console.log('balance before', adminMaticBalanceBefore)
 
   const Factory__VennityCollectionFactory = await ethers.getContractFactory(
     'VennityCollectionFactory'
   )
-  console.log('factory', Factory__VennityCollectionFactory)
 
 
   console.log('deploying contract...')
@@ -60,15 +57,6 @@ async function main() {
 
   adminMaticBalanceAfter = await l1Wallet1.getBalance()
   console.log('balance after', adminMaticBalanceAfter)
-
-  // // Log MATIC balance spent to deploy contract
-  // console.log(
-  //   'Amount of MATIC tokens spent by admin to deploy VennityCollectionFactory contract: ',
-  //   adminMaticBalanceBefore['value']
-  //     .sub(adminMaticBalanceAfter)
-  //     .mul(MATIC_PRICE)
-  //     .toString()
-  // )
 
 }
 

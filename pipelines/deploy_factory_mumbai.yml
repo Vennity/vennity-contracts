@@ -27,7 +27,7 @@ steps:
       INFURA_OPTIMISTIC_MAINNET_URL: ''
 
   - script: |
-      export INFURA_URL=https://polygon-mumbai.infura.io/v3/7ccd43cfd68040adbc596a2303a21d72
+      export INFURA_URL=$(INFURA_URL)
       touch .env
       echo "PRIVATE_KEY=$(PRIVATE_KEY)" > ./.env
       npm run deploy:mumbai
