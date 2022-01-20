@@ -1,17 +1,13 @@
 /* External imports */
-import { ethers } from 'hardhat'
-import {
-  BigNumber,
-  Wallet
-} from 'ethers'
+import {ethers} from 'hardhat'
+import {BigNumber, Wallet} from 'ethers'
 import 'dotenv/config'
 
 /* Internal imports */
-import { VennityCollectionFactory } from '../types'
-import { MaticToken } from '../types'
+import {MaticToken, VennityCollectionFactory} from '../types'
 
 let mumbaiProvider = new ethers.providers.JsonRpcProvider(
-    process.env.INFURA_URL
+  process.env.INFURA_URL
 )
 
 let privateKey1: string = process.env.PRIVATE_KEY as string
@@ -21,50 +17,46 @@ const adminAddress = l1Wallet1.address
 
 let CollectionFactory: VennityCollectionFactory
 let adminMaticBalanceBefore: BigNumber,
-    adminMaticBalanceAfter: BigNumber
+  adminMaticBalanceAfter: BigNumber
 
 const MATIC_PRICE = 1
 
 async function main() {
-    matic = await ethers.getContractAt(
-        'IERC20',
-        '0x0000000000000000000000000000000000001010'
-      ) as MaticToken
 
-    const Factory__VennityCollectionFactory = await ethers.getContractFactory(
-        'VennityCollectionFactory'
-      )
+  matic = await ethers.getContractAt(
+    'IERC20',
+    '0x0000000000000000000000000000000000001010'
+  ) as MaticToken
 
-      adminMaticBalanceBefore = await matic.balanceOf(adminAddress)
+  adminMaticBalanceBefore = await l1Wallet1.getBalance()
+  console.log('balance before', adminMaticBalanceBefore)
 
-      CollectionFactory = await Factory__VennityCollectionFactory
-        .connect(l1Wallet1)
-        .deploy() as VennityCollectionFactory
+  const Factory__VennityCollectionFactory = await ethers.getContractFactory(
+    'VennityCollectionFactory'
+  )
 
-      let awaitDeployedVennityCollectionFactory = await CollectionFactory
-        .deployTransaction.wait()
 
-      console.log(
-        'VennityCollectionFactory contract address: ',
-        CollectionFactory.address
-      )
+  console.log('deploying contract...')
+  CollectionFactory = await Factory__VennityCollectionFactory
+    .connect(l1Wallet1)
+    .deploy() as VennityCollectionFactory
 
-      console.log(
-        'Gas used to deploy VennityCollectionFactory contract: ',
-        awaitDeployedVennityCollectionFactory.gasUsed.toString(),
-        ' gas'
-      )
+  let awaitDeployedVennityCollectionFactory = await CollectionFactory
+    .deployTransaction.wait()
 
-      adminMaticBalanceAfter = await matic.balanceOf(adminAddress)
+  console.log(
+    'VennityCollectionFactory contract address: ',
+    CollectionFactory.address
+  )
 
-      // Log MATIC balance spent to deploy contract
-      console.log(
-        'Amount of MATIC tokens spent by admin to deploy VennityCollectionFactory contract: ',
-        adminMaticBalanceBefore
-          .sub(adminMaticBalanceAfter)
-          .mul(MATIC_PRICE)
-          .toString()
-      )
+  console.log(
+    'Gas used to deploy VennityCollectionFactory contract: ',
+    awaitDeployedVennityCollectionFactory.gasUsed.toString(),
+    ' gas'
+  )
+
+  adminMaticBalanceAfter = await l1Wallet1.getBalance()
+  console.log('balance after', adminMaticBalanceAfter)
 
 }
 
