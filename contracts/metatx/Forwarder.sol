@@ -124,7 +124,7 @@ contract Forwarder is Ownable {
     {
         require(whitelist[req.user], "User is not whitelisted");
         _nonces[req.user] = req.nonce + 1;
-        uint gas = msg.value; // gas is amount paid to execute call
+        uint gas = gasleft(); // gas is amount paid to execute call
         (bool success, bytes memory returndata) = req.collection.call{gas: gas, value: req.value}(req.data);
         if (success) { emit executedCall(req); }
         // Validate that the relayer has sent enough gas for the call.
