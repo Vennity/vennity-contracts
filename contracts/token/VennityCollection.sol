@@ -70,6 +70,7 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
      */
     address public admin;
     string public name;
+    string public cURI; // contractURI
 
     // Used to track NFTs that are minted.
     NFT[] public nfts;
@@ -86,9 +87,10 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev Create new ERC1155 contract named `VennityNFT`.
      */
-    constructor(string memory _name, address _admin) {
+    constructor(string memory _name, address _admin, string memory _cURI) {
         admin = _admin;
         name = _name;
+        cURI = _cURI;
     }
 
     /**
@@ -152,6 +154,13 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /**
+     * @dev gets collection details for opensea
+     */
+    function contractURI() public view returns(string memory) {
+        return cURI;
+    }
+
+    /**
      * @dev Sets the name of this contract
      */
     function setName(string memory _name) public virtual {
@@ -165,6 +174,13 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     function getSupply(uint256 id) public view virtual returns (uint256) {
         uint256 supply_ = _supplies[id];
         return supply_;
+    }
+
+    /**
+     * @dev sets the contract URI
+     */
+    function setContractURI(string memory _cRUI) public virtual {
+        cURI = _cRUI;
     }
 
     /**

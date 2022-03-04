@@ -20,7 +20,8 @@ contract VennityCollectionFactory {
         address admin,
         address address_,
         string uuid,
-        string name
+        string name,
+        string cURI
     );
 
     struct Collection {
@@ -28,6 +29,7 @@ contract VennityCollectionFactory {
         address address_;
         string uuid;
         string name;
+        string cURI; 
     }
 
     /**************************
@@ -40,6 +42,8 @@ contract VennityCollectionFactory {
     uint256 private mintCount;
 
     mapping(string => uint256) public _ids;
+
+    mapping(string => string) public _cURIs;
 
     // Used to track badges that are minted.
     Collection[] public collections;
@@ -55,7 +59,8 @@ contract VennityCollectionFactory {
     function createCollection(
         address _admin,
         string memory uuid,
-        string memory name
+        string memory name,
+        string memory cURI
     ) public returns (VennityCollection tokenAddress) {
         require(
             admin == msg.sender,
@@ -70,19 +75,21 @@ contract VennityCollectionFactory {
         id = mintCount - 1;
 
         _ids[uuid] = id;
+        _cURIs[uuid] = cURI;
 
         // Create a new `VennityCollection` contract and return its address.
         // From the JavaScript side, the return type
         // of this function is `address`, as this is
         // the closest type available in the ABI.
-        VennityCollection collection = new VennityCollection(name, _admin);
-        emit VennityCollectionCreated(_admin, address(collection), uuid, name);
+        VennityCollection collection = new VennityCollection(name, _admin, cURI);
+        emit VennityCollectionCreated(_admin, address(collection), uuid, name, cURI);
 
         Collection memory _collection = Collection(
             admin,
             address(collection),
             uuid,
-            name
+            name,
+            cURI
         );
         collections.push(_collection);
 
@@ -142,6 +149,10 @@ contract VennityCollectionFactory {
      */
     function getId(string memory uuid) public view virtual returns (uint256) {
         return _ids[uuid];
+    }
+
+    function getCURI(string memory uuid) public view virtual returns (string memory) {
+        return _cURIs[uuid];
     }
 
     function changeName(VennityCollection tokenAddress, string memory name)
