@@ -1,6 +1,6 @@
 /* External imports */
 import {ethers} from 'hardhat'
-import {BigNumber, Wallet} from 'ethers'
+import {BigNumber, Wallet, utils} from 'ethers'
 import 'dotenv/config'
 
 /* Internal imports */
@@ -18,11 +18,10 @@ const adminAddress = l1Wallet1.address
 let CollectionFactory: VennityCollectionFactory
 let adminMaticBalanceBefore: BigNumber,
   adminMaticBalanceAfter: BigNumber
-
 const MATIC_PRICE = 1
 
 async function main() {
-
+  const gasLimit = utils.parseUnits('350.0', 'gwei')
   matic = await ethers.getContractAt(
     'IERC20',
     '0x0000000000000000000000000000000000001010'
@@ -39,7 +38,7 @@ async function main() {
   console.log('deploying contract...')
   CollectionFactory = await Factory__VennityCollectionFactory
     .connect(l1Wallet1)
-    .deploy() as VennityCollectionFactory
+    .deploy({gasPrice: 30000000000}) as VennityCollectionFactory
 
   console.log('submitted deployment', CollectionFactory)
 
