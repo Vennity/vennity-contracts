@@ -27,7 +27,7 @@ async function main() {
     'IERC20',
     '0x0000000000000000000000000000000000001010'
   ) as MaticToken
-
+  console.log('deploying from address', adminAddress)
   adminMaticBalanceBefore = await l1Wallet1.getBalance()
   console.log('balance before', adminMaticBalanceBefore)
 
@@ -40,6 +40,10 @@ async function main() {
   CollectionFactory = await Factory__VennityCollectionFactory
     .connect(l1Wallet1)
     .deploy() as VennityCollectionFactory
+
+  console.log('submitted deployment', CollectionFactory)
+
+  console.log('waiting for confirmation')
 
   let awaitDeployedVennityCollectionFactory = await CollectionFactory
     .deployTransaction.wait()
