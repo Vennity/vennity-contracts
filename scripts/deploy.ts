@@ -38,7 +38,7 @@ async function main() {
   console.log('deploying contract...')
   CollectionFactory = await Factory__VennityCollectionFactory
     .connect(l1Wallet1)
-    .deploy({gasPrice: 30000000000}) as VennityCollectionFactory
+    .deploy() as VennityCollectionFactory
 
   console.log('submitted deployment', CollectionFactory)
 
