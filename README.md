@@ -5,7 +5,7 @@
 ## Contributors
 [@platocrat](https://github.com/platocrat)
 [@mazurbeam](https://github.com/mazurbeam)
-[@caleb-shacl](https://github.com/caleb-shack)
+[@caleb-shack](https://github.com/caleb-shack)
 
 
 To run tests, create  `.env` file with the following filled out:
