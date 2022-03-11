@@ -1,18 +1,20 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * Inspired by https://github.com/austintgriffith/bouncer-proxy/blob/master/BouncerProxy/BouncerProxy.sol
+ * @author 0xCaleb (follow me on twitter)
+ * @dev Forwarder contract to facilitate metatransactions on Ethereum L1. Intended to be used for Vennity NFT
+ * so that they can pay gas fees on their frontend application. Allows for generic calls to any contract without
+ * any incentive for the caller to pay the user's gas fees. For Vennity's case, we have a web2-native fiat subscription plan.
+ * References: https://github.com/austintgriffith/bouncer-proxy/blob/master/BouncerProxy/BouncerProxy.sol
  *             https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/metatx/MinimalForwarder.sol
  */
 
 contract Forwarder is Ownable {
-    using ECDSA for bytes32;
 
-    uint256 CALL_LIMIT = 100;  // TODO implement call limit
+    bool paused; // pauses executeCall
 
     struct Invoice {
         address user;           // address of user
@@ -25,15 +27,15 @@ contract Forwarder is Ownable {
     }
 
     mapping(address => uint256) private _nonces; // keeps track of user's nonces
-    mapping(address => uint256) private callCount; // keeps track of call limit per user
-    mapping(address => uint256) private subscriptionPlan; // keeps track of user's subscription plan
     mapping(address => bool) private whitelist; // keeps track if user is whitelisted
 
     event whitelisted(address account);
+    event removed(address account);
     event executedCall(Invoice request);
 
     constructor() {
         whitelist[msg.sender] = true;
+        paused = false;
     }
 
     ///////////////////////////////////////
@@ -61,6 +63,31 @@ contract Forwarder is Ownable {
         emit whitelisted(account);
     }
 
+    /**
+     * @dev removes user from whitelist
+     */
+    function removeWhitelist(address account) external onlyOwner {
+        require(whitelist[account], "user is not whitelisted");
+        whitelist[account] = false;
+        emit removed(account);
+    }
+
+    /**
+     * @dev pauses executeCall function
+     */
+    function pause() external onlyOwner {
+        require(!paused, "Contract is already paused");
+        paused = true;
+    }
+
+    /**
+     * @dev unpauses executeCall function
+     */
+    function unpause() external onlyOwner {
+        require(paused, "Contract is already not paused");
+        paused = false;
+    }
+
     ///////////////////////////////////////
     // |        CALL A FUNCTION        | //
     ///////////////////////////////////////
@@ -70,16 +97,19 @@ contract Forwarder is Ownable {
         payable
         returns (bool, bytes memory)
     {
+        require(!paused, "Contract is paused");
         require(whitelist[req.user], "User is not whitelisted");
         _nonces[req.user] = req.nonce + 1;
         uint gas = gasleft(); // gas is amount paid to execute call
-        (bool success, bytes memory returndata) = req.collection.call{gas: gas, value: req.value}(req.data);
-        if (success) { emit executedCall(req); }
+        (bool success, bytes memory returndata) = req.collection.call{gas: gas, value: 0}(req.data);
+        require(success, "Call failed to execute");
+        emit executedCall(req);
         // Validate that the relayer has sent enough gas for the call.
         // See https://ronan.eth.link/blog/ethereum-gas-dangers/
         assert(gasleft() > gas / 63);
 
         return (success, returndata);
     }
+
 
 }
