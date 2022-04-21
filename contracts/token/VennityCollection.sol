@@ -8,11 +8,11 @@ pragma solidity >=0.8.9 <=0.9.0;
  ***************/
 import "../utils/Context.sol";
 import "../utils/Address.sol";
-import "./utils/introspection/ERC165.sol";
+import "../utils/introspection/ERC165.sol";
 import "./IERC1155Receiver.sol";
-import "./IERC1155MetadataURI.sol";
+import "./extensions/IERC1155MetadataURI.sol";
 import "./IERC1155.sol";
-import "./Ownable.sol";
+import "../access/Ownable.sol";
 
 /**
  * @dev Implementation of the basic standard multi-token.
