@@ -8,10 +8,11 @@ pragma solidity >=0.8.9 <=0.9.0;
  ***************/
 import "../utils/Context.sol";
 import "../utils/Address.sol";
-import "../utils/introspection/ERC165.sol";
+import "./utils/introspection/ERC165.sol";
 import "./IERC1155Receiver.sol";
-import "./extensions/IERC1155MetadataURI.sol";
+import "./IERC1155MetadataURI.sol";
 import "./IERC1155.sol";
+import "./Ownable.sol";
 
 /**
  * @dev Implementation of the basic standard multi-token.
@@ -20,7 +21,7 @@ import "./IERC1155.sol";
  *
  * _Available since v3.1._
  */
-contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
+contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI, Ownable {
     using Address for address;
 
     event SetUri(uint256 id, string uri, string uuid);
@@ -66,9 +67,9 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
      *************************/
     /**
      * @dev Not part of ERC1155 standard.
-     * Admin of the contract. Is the only one who can call `_mint()`.
+     * @dev va0422 Removing admin in favor of Ownable. 
      */
-    address public admin;
+    //address public admin;
     string public name;
     string public cURI; // contractURI
 
@@ -87,8 +88,9 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev Create new ERC1155 contract named `VennityNFT`.
      */
-    constructor(string memory _name, address _admin, string memory _cURI) {
-        admin = _admin;
+    constructor(string memory _name, string memory _cURI) {
+        //admin = _admin;
+        //_transferOwnership(_owner);
         name = _name;
         cURI = _cURI;
     }
@@ -96,9 +98,9 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev Returns the `admin` address of this contract.
      */
-    function getAdmin() public view virtual returns (address admin_) {
+    /*function getAdmin() public view virtual returns (address admin_) {
         return admin;
-    }
+    }*/
 
     /**
      * @dev Returns the name of the contract
@@ -146,7 +148,7 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
      *
      * This implementation returns the token URI from its token UUID
      */
-    function setURI(string memory _uuid, string memory _uri) public virtual {
+    function setURI(string memory _uuid, string memory _uri) public onlyOwner virtual {
         uint256 id = getId(_uuid);
         _uris[id] = _uri;
 
@@ -163,7 +165,7 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev Sets the name of this contract
      */
-    function setName(string memory _name) public virtual {
+    function setName(string memory _name) public onlyOwner virtual {
         name = _name;
     }
 
@@ -179,7 +181,7 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     /**
      * @dev sets the contract URI
      */
-    function setContractURI(string memory _cRUI) public virtual {
+    function setContractURI(string memory _cRUI) public onlyOwner virtual {
         cURI = _cRUI;
     }
 
@@ -249,7 +251,6 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /******************
-     * @dev Not in use!
      *****************/
     function setApprovalForAll(address operator, bool approved)
         public
@@ -266,7 +267,6 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
     }
 
     /******************
-     * @dev Not in use!
      *****************/
     function isApprovedForAll(address account, address operator)
         public
@@ -285,38 +285,11 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(to != address(0), "ERC1155: transfer to the zero address");
         require(
-            msg.sender == admin,
-            "ERC1155: caller is not the contract admin!"
+            from == _msgSender() || isApprovedForAll(from, _msgSender()),
+            "ERC1155: caller is not owner nor approved"
         );
-        require(
-            from == admin,
-            "ERC1155: `from` address must be the contract admin!"
-        );
-        uint256 fromBalance = _balances[id][from];
-        require(
-            fromBalance >= amount,
-            "ERC1155: insufficient balance for transfer"
-        );
-
-        address operator = _msgSender();
-
-        _beforeTokenTransfer(
-            operator,
-            from,
-            to,
-            _asSingletonArray(id),
-            _asSingletonArray(amount),
-            data
-        );
-
-        _balances[id][from] = fromBalance - amount;
-        _balances[id][to] += amount;
-
-        emit TransferSingle(operator, from, to, id, amount);
-
-        _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
+        _safeTransferFrom(from, to, id, amount, data);
     }
 
     function safeBatchTransferFrom(
@@ -326,46 +299,73 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
         uint256[] memory amounts,
         bytes memory data
     ) public virtual override {
-        require(
-            ids.length == amounts.length,
-            "ERC1155: ids and amounts length mismatch"
+         require(
+            from == _msgSender() || isApprovedForAll(from, _msgSender()),
+            "ERC1155: transfer caller is not owner nor approved"
         );
-        require(to != address(0), "ERC1155: transfer to the zero address");
-        require(
-            msg.sender == admin,
-            "ERC1155: caller is not the contract admin!"
-        );
-        require(
-            from == admin,
-            "ERC1155: `from` address must be the contract admin!"
-        );
-        for (uint256 i = 0; i < ids.length; ++i) {
-            uint256 id = ids[i];
-            uint256 amount = amounts[i];
+        _safeBatchTransferFrom(from, to, ids, amounts, data);
+    }
 
-            uint256 fromBalance = _balances[id][from];
-            require(
-                fromBalance >= amount,
-                "ERC1155: insufficient balance for transfer"
-            );
+    function _safeTransferFrom(
+        address from,
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) internal virtual {
+        require(to != address(0), "ERC1155: transfer to the zero address");
+
+        address operator = _msgSender();
+
+        _beforeTokenTransfer(operator, from, to, _asSingletonArray(id), _asSingletonArray(amount), data);
+
+        uint256 fromBalance = _balances[id][from];
+        require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
+        unchecked {
             _balances[id][from] = fromBalance - amount;
-            _balances[id][to] += amount;
         }
+        _balances[id][to] += amount;
+
+        emit TransferSingle(operator, from, to, id, amount);
+
+        _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
+    }
+
+    function _safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal virtual {
+        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+        require(to != address(0), "ERC1155: transfer to the zero address");
 
         address operator = _msgSender();
 
         _beforeTokenTransfer(operator, from, to, ids, amounts, data);
 
+        for (uint256 i = 0; i < ids.length; ++i) {
+            uint256 id = ids[i];
+            uint256 amount = amounts[i];
+
+            uint256 fromBalance = _balances[id][from];
+            require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
+            unchecked {
+                _balances[id][from] = fromBalance - amount;
+            }
+            _balances[id][to] += amount;
+        }
+
         emit TransferBatch(operator, from, to, ids, amounts);
 
-        _doSafeBatchTransferAcceptanceCheck(
-            operator,
-            from,
-            to,
-            ids,
-            amounts,
-            data
-        );
+        _doSafeBatchTransferAcceptanceCheck(operator, from, to, ids, amounts, data);
+    }
+    
+    function mint(address account, string memory name, string memory uri, uint256 amount, string memory uuid)
+        public onlyOwner
+    {
+        _mint(account, name, uri, amount, uuid);
     }
 
     function _mint(
@@ -374,16 +374,16 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
         string memory uri_,
         uint256 amount_,
         string memory uuid_
-    ) public {
+    ) virtual internal {
         require(
             account_ != address(0),
             "ERC1155: cannot mint to the zero address"
         );
-        require(
-            msg.sender == admin,
-            "ERC1155: only the admin of this contract can call `_mint()`!"
-        );
-        require(account_ == admin, "ERC1155: account must be the admin!");
+        //require(
+        //    msg.sender == admin,
+        //    "ERC1155: only the admin of this contract can call `_mint()`!"
+        //);
+        //require(account_ == admin, "ERC1155: account must be the admin!");
 
         // Get the bytes of `uuid`.
         bytes memory data = abi.encode(uuid_);
@@ -458,6 +458,16 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
      * acceptance magic value.
      */
+
+    function mintBatch(address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data)
+        public onlyOwner
+    {
+        _mintBatch(to, ids, amounts, data);
+    }
+    
     function _mintBatch(
         address to,
         uint256[] memory ids,
@@ -498,6 +508,30 @@ contract VennityCollection is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * - `account` cannot be the zero address.
      * - `account` must have at least `amount` tokens of token type `id`.
      */
+    function burn(	
+        address account,	
+        uint256 id,	
+        uint256 value	
+    ) public virtual {	
+        require(	
+            account == _msgSender() || isApprovedForAll(account, _msgSender()),	
+            "ERC1155: caller is not owner nor approved"	
+        );	
+        _burn(account, id, value);	
+    }	
+    
+    function burnBatch(	
+        address account,	
+        uint256[] memory ids,	
+        uint256[] memory values	
+    ) public virtual {	
+        require(	
+            account == _msgSender() || isApprovedForAll(account, _msgSender()),	
+            "ERC1155: caller is not owner nor approved"	
+        );	
+        _burnBatch(account, ids, values);	
+    }
+
     function _burn(
         address account,
         uint256 id,
