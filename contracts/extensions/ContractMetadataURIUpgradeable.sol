@@ -8,7 +8,6 @@ import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeabl
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 
-import "@manifoldxyz/libraries-solidity/contracts/access/AdminControl.sol";
 import "./IContractMetadataURIUpgradeable.sol";
 
 abstract contract ContractMetadataURIUpgradeable is Initializable, ContextUpgradeable, IContractMetadataURIUpgradeable, ERC165Upgradeable {

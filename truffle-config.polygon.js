@@ -10,12 +10,12 @@ module.exports = {
   /**
   * contracts_build_directory tells Truffle where to store compiled contracts
   */
-  contracts_build_directory: './build/polygon-contracts',
+  contracts_build_directory: './build',
 
   /**
   * contracts_directory tells Truffle where the contracts you want to compile are located
   */
-  contracts_directory: './contracts/polygon',
+  contracts_directory: './contracts',
 
 
   networks: {
@@ -62,6 +62,13 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
+      version: "0.8.7",    // Fetch exact version from solc-bin (default: truffle's version)
+      settings: {          // See the solidity docs for advice about optimization and evmVersion
+        optimizer: {
+          enabled: true,
+          runs: 100
+        }
+      }
     }
   },
   db: {
