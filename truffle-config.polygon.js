@@ -31,7 +31,7 @@ module.exports = {
           phrase: mnemonic
         },
         providerOrUrl:
-         "https://polygon-mainnet.infura.io/v3/" + infuraProjectId
+         "https://polygon-mainnet.g.alchemy.com/v2/" + infuraProjectId
       }),
       network_id: 137,
       confirmations: 2,
@@ -42,11 +42,9 @@ module.exports = {
     //polygon Infura testnet
     polygon_infura_testnet: {
       provider: () => new HDWalletProvider({
-        mnemonic: {
-          phrase: mnemonic
-        },
+        privateKeys: [mnemonic],
         providerOrUrl:
-         "https://polygon-mumbai.infura.io/v3/" + infuraProjectId
+         "https://polygon-mumbai.g.alchemy.com/v2/" + infuraProjectId
       }),
       network_id: 80001,
       confirmations: 2,

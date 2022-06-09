@@ -1,0 +1,3874 @@
+{
+  "contractName": "ICreatorCore",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address payable[]",
+          "name": "receivers",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "basisPoints",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "DefaultRoyaltiesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "enabled",
+          "type": "bool"
+        }
+      ],
+      "name": "ExtensionApproveTransferUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "ExtensionBlacklisted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "ExtensionRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address payable[]",
+          "name": "receivers",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "basisPoints",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "ExtensionRoyaltiesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "ExtensionUnregistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "permissions",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "MintPermissionsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address payable[]",
+          "name": "receivers",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "basisPoints",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "RoyaltiesUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getExtensions",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "baseURI",
+          "type": "string"
+        }
+      ],
+      "name": "registerExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "baseURI",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "baseURIIdentical",
+          "type": "bool"
+        }
+      ],
+      "name": "registerExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        }
+      ],
+      "name": "unregisterExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        }
+      ],
+      "name": "blacklistExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uri",
+          "type": "string"
+        }
+      ],
+      "name": "setBaseTokenURIExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uri",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "identical",
+          "type": "bool"
+        }
+      ],
+      "name": "setBaseTokenURIExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "prefix",
+          "type": "string"
+        }
+      ],
+      "name": "setTokenURIPrefixExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenId",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "string[]",
+          "name": "uri",
+          "type": "string[]"
+        }
+      ],
+      "name": "setTokenURIExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "uri",
+          "type": "string"
+        }
+      ],
+      "name": "setTokenURIExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uri",
+          "type": "string"
+        }
+      ],
+      "name": "setBaseTokenURI",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "prefix",
+          "type": "string"
+        }
+      ],
+      "name": "setTokenURIPrefix",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "uri",
+          "type": "string"
+        }
+      ],
+      "name": "setTokenURI",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "string[]",
+          "name": "uris",
+          "type": "string[]"
+        }
+      ],
+      "name": "setTokenURI",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "permissions",
+          "type": "address"
+        }
+      ],
+      "name": "setMintPermissions",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "enabled",
+          "type": "bool"
+        }
+      ],
+      "name": "setApproveTransferExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenExtension",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable[]",
+          "name": "receivers",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "basisPoints",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "setRoyalties",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address payable[]",
+          "name": "receivers",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "basisPoints",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "setRoyalties",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "extension",
+          "type": "address"
+        },
+        {
+          "internalType": "address payable[]",
+          "name": "receivers",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "basisPoints",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "setRoyaltiesExtension",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getRoyalties",
+      "outputs": [
+        {
+          "internalType": "address payable[]",
+          "name": "",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFeeRecipients",
+      "outputs": [
+        {
+          "internalType": "address payable[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFeeBps",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFees",
+      "outputs": [
+        {
+          "internalType": "address payable[]",
+          "name": "",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "royaltyInfo",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address payable[]\",\"name\":\"receivers\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"basisPoints\",\"type\":\"uint256[]\"}],\"name\":\"DefaultRoyaltiesUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"enabled\",\"type\":\"bool\"}],\"name\":\"ExtensionApproveTransferUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"ExtensionBlacklisted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"ExtensionRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address payable[]\",\"name\":\"receivers\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"basisPoints\",\"type\":\"uint256[]\"}],\"name\":\"ExtensionRoyaltiesUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"ExtensionUnregistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"permissions\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"MintPermissionsUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address payable[]\",\"name\":\"receivers\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"basisPoints\",\"type\":\"uint256[]\"}],\"name\":\"RoyaltiesUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"}],\"name\":\"blacklistExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getExtensions\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getFeeBps\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getFeeRecipients\",\"outputs\":[{\"internalType\":\"address payable[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getFees\",\"outputs\":[{\"internalType\":\"address payable[]\",\"name\":\"\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getRoyalties\",\"outputs\":[{\"internalType\":\"address payable[]\",\"name\":\"\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"baseURI\",\"type\":\"string\"}],\"name\":\"registerExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"baseURI\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"baseURIIdentical\",\"type\":\"bool\"}],\"name\":\"registerExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"royaltyInfo\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"enabled\",\"type\":\"bool\"}],\"name\":\"setApproveTransferExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"}],\"name\":\"setBaseTokenURI\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"}],\"name\":\"setBaseTokenURIExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"identical\",\"type\":\"bool\"}],\"name\":\"setBaseTokenURIExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"permissions\",\"type\":\"address\"}],\"name\":\"setMintPermissions\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address payable[]\",\"name\":\"receivers\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"basisPoints\",\"type\":\"uint256[]\"}],\"name\":\"setRoyalties\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address payable[]\",\"name\":\"receivers\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"basisPoints\",\"type\":\"uint256[]\"}],\"name\":\"setRoyalties\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"},{\"internalType\":\"address payable[]\",\"name\":\"receivers\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"basisPoints\",\"type\":\"uint256[]\"}],\"name\":\"setRoyaltiesExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"}],\"name\":\"setTokenURI\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[]\",\"name\":\"tokenIds\",\"type\":\"uint256[]\"},{\"internalType\":\"string[]\",\"name\":\"uris\",\"type\":\"string[]\"}],\"name\":\"setTokenURI\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[]\",\"name\":\"tokenId\",\"type\":\"uint256[]\"},{\"internalType\":\"string[]\",\"name\":\"uri\",\"type\":\"string[]\"}],\"name\":\"setTokenURIExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"}],\"name\":\"setTokenURIExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"prefix\",\"type\":\"string\"}],\"name\":\"setTokenURIPrefix\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"prefix\",\"type\":\"string\"}],\"name\":\"setTokenURIPrefixExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenExtension\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"extension\",\"type\":\"address\"}],\"name\":\"unregisterExtension\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Core creator interface\",\"kind\":\"dev\",\"methods\":{\"blacklistExtension(address)\":{\"details\":\"blacklist an extension.  Can only be called by contract owner or admin. This function will destroy all ability to reference the metadata of any tokens created by the specified extension. It will also unregister the extension if needed. Returns True if removed, False if already removed.\"},\"getExtensions()\":{\"details\":\"gets address of all extensions\"},\"getRoyalties(uint256)\":{\"details\":\"Get royalites of a token.  Returns list of receivers and basisPoints\"},\"registerExtension(address,string)\":{\"details\":\"add an extension.  Can only be called by contract owner or admin. extension address must point to a contract implementing ICreatorExtension. Returns True if newly added, False if already added.\"},\"registerExtension(address,string,bool)\":{\"details\":\"add an extension.  Can only be called by contract owner or admin. extension address must point to a contract implementing ICreatorExtension. Returns True if newly added, False if already added.\"},\"setApproveTransferExtension(bool)\":{\"details\":\"Configure so transfers of tokens created by the caller (must be extension) gets approval from the extension before transferring\"},\"setBaseTokenURI(string)\":{\"details\":\"set the baseTokenURI for tokens with no extension.  Can only be called by owner/admin. For tokens with no uri configured, tokenURI will return \\\"uri+tokenId\\\"\"},\"setBaseTokenURIExtension(string)\":{\"details\":\"set the baseTokenURI of an extension.  Can only be called by extension.\"},\"setBaseTokenURIExtension(string,bool)\":{\"details\":\"set the baseTokenURI of an extension.  Can only be called by extension. For tokens with no uri configured, tokenURI will return \\\"uri+tokenId\\\"\"},\"setMintPermissions(address,address)\":{\"details\":\"set a permissions contract for an extension.  Used to control minting.\"},\"setRoyalties(address[],uint256[])\":{\"details\":\"Set default royalties\"},\"setRoyalties(uint256,address[],uint256[])\":{\"details\":\"Set royalties of a token\"},\"setRoyaltiesExtension(address,address[],uint256[])\":{\"details\":\"Set royalties of an extension\"},\"setTokenURI(uint256,string)\":{\"details\":\"set the tokenURI of a token with no extension.  Can only be called by owner/admin.\"},\"setTokenURI(uint256[],string[])\":{\"details\":\"set the tokenURI of multiple tokens with no extension.  Can only be called by owner/admin.\"},\"setTokenURIExtension(uint256,string)\":{\"details\":\"set the tokenURI of a token extension.  Can only be called by extension that minted token.\"},\"setTokenURIExtension(uint256[],string[])\":{\"details\":\"set the tokenURI of a token extension for multiple tokens.  Can only be called by extension that minted token.\"},\"setTokenURIPrefix(string)\":{\"details\":\"set the common prefix for tokens with no extension.  Can only be called by owner/admin. If configured, and a token has a uri set, tokenURI will return \\\"prefixURI+tokenURI\\\" Useful if you want to use ipfs/arweave\"},\"setTokenURIPrefixExtension(string)\":{\"details\":\"set the common prefix of an extension.  Can only be called by extension. If configured, and a token has a uri set, tokenURI will return \\\"prefixURI+tokenURI\\\" Useful if you want to use ipfs/arweave\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas.\"},\"tokenExtension(uint256)\":{\"details\":\"get the extension of a given token\"},\"unregisterExtension(address)\":{\"details\":\"add an extension.  Can only be called by contract owner or admin. Returns True if removed, False if already removed.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@manifoldxyz/creator-core-solidity/contracts/core/ICreatorCore.sol\":\"ICreatorCore\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@manifoldxyz/creator-core-solidity/contracts/core/ICreatorCore.sol\":{\"keccak256\":\"0x2dc54667c7182b70fbfcb5c0775b098d9b6b652cbebdd55d2ef7e4676b84af4b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://383cef86be81bc48af21a27e945b82dcbb5ed1c1771a7bb68179538c6f8d6b71\",\"dweb:/ipfs/QmV345QPgtbZTqui7YQeA95QB3YCDnG7bX4H5RyUhTd4CX\"]},\"@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\n/// @author: manifold.xyz\n\nimport \"@openzeppelin/contracts/utils/introspection/IERC165.sol\";\n\n/**\n * @dev Core creator interface\n */\ninterface ICreatorCore is IERC165 {\n\n    event ExtensionRegistered(address indexed extension, address indexed sender);\n    event ExtensionUnregistered(address indexed extension, address indexed sender);\n    event ExtensionBlacklisted(address indexed extension, address indexed sender);\n    event MintPermissionsUpdated(address indexed extension, address indexed permissions, address indexed sender);\n    event RoyaltiesUpdated(uint256 indexed tokenId, address payable[] receivers, uint256[] basisPoints);\n    event DefaultRoyaltiesUpdated(address payable[] receivers, uint256[] basisPoints);\n    event ExtensionRoyaltiesUpdated(address indexed extension, address payable[] receivers, uint256[] basisPoints);\n    event ExtensionApproveTransferUpdated(address indexed extension, bool enabled);\n\n    /**\n     * @dev gets address of all extensions\n     */\n    function getExtensions() external view returns (address[] memory);\n\n    /**\n     * @dev add an extension.  Can only be called by contract owner or admin.\n     * extension address must point to a contract implementing ICreatorExtension.\n     * Returns True if newly added, False if already added.\n     */\n    function registerExtension(address extension, string calldata baseURI) external;\n\n    /**\n     * @dev add an extension.  Can only be called by contract owner or admin.\n     * extension address must point to a contract implementing ICreatorExtension.\n     * Returns True if newly added, False if already added.\n     */\n    function registerExtension(address extension, string calldata baseURI, bool baseURIIdentical) external;\n\n    /**\n     * @dev add an extension.  Can only be called by contract owner or admin.\n     * Returns True if removed, False if already removed.\n     */\n    function unregisterExtension(address extension) external;\n\n    /**\n     * @dev blacklist an extension.  Can only be called by contract owner or admin.\n     * This function will destroy all ability to reference the metadata of any tokens created\n     * by the specified extension. It will also unregister the extension if needed.\n     * Returns True if removed, False if already removed.\n     */\n    function blacklistExtension(address extension) external;\n\n    /**\n     * @dev set the baseTokenURI of an extension.  Can only be called by extension.\n     */\n    function setBaseTokenURIExtension(string calldata uri) external;\n\n    /**\n     * @dev set the baseTokenURI of an extension.  Can only be called by extension.\n     * For tokens with no uri configured, tokenURI will return \"uri+tokenId\"\n     */\n    function setBaseTokenURIExtension(string calldata uri, bool identical) external;\n\n    /**\n     * @dev set the common prefix of an extension.  Can only be called by extension.\n     * If configured, and a token has a uri set, tokenURI will return \"prefixURI+tokenURI\"\n     * Useful if you want to use ipfs/arweave\n     */\n    function setTokenURIPrefixExtension(string calldata prefix) external;\n\n    /**\n     * @dev set the tokenURI of a token extension.  Can only be called by extension that minted token.\n     */\n    function setTokenURIExtension(uint256 tokenId, string calldata uri) external;\n\n    /**\n     * @dev set the tokenURI of a token extension for multiple tokens.  Can only be called by extension that minted token.\n     */\n    function setTokenURIExtension(uint256[] memory tokenId, string[] calldata uri) external;\n\n    /**\n     * @dev set the baseTokenURI for tokens with no extension.  Can only be called by owner/admin.\n     * For tokens with no uri configured, tokenURI will return \"uri+tokenId\"\n     */\n    function setBaseTokenURI(string calldata uri) external;\n\n    /**\n     * @dev set the common prefix for tokens with no extension.  Can only be called by owner/admin.\n     * If configured, and a token has a uri set, tokenURI will return \"prefixURI+tokenURI\"\n     * Useful if you want to use ipfs/arweave\n     */\n    function setTokenURIPrefix(string calldata prefix) external;\n\n    /**\n     * @dev set the tokenURI of a token with no extension.  Can only be called by owner/admin.\n     */\n    function setTokenURI(uint256 tokenId, string calldata uri) external;\n\n    /**\n     * @dev set the tokenURI of multiple tokens with no extension.  Can only be called by owner/admin.\n     */\n    function setTokenURI(uint256[] memory tokenIds, string[] calldata uris) external;\n\n    /**\n     * @dev set a permissions contract for an extension.  Used to control minting.\n     */\n    function setMintPermissions(address extension, address permissions) external;\n\n    /**\n     * @dev Configure so transfers of tokens created by the caller (must be extension) gets approval\n     * from the extension before transferring\n     */\n    function setApproveTransferExtension(bool enabled) external;\n\n    /**\n     * @dev get the extension of a given token\n     */\n    function tokenExtension(uint256 tokenId) external view returns (address);\n\n    /**\n     * @dev Set default royalties\n     */\n    function setRoyalties(address payable[] calldata receivers, uint256[] calldata basisPoints) external;\n\n    /**\n     * @dev Set royalties of a token\n     */\n    function setRoyalties(uint256 tokenId, address payable[] calldata receivers, uint256[] calldata basisPoints) external;\n\n    /**\n     * @dev Set royalties of an extension\n     */\n    function setRoyaltiesExtension(address extension, address payable[] calldata receivers, uint256[] calldata basisPoints) external;\n\n    /**\n     * @dev Get royalites of a token.  Returns list of receivers and basisPoints\n     */\n    function getRoyalties(uint256 tokenId) external view returns (address payable[] memory, uint256[] memory);\n    \n    // Royalty support for various other standards\n    function getFeeRecipients(uint256 tokenId) external view returns (address payable[] memory);\n    function getFeeBps(uint256 tokenId) external view returns (uint[] memory);\n    function getFees(uint256 tokenId) external view returns (address payable[] memory, uint256[] memory);\n    function royaltyInfo(uint256 tokenId, uint256 value) external view returns (address, uint256);\n\n}\n",
+  "sourcePath": "@manifoldxyz/creator-core-solidity/contracts/core/ICreatorCore.sol",
+  "ast": {
+    "absolutePath": "@manifoldxyz/creator-core-solidity/contracts/core/ICreatorCore.sol",
+    "exportedSymbols": {
+      "ICreatorCore": [
+        2989
+      ],
+      "IERC165": [
+        6219
+      ]
+    },
+    "id": 2990,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2713,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:3"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "file": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "id": 2714,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 2990,
+        "sourceUnit": 6220,
+        "src": "85:65:3",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 2716,
+              "name": "IERC165",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 6219,
+              "src": "217:7:3"
+            },
+            "id": 2717,
+            "nodeType": "InheritanceSpecifier",
+            "src": "217:7:3"
+          }
+        ],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 2715,
+          "nodeType": "StructuredDocumentation",
+          "src": "152:38:3",
+          "text": " @dev Core creator interface"
+        },
+        "fullyImplemented": false,
+        "id": 2989,
+        "linearizedBaseContracts": [
+          2989,
+          6219
+        ],
+        "name": "ICreatorCore",
+        "nameLocation": "201:12:3",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "id": 2723,
+            "name": "ExtensionRegistered",
+            "nameLocation": "238:19:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2722,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2719,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "274:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2723,
+                  "src": "258:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2718,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "258:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2721,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nameLocation": "301:6:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2723,
+                  "src": "285:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2720,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "285:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "257:51:3"
+            },
+            "src": "232:77:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2729,
+            "name": "ExtensionUnregistered",
+            "nameLocation": "320:21:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2728,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2725,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "358:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2729,
+                  "src": "342:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2724,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "342:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2727,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nameLocation": "385:6:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2729,
+                  "src": "369:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2726,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "369:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "341:51:3"
+            },
+            "src": "314:79:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2735,
+            "name": "ExtensionBlacklisted",
+            "nameLocation": "404:20:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2734,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2731,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "441:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2735,
+                  "src": "425:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2730,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "425:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2733,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nameLocation": "468:6:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2735,
+                  "src": "452:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2732,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "452:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "424:51:3"
+            },
+            "src": "398:78:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2743,
+            "name": "MintPermissionsUpdated",
+            "nameLocation": "487:22:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2742,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2737,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "526:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2743,
+                  "src": "510:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2736,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "510:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2739,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "permissions",
+                  "nameLocation": "553:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2743,
+                  "src": "537:27:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2738,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "537:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2741,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nameLocation": "582:6:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2743,
+                  "src": "566:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2740,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "566:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "509:80:3"
+            },
+            "src": "481:109:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2753,
+            "name": "RoyaltiesUpdated",
+            "nameLocation": "601:16:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2752,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2745,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "634:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2753,
+                  "src": "618:23:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2744,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "618:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2748,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "receivers",
+                  "nameLocation": "661:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2753,
+                  "src": "643:27:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_memory_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2746,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "643:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2747,
+                    "nodeType": "ArrayTypeName",
+                    "src": "643:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2751,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "basisPoints",
+                  "nameLocation": "682:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2753,
+                  "src": "672:21:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2749,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "672:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2750,
+                    "nodeType": "ArrayTypeName",
+                    "src": "672:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "617:77:3"
+            },
+            "src": "595:100:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2761,
+            "name": "DefaultRoyaltiesUpdated",
+            "nameLocation": "706:23:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2760,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2756,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "receivers",
+                  "nameLocation": "748:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2761,
+                  "src": "730:27:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_memory_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2754,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "730:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2755,
+                    "nodeType": "ArrayTypeName",
+                    "src": "730:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2759,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "basisPoints",
+                  "nameLocation": "769:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2761,
+                  "src": "759:21:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2757,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "759:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2758,
+                    "nodeType": "ArrayTypeName",
+                    "src": "759:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "729:52:3"
+            },
+            "src": "700:82:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2771,
+            "name": "ExtensionRoyaltiesUpdated",
+            "nameLocation": "793:25:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2770,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2763,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "835:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2771,
+                  "src": "819:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2762,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "819:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2766,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "receivers",
+                  "nameLocation": "864:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2771,
+                  "src": "846:27:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_memory_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2764,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "846:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2765,
+                    "nodeType": "ArrayTypeName",
+                    "src": "846:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2769,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "basisPoints",
+                  "nameLocation": "885:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2771,
+                  "src": "875:21:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2767,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "875:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2768,
+                    "nodeType": "ArrayTypeName",
+                    "src": "875:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "818:79:3"
+            },
+            "src": "787:111:3"
+          },
+          {
+            "anonymous": false,
+            "id": 2777,
+            "name": "ExtensionApproveTransferUpdated",
+            "nameLocation": "909:31:3",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2776,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2773,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "957:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2777,
+                  "src": "941:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2772,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "941:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2775,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "enabled",
+                  "nameLocation": "973:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2777,
+                  "src": "968:12:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2774,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "968:4:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "940:41:3"
+            },
+            "src": "903:79:3"
+          },
+          {
+            "documentation": {
+              "id": 2778,
+              "nodeType": "StructuredDocumentation",
+              "src": "988:54:3",
+              "text": " @dev gets address of all extensions"
+            },
+            "functionSelector": "83b7db63",
+            "id": 2784,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getExtensions",
+            "nameLocation": "1056:13:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2779,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1069:2:3"
+            },
+            "returnParameters": {
+              "id": 2783,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2782,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1095:16:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_memory_ptr",
+                    "typeString": "address[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2780,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1095:7:3",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "id": 2781,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1095:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                      "typeString": "address[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1094:18:3"
+            },
+            "scope": 2989,
+            "src": "1047:66:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2785,
+              "nodeType": "StructuredDocumentation",
+              "src": "1119:231:3",
+              "text": " @dev add an extension.  Can only be called by contract owner or admin.\n extension address must point to a contract implementing ICreatorExtension.\n Returns True if newly added, False if already added."
+            },
+            "functionSelector": "3071a0f9",
+            "id": 2792,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerExtension",
+            "nameLocation": "1364:17:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2790,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2787,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "1390:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2792,
+                  "src": "1382:17:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2786,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1382:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2789,
+                  "mutability": "mutable",
+                  "name": "baseURI",
+                  "nameLocation": "1417:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2792,
+                  "src": "1401:23:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2788,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1401:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1381:44:3"
+            },
+            "returnParameters": {
+              "id": 2791,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1434:0:3"
+            },
+            "scope": 2989,
+            "src": "1355:80:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2793,
+              "nodeType": "StructuredDocumentation",
+              "src": "1441:231:3",
+              "text": " @dev add an extension.  Can only be called by contract owner or admin.\n extension address must point to a contract implementing ICreatorExtension.\n Returns True if newly added, False if already added."
+            },
+            "functionSelector": "3f0f37f6",
+            "id": 2802,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerExtension",
+            "nameLocation": "1686:17:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2800,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2795,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "1712:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2802,
+                  "src": "1704:17:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2794,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1704:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2797,
+                  "mutability": "mutable",
+                  "name": "baseURI",
+                  "nameLocation": "1739:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2802,
+                  "src": "1723:23:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2796,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1723:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2799,
+                  "mutability": "mutable",
+                  "name": "baseURIIdentical",
+                  "nameLocation": "1753:16:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2802,
+                  "src": "1748:21:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2798,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1748:4:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1703:67:3"
+            },
+            "returnParameters": {
+              "id": 2801,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1779:0:3"
+            },
+            "scope": 2989,
+            "src": "1677:103:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2803,
+              "nodeType": "StructuredDocumentation",
+              "src": "1786:147:3",
+              "text": " @dev add an extension.  Can only be called by contract owner or admin.\n Returns True if removed, False if already removed."
+            },
+            "functionSelector": "ce8aee9d",
+            "id": 2808,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "unregisterExtension",
+            "nameLocation": "1947:19:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2806,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2805,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "1975:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2808,
+                  "src": "1967:17:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2804,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1967:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1966:19:3"
+            },
+            "returnParameters": {
+              "id": 2807,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1994:0:3"
+            },
+            "scope": 2989,
+            "src": "1938:57:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2809,
+              "nodeType": "StructuredDocumentation",
+              "src": "2001:331:3",
+              "text": " @dev blacklist an extension.  Can only be called by contract owner or admin.\n This function will destroy all ability to reference the metadata of any tokens created\n by the specified extension. It will also unregister the extension if needed.\n Returns True if removed, False if already removed."
+            },
+            "functionSelector": "02e7afb7",
+            "id": 2814,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "blacklistExtension",
+            "nameLocation": "2346:18:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2812,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2811,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "2373:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2814,
+                  "src": "2365:17:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2810,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2365:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2364:19:3"
+            },
+            "returnParameters": {
+              "id": 2813,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2392:0:3"
+            },
+            "scope": 2989,
+            "src": "2337:56:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2815,
+              "nodeType": "StructuredDocumentation",
+              "src": "2399:95:3",
+              "text": " @dev set the baseTokenURI of an extension.  Can only be called by extension."
+            },
+            "functionSelector": "3e6134b8",
+            "id": 2820,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setBaseTokenURIExtension",
+            "nameLocation": "2508:24:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2818,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2817,
+                  "mutability": "mutable",
+                  "name": "uri",
+                  "nameLocation": "2549:3:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2820,
+                  "src": "2533:19:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2816,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2533:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2532:21:3"
+            },
+            "returnParameters": {
+              "id": 2819,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2562:0:3"
+            },
+            "scope": 2989,
+            "src": "2499:64:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2821,
+              "nodeType": "StructuredDocumentation",
+              "src": "2569:172:3",
+              "text": " @dev set the baseTokenURI of an extension.  Can only be called by extension.\n For tokens with no uri configured, tokenURI will return \"uri+tokenId\""
+            },
+            "functionSelector": "82dcc0c8",
+            "id": 2828,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setBaseTokenURIExtension",
+            "nameLocation": "2755:24:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2826,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2823,
+                  "mutability": "mutable",
+                  "name": "uri",
+                  "nameLocation": "2796:3:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2828,
+                  "src": "2780:19:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2822,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2780:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2825,
+                  "mutability": "mutable",
+                  "name": "identical",
+                  "nameLocation": "2806:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2828,
+                  "src": "2801:14:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2824,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2801:4:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2779:37:3"
+            },
+            "returnParameters": {
+              "id": 2827,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2825:0:3"
+            },
+            "scope": 2989,
+            "src": "2746:80:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2829,
+              "nodeType": "StructuredDocumentation",
+              "src": "2832:233:3",
+              "text": " @dev set the common prefix of an extension.  Can only be called by extension.\n If configured, and a token has a uri set, tokenURI will return \"prefixURI+tokenURI\"\n Useful if you want to use ipfs/arweave"
+            },
+            "functionSelector": "66d1e9d0",
+            "id": 2834,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setTokenURIPrefixExtension",
+            "nameLocation": "3079:26:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2832,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2831,
+                  "mutability": "mutable",
+                  "name": "prefix",
+                  "nameLocation": "3122:6:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2834,
+                  "src": "3106:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2830,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3106:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3105:24:3"
+            },
+            "returnParameters": {
+              "id": 2833,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3138:0:3"
+            },
+            "scope": 2989,
+            "src": "3070:69:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2835,
+              "nodeType": "StructuredDocumentation",
+              "src": "3145:114:3",
+              "text": " @dev set the tokenURI of a token extension.  Can only be called by extension that minted token."
+            },
+            "functionSelector": "e92a89f6",
+            "id": 2842,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setTokenURIExtension",
+            "nameLocation": "3273:20:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2840,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2837,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "3302:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2842,
+                  "src": "3294:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2836,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3294:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2839,
+                  "mutability": "mutable",
+                  "name": "uri",
+                  "nameLocation": "3327:3:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2842,
+                  "src": "3311:19:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2838,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3311:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3293:38:3"
+            },
+            "returnParameters": {
+              "id": 2841,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3340:0:3"
+            },
+            "scope": 2989,
+            "src": "3264:77:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2843,
+              "nodeType": "StructuredDocumentation",
+              "src": "3347:134:3",
+              "text": " @dev set the tokenURI of a token extension for multiple tokens.  Can only be called by extension that minted token."
+            },
+            "functionSelector": "61e5bc6b",
+            "id": 2852,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setTokenURIExtension",
+            "nameLocation": "3495:20:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2850,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2846,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "3533:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2852,
+                  "src": "3516:24:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2844,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "3516:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2845,
+                    "nodeType": "ArrayTypeName",
+                    "src": "3516:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2849,
+                  "mutability": "mutable",
+                  "name": "uri",
+                  "nameLocation": "3560:3:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2852,
+                  "src": "3542:21:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_string_calldata_ptr_$dyn_calldata_ptr",
+                    "typeString": "string[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2847,
+                      "name": "string",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "3542:6:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_string_storage_ptr",
+                        "typeString": "string"
+                      }
+                    },
+                    "id": 2848,
+                    "nodeType": "ArrayTypeName",
+                    "src": "3542:8:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
+                      "typeString": "string[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3515:49:3"
+            },
+            "returnParameters": {
+              "id": 2851,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3573:0:3"
+            },
+            "scope": 2989,
+            "src": "3486:88:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2853,
+              "nodeType": "StructuredDocumentation",
+              "src": "3580:187:3",
+              "text": " @dev set the baseTokenURI for tokens with no extension.  Can only be called by owner/admin.\n For tokens with no uri configured, tokenURI will return \"uri+tokenId\""
+            },
+            "functionSelector": "30176e13",
+            "id": 2858,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setBaseTokenURI",
+            "nameLocation": "3781:15:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2856,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2855,
+                  "mutability": "mutable",
+                  "name": "uri",
+                  "nameLocation": "3813:3:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2858,
+                  "src": "3797:19:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2854,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3797:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3796:21:3"
+            },
+            "returnParameters": {
+              "id": 2857,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3826:0:3"
+            },
+            "scope": 2989,
+            "src": "3772:55:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2859,
+              "nodeType": "StructuredDocumentation",
+              "src": "3833:248:3",
+              "text": " @dev set the common prefix for tokens with no extension.  Can only be called by owner/admin.\n If configured, and a token has a uri set, tokenURI will return \"prefixURI+tokenURI\"\n Useful if you want to use ipfs/arweave"
+            },
+            "functionSelector": "99e0dd7c",
+            "id": 2864,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setTokenURIPrefix",
+            "nameLocation": "4095:17:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2862,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2861,
+                  "mutability": "mutable",
+                  "name": "prefix",
+                  "nameLocation": "4129:6:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2864,
+                  "src": "4113:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2860,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4113:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4112:24:3"
+            },
+            "returnParameters": {
+              "id": 2863,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "4145:0:3"
+            },
+            "scope": 2989,
+            "src": "4086:60:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2865,
+              "nodeType": "StructuredDocumentation",
+              "src": "4152:106:3",
+              "text": " @dev set the tokenURI of a token with no extension.  Can only be called by owner/admin."
+            },
+            "functionSelector": "162094c4",
+            "id": 2872,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setTokenURI",
+            "nameLocation": "4272:11:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2870,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2867,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "4292:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2872,
+                  "src": "4284:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2866,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4284:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2869,
+                  "mutability": "mutable",
+                  "name": "uri",
+                  "nameLocation": "4317:3:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2872,
+                  "src": "4301:19:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2868,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4301:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4283:38:3"
+            },
+            "returnParameters": {
+              "id": 2871,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "4330:0:3"
+            },
+            "scope": 2989,
+            "src": "4263:68:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2873,
+              "nodeType": "StructuredDocumentation",
+              "src": "4337:114:3",
+              "text": " @dev set the tokenURI of multiple tokens with no extension.  Can only be called by owner/admin."
+            },
+            "functionSelector": "aafb2d44",
+            "id": 2882,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setTokenURI",
+            "nameLocation": "4465:11:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2880,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2876,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "4494:8:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2882,
+                  "src": "4477:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2874,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "4477:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2875,
+                    "nodeType": "ArrayTypeName",
+                    "src": "4477:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2879,
+                  "mutability": "mutable",
+                  "name": "uris",
+                  "nameLocation": "4522:4:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2882,
+                  "src": "4504:22:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_string_calldata_ptr_$dyn_calldata_ptr",
+                    "typeString": "string[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2877,
+                      "name": "string",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "4504:6:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_string_storage_ptr",
+                        "typeString": "string"
+                      }
+                    },
+                    "id": 2878,
+                    "nodeType": "ArrayTypeName",
+                    "src": "4504:8:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
+                      "typeString": "string[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4476:51:3"
+            },
+            "returnParameters": {
+              "id": 2881,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "4536:0:3"
+            },
+            "scope": 2989,
+            "src": "4456:81:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2883,
+              "nodeType": "StructuredDocumentation",
+              "src": "4543:94:3",
+              "text": " @dev set a permissions contract for an extension.  Used to control minting."
+            },
+            "functionSelector": "f0cdc499",
+            "id": 2890,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setMintPermissions",
+            "nameLocation": "4651:18:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2888,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2885,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "4678:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2890,
+                  "src": "4670:17:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2884,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4670:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2887,
+                  "mutability": "mutable",
+                  "name": "permissions",
+                  "nameLocation": "4697:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2890,
+                  "src": "4689:19:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2886,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4689:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4669:40:3"
+            },
+            "returnParameters": {
+              "id": 2889,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "4718:0:3"
+            },
+            "scope": 2989,
+            "src": "4642:77:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2891,
+              "nodeType": "StructuredDocumentation",
+              "src": "4725:158:3",
+              "text": " @dev Configure so transfers of tokens created by the caller (must be extension) gets approval\n from the extension before transferring"
+            },
+            "functionSelector": "ac0c8cfa",
+            "id": 2896,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setApproveTransferExtension",
+            "nameLocation": "4897:27:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2894,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2893,
+                  "mutability": "mutable",
+                  "name": "enabled",
+                  "nameLocation": "4930:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2896,
+                  "src": "4925:12:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2892,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4925:4:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4924:14:3"
+            },
+            "returnParameters": {
+              "id": 2895,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "4947:0:3"
+            },
+            "scope": 2989,
+            "src": "4888:60:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2897,
+              "nodeType": "StructuredDocumentation",
+              "src": "4954:58:3",
+              "text": " @dev get the extension of a given token"
+            },
+            "functionSelector": "239be317",
+            "id": 2904,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "tokenExtension",
+            "nameLocation": "5026:14:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2900,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2899,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "5049:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2904,
+                  "src": "5041:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2898,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5041:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5040:17:3"
+            },
+            "returnParameters": {
+              "id": 2903,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2902,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2904,
+                  "src": "5081:7:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2901,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5081:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5080:9:3"
+            },
+            "scope": 2989,
+            "src": "5017:73:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2905,
+              "nodeType": "StructuredDocumentation",
+              "src": "5096:45:3",
+              "text": " @dev Set default royalties"
+            },
+            "functionSelector": "332dd1ae",
+            "id": 2914,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setRoyalties",
+            "nameLocation": "5155:12:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2912,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2908,
+                  "mutability": "mutable",
+                  "name": "receivers",
+                  "nameLocation": "5195:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2914,
+                  "src": "5168:36:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_calldata_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2906,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5168:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2907,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5168:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2911,
+                  "mutability": "mutable",
+                  "name": "basisPoints",
+                  "nameLocation": "5225:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2914,
+                  "src": "5206:30:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_calldata_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2909,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5206:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2910,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5206:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5167:70:3"
+            },
+            "returnParameters": {
+              "id": 2913,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "5246:0:3"
+            },
+            "scope": 2989,
+            "src": "5146:101:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2915,
+              "nodeType": "StructuredDocumentation",
+              "src": "5253:48:3",
+              "text": " @dev Set royalties of a token"
+            },
+            "functionSelector": "20e4afe2",
+            "id": 2926,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setRoyalties",
+            "nameLocation": "5315:12:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2924,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2917,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "5336:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2926,
+                  "src": "5328:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2916,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5328:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2920,
+                  "mutability": "mutable",
+                  "name": "receivers",
+                  "nameLocation": "5372:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2926,
+                  "src": "5345:36:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_calldata_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2918,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5345:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2919,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5345:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2923,
+                  "mutability": "mutable",
+                  "name": "basisPoints",
+                  "nameLocation": "5402:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2926,
+                  "src": "5383:30:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_calldata_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2921,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5383:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2922,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5383:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5327:87:3"
+            },
+            "returnParameters": {
+              "id": 2925,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "5423:0:3"
+            },
+            "scope": 2989,
+            "src": "5306:118:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2927,
+              "nodeType": "StructuredDocumentation",
+              "src": "5430:53:3",
+              "text": " @dev Set royalties of an extension"
+            },
+            "functionSelector": "b0fe87c9",
+            "id": 2938,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setRoyaltiesExtension",
+            "nameLocation": "5497:21:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2936,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2929,
+                  "mutability": "mutable",
+                  "name": "extension",
+                  "nameLocation": "5527:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2938,
+                  "src": "5519:17:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2928,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5519:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2932,
+                  "mutability": "mutable",
+                  "name": "receivers",
+                  "nameLocation": "5565:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2938,
+                  "src": "5538:36:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_calldata_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2930,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5538:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2931,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5538:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2935,
+                  "mutability": "mutable",
+                  "name": "basisPoints",
+                  "nameLocation": "5595:11:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2938,
+                  "src": "5576:30:3",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_calldata_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2933,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5576:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2934,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5576:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5518:89:3"
+            },
+            "returnParameters": {
+              "id": 2937,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "5616:0:3"
+            },
+            "scope": 2989,
+            "src": "5488:129:3",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 2939,
+              "nodeType": "StructuredDocumentation",
+              "src": "5623:92:3",
+              "text": " @dev Get royalites of a token.  Returns list of receivers and basisPoints"
+            },
+            "functionSelector": "bb3bafd6",
+            "id": 2950,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getRoyalties",
+            "nameLocation": "5729:12:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2942,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2941,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "5750:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2950,
+                  "src": "5742:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2940,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5742:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5741:17:3"
+            },
+            "returnParameters": {
+              "id": 2949,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2945,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2950,
+                  "src": "5782:24:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_memory_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2943,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5782:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2944,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5782:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2948,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2950,
+                  "src": "5808:16:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2946,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5808:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2947,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5808:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5781:44:3"
+            },
+            "scope": 2989,
+            "src": "5720:106:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "b9c4d9fb",
+            "id": 2958,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFeeRecipients",
+            "nameLocation": "5896:16:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2953,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2952,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "5921:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2958,
+                  "src": "5913:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2951,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5913:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5912:17:3"
+            },
+            "returnParameters": {
+              "id": 2957,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2956,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2958,
+                  "src": "5953:24:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_memory_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2954,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "5953:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2955,
+                    "nodeType": "ArrayTypeName",
+                    "src": "5953:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "5952:26:3"
+            },
+            "scope": 2989,
+            "src": "5887:92:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "0ebd4c7f",
+            "id": 2966,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFeeBps",
+            "nameLocation": "5993:9:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2961,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2960,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "6011:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2966,
+                  "src": "6003:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2959,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6003:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "6002:17:3"
+            },
+            "returnParameters": {
+              "id": 2965,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2964,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2966,
+                  "src": "6043:13:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2962,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "6043:4:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2963,
+                    "nodeType": "ArrayTypeName",
+                    "src": "6043:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "6042:15:3"
+            },
+            "scope": 2989,
+            "src": "5984:74:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "d5a06d4c",
+            "id": 2977,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFees",
+            "nameLocation": "6072:7:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2969,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2968,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "6088:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2977,
+                  "src": "6080:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2967,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6080:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "6079:17:3"
+            },
+            "returnParameters": {
+              "id": 2976,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2972,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2977,
+                  "src": "6120:24:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_payable_$dyn_memory_ptr",
+                    "typeString": "address payable[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2970,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "6120:15:3",
+                      "stateMutability": "payable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "id": 2971,
+                    "nodeType": "ArrayTypeName",
+                    "src": "6120:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_payable_$dyn_storage_ptr",
+                      "typeString": "address payable[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2975,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2977,
+                  "src": "6146:16:3",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 2973,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "6146:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 2974,
+                    "nodeType": "ArrayTypeName",
+                    "src": "6146:9:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "6119:44:3"
+            },
+            "scope": 2989,
+            "src": "6063:101:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "2a55205a",
+            "id": 2988,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "royaltyInfo",
+            "nameLocation": "6178:11:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2982,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2979,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "6198:7:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2988,
+                  "src": "6190:15:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2978,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6190:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2981,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "6215:5:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2988,
+                  "src": "6207:13:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2980,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6207:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "6189:32:3"
+            },
+            "returnParameters": {
+              "id": 2987,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2984,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2988,
+                  "src": "6245:7:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2983,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6245:7:3",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2986,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2988,
+                  "src": "6254:7:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2985,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6254:7:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "6244:18:3"
+            },
+            "scope": 2989,
+            "src": "6169:94:3",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2990,
+        "src": "191:6075:3",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:6234:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.7+commit.e28d00a7.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-06-09T20:22:52.434Z",
+  "devdoc": {
+    "details": "Core creator interface",
+    "kind": "dev",
+    "methods": {
+      "blacklistExtension(address)": {
+        "details": "blacklist an extension.  Can only be called by contract owner or admin. This function will destroy all ability to reference the metadata of any tokens created by the specified extension. It will also unregister the extension if needed. Returns True if removed, False if already removed."
+      },
+      "getExtensions()": {
+        "details": "gets address of all extensions"
+      },
+      "getRoyalties(uint256)": {
+        "details": "Get royalites of a token.  Returns list of receivers and basisPoints"
+      },
+      "registerExtension(address,string)": {
+        "details": "add an extension.  Can only be called by contract owner or admin. extension address must point to a contract implementing ICreatorExtension. Returns True if newly added, False if already added."
+      },
+      "registerExtension(address,string,bool)": {
+        "details": "add an extension.  Can only be called by contract owner or admin. extension address must point to a contract implementing ICreatorExtension. Returns True if newly added, False if already added."
+      },
+      "setApproveTransferExtension(bool)": {
+        "details": "Configure so transfers of tokens created by the caller (must be extension) gets approval from the extension before transferring"
+      },
+      "setBaseTokenURI(string)": {
+        "details": "set the baseTokenURI for tokens with no extension.  Can only be called by owner/admin. For tokens with no uri configured, tokenURI will return \"uri+tokenId\""
+      },
+      "setBaseTokenURIExtension(string)": {
+        "details": "set the baseTokenURI of an extension.  Can only be called by extension."
+      },
+      "setBaseTokenURIExtension(string,bool)": {
+        "details": "set the baseTokenURI of an extension.  Can only be called by extension. For tokens with no uri configured, tokenURI will return \"uri+tokenId\""
+      },
+      "setMintPermissions(address,address)": {
+        "details": "set a permissions contract for an extension.  Used to control minting."
+      },
+      "setRoyalties(address[],uint256[])": {
+        "details": "Set default royalties"
+      },
+      "setRoyalties(uint256,address[],uint256[])": {
+        "details": "Set royalties of a token"
+      },
+      "setRoyaltiesExtension(address,address[],uint256[])": {
+        "details": "Set royalties of an extension"
+      },
+      "setTokenURI(uint256,string)": {
+        "details": "set the tokenURI of a token with no extension.  Can only be called by owner/admin."
+      },
+      "setTokenURI(uint256[],string[])": {
+        "details": "set the tokenURI of multiple tokens with no extension.  Can only be called by owner/admin."
+      },
+      "setTokenURIExtension(uint256,string)": {
+        "details": "set the tokenURI of a token extension.  Can only be called by extension that minted token."
+      },
+      "setTokenURIExtension(uint256[],string[])": {
+        "details": "set the tokenURI of a token extension for multiple tokens.  Can only be called by extension that minted token."
+      },
+      "setTokenURIPrefix(string)": {
+        "details": "set the common prefix for tokens with no extension.  Can only be called by owner/admin. If configured, and a token has a uri set, tokenURI will return \"prefixURI+tokenURI\" Useful if you want to use ipfs/arweave"
+      },
+      "setTokenURIPrefixExtension(string)": {
+        "details": "set the common prefix of an extension.  Can only be called by extension. If configured, and a token has a uri set, tokenURI will return \"prefixURI+tokenURI\" Useful if you want to use ipfs/arweave"
+      },
+      "supportsInterface(bytes4)": {
+        "details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+      },
+      "tokenExtension(uint256)": {
+        "details": "get the extension of a given token"
+      },
+      "unregisterExtension(address)": {
+        "details": "add an extension.  Can only be called by contract owner or admin. Returns True if removed, False if already removed."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "db": {
+    "callBytecode": {
+      "id": "0x2cdc5c5f756f555319272af6740217ecb0d9451b44e748689b42eb518eb5ef1b"
+    },
+    "createBytecode": {
+      "id": "0x2cdc5c5f756f555319272af6740217ecb0d9451b44e748689b42eb518eb5ef1b"
+    },
+    "contract": {
+      "id": "0x5486b7e073f92a7156a1ce0164b3b4512fa2e3b479aacdea3aaa809115c039cd"
+    }
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "contractName": "IERC1155CreatorExtensionBurnable",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "onBurn",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"tokenIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"}],\"name\":\"onBurn\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Your extension is required to implement this interface if it wishes to receive the onBurn callback whenever a token the extension created is burned\",\"kind\":\"dev\",\"methods\":{\"onBurn(address,uint256[],uint256[])\":{\"details\":\"callback handler for burn events\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@manifoldxyz/creator-core-solidity/contracts/extensions/ERC1155/IERC1155CreatorExtensionBurnable.sol\":\"IERC1155CreatorExtensionBurnable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@manifoldxyz/creator-core-solidity/contracts/extensions/ERC1155/IERC1155CreatorExtensionBurnable.sol\":{\"keccak256\":\"0xc274a67fd639f490659aae3c188b7eaef5f819367f61b058e547681c1410e22f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2862472b3f417e447faa442cf27a1ea33cea678ff4f64b4cc99102d5d1e6bfb8\",\"dweb:/ipfs/QmepVRQniqf5hpSWgptfoxbYw546s9L6uo9PiobsStxJ7D\"]},\"@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\n/// @author: manifold.xyz\n\nimport \"@openzeppelin/contracts/utils/introspection/IERC165.sol\";\n\n/**\n * @dev Your extension is required to implement this interface if it wishes\n * to receive the onBurn callback whenever a token the extension created is\n * burned\n */\ninterface IERC1155CreatorExtensionBurnable is IERC165 {\n    /**\n     * @dev callback handler for burn events\n     */\n    function onBurn(address owner, uint256[] calldata tokenIds, uint256[] calldata amounts) external;\n}",
+  "sourcePath": "@manifoldxyz/creator-core-solidity/contracts/extensions/ERC1155/IERC1155CreatorExtensionBurnable.sol",
+  "ast": {
+    "absolutePath": "@manifoldxyz/creator-core-solidity/contracts/extensions/ERC1155/IERC1155CreatorExtensionBurnable.sol",
+    "exportedSymbols": {
+      "IERC1155CreatorExtensionBurnable": [
+        3124
+      ],
+      "IERC165": [
+        6219
+      ]
+    },
+    "id": 3125,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3107,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:6"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "file": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "id": 3108,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 3125,
+        "sourceUnit": 6220,
+        "src": "85:65:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 3110,
+              "name": "IERC165",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 6219,
+              "src": "368:7:6"
+            },
+            "id": 3111,
+            "nodeType": "InheritanceSpecifier",
+            "src": "368:7:6"
+          }
+        ],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 3109,
+          "nodeType": "StructuredDocumentation",
+          "src": "152:169:6",
+          "text": " @dev Your extension is required to implement this interface if it wishes\n to receive the onBurn callback whenever a token the extension created is\n burned"
+        },
+        "fullyImplemented": false,
+        "id": 3124,
+        "linearizedBaseContracts": [
+          3124,
+          6219
+        ],
+        "name": "IERC1155CreatorExtensionBurnable",
+        "nameLocation": "332:32:6",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 3112,
+              "nodeType": "StructuredDocumentation",
+              "src": "382:56:6",
+              "text": " @dev callback handler for burn events"
+            },
+            "functionSelector": "7b8deca0",
+            "id": 3123,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "onBurn",
+            "nameLocation": "452:6:6",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3121,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3114,
+                  "mutability": "mutable",
+                  "name": "owner",
+                  "nameLocation": "467:5:6",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3123,
+                  "src": "459:13:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3113,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "459:7:6",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3117,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "493:8:6",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3123,
+                  "src": "474:27:6",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_calldata_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 3115,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "474:7:6",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 3116,
+                    "nodeType": "ArrayTypeName",
+                    "src": "474:9:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3120,
+                  "mutability": "mutable",
+                  "name": "amounts",
+                  "nameLocation": "522:7:6",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3123,
+                  "src": "503:26:6",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_calldata_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 3118,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "503:7:6",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 3119,
+                    "nodeType": "ArrayTypeName",
+                    "src": "503:9:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "458:72:6"
+            },
+            "returnParameters": {
+              "id": 3122,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "539:0:6"
+            },
+            "scope": 3124,
+            "src": "443:97:6",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3125,
+        "src": "322:220:6",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:509:6"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.7+commit.e28d00a7.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-06-09T20:22:52.445Z",
+  "devdoc": {
+    "details": "Your extension is required to implement this interface if it wishes to receive the onBurn callback whenever a token the extension created is burned",
+    "kind": "dev",
+    "methods": {
+      "onBurn(address,uint256[],uint256[])": {
+        "details": "callback handler for burn events"
+      },
+      "supportsInterface(bytes4)": {
+        "details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "db": {
+    "callBytecode": {
+      "id": "0x2cdc5c5f756f555319272af6740217ecb0d9451b44e748689b42eb518eb5ef1b"
+    },
+    "createBytecode": {
+      "id": "0x2cdc5c5f756f555319272af6740217ecb0d9451b44e748689b42eb518eb5ef1b"
+    },
+    "contract": {
+      "id": "0xcffe57255341caab41c5f193a2573d3bddd1501fa1d455d442a178bd610e6f14"
+    }
+  }
+}
