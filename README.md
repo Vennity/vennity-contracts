@@ -1,3 +1,13 @@
+# Vennity Contracts
+
+This project was generated with Truffle. See Polygon Box documentation below.
+
+To get started with testing, no environment is required for running:
+```bash
+npm run test
+```
+
+
 # Polygon Box
 
 - [Requirements](#requirements)
