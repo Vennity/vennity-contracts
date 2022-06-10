@@ -8,10 +8,9 @@ jobs:
       - name: Install dependencies, truffle, and ganache-cli
         run: |
           npm install -g truffle
-          npm install -g ganache-cli
           npm install
       - name: start ganache
-        run: ganache-cli
+        run: docker run --detach --publish 8545:8545 trufflesuite/ganache:latest
       - name: Test
         run: |
           npm run test
