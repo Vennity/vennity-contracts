@@ -6,11 +6,10 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 
 import "./IContractMetadataURIUpgradeable.sol";
 
-abstract contract ContractMetadataURIUpgradeable is Initializable, ContextUpgradeable, IContractMetadataURIUpgradeable, ERC165Upgradeable {
+abstract contract ContractMetadataURIUpgradeable is Initializable, IContractMetadataURIUpgradeable, ERC165Upgradeable {
     string private cURI;
 
     /**

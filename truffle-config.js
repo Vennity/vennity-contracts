@@ -69,7 +69,7 @@ module.exports = {  /**
           runs: 125
         },
       //  evmVersion: "byzantium"
-      // }
+      }
     }
   },
 

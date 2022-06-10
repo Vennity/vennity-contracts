@@ -8,11 +8,11 @@ import "@openzeppelin/contracts/proxy/Proxy.sol";
 
 contract ERC1155Creator is Proxy {
 
-    constructor() {
+    constructor(address _proxy_address) {
         assert(_IMPLEMENTATION_SLOT == bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1));
-        StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = 0xbfA17f39c35AB7b6B5E47EcDbbd989d7A138a4Ac;
+        StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = _proxy_address;
         Address.functionDelegateCall(
-            0xbfA17f39c35AB7b6B5E47EcDbbd989d7A138a4Ac,
+            _proxy_address,
             abi.encodeWithSignature("initialize()")
         );
     }
@@ -33,6 +33,10 @@ contract ERC1155Creator is Proxy {
 
     function _implementation() internal override view returns (address) {
         return StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value;
-    }    
+    }
 
+}
+
+contract VenProxy is ERC1155Creator {
+    constructor(address _implementation) ERC1155Creator(_implementation) {}
 }
