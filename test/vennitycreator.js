@@ -18,13 +18,12 @@ contract("VennityCreator", accounts => {
     const cURI = 'http://gateway.pinata.cloud/ipfs/QmPVyfBmV1XbP7cXRkYt65hC4FPoeLvjGfUSk9SoytBD9C'
 
     vennityCreatorInstance = await VennityCreator.new()
-    console.log('vennityCreatorInstance owner', await vennityCreatorInstance.owner())
-    venProxyInstance = await VenProxy.new(vennityCreatorInstance.address, cURI, userAccount, {from: adminAccount})
+    venProxyInstance = await VenProxy.new(vennityCreatorInstance.address, cURI, {from: adminAccount})
     assert.equal(vennityCreatorInstance.address, await venProxyInstance.implementation())
 
     proxyImpl = await VennityCreator.at(venProxyInstance.address)
-    assert.equal(userAccount, await proxyImpl.owner())
-    assert.equal(true, await proxyImpl.isAdmin(adminAccount))
+    assert.equal(adminAccount, await proxyImpl.owner())
+    // assert.equal(true, await proxyImpl.isAdmin(adminAccount))
 
     assert.equal(await proxyImpl.contractURI(), cURI)
 
@@ -35,6 +34,19 @@ contract("VennityCreator", accounts => {
 
     await proxyImpl.setContractURI(cURI)
     assert.equal(await proxyImpl.contractURI(), cURI)
+
+  })
+
+  it("...should add adminAccount to proxy admins", async () => {
+    await proxyImpl.approveAdmin(adminAccount)
+    assert.equal(await proxyImpl.isAdmin(adminAccount), true)
+
+  })
+
+  it("...should add transfer ownership to user account", async () => {
+    await proxyImpl.transferOwnership(userAccount)
+    assert.equal(await proxyImpl.owner(), userAccount)
+    assert.equal(await proxyImpl.isAdmin(adminAccount), true)
 
   })
 
