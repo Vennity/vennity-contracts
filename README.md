@@ -7,6 +7,27 @@ To get started with testing, no environment is required for running:
 npm run test
 ```
 
+## Basic Commands
+
+The code here will allow you to compile, migrate, and test your code against a Polygon PoS network instance. The following commands can be run (more details on each can be found in the next section):
+
+To compile:
+
+```
+npm run compile:polygon
+```
+
+To migrate:
+
+```
+npm run migrate:polygon --network=(polygon_infura_testnet | polygon_infura_mainnet)
+```
+
+To test:
+
+```
+npm run test:polygon --network=(polygon_infura_testnet | polygon_infura_mainnet)
+```
 
 # Polygon Box
 
@@ -125,27 +146,7 @@ Follow the steps in the documentation above using Infura's RPC endpoints (`"http
 
 To get testnet ETH to use, visit a faucet like https://goerli-faucet.slock.it/.
 
-## Basic Commands
 
-The code here will allow you to compile, migrate, and test your code against a Polygon PoS network instance. The following commands can be run (more details on each can be found in the next section):
-
-To compile:
-
-```
-npm run compile:polygon
-```
-
-To migrate:
-
-```
-npm run migrate:polygon --network=(polygon_infura_testnet | polygon_infura_mainnet)
-```
-
-To test:
-
-```
-npm run test:polygon --network=(polygon_infura_testnet | polygon_infura_mainnet)
-```
 
 ### Testing
 
