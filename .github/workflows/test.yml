@@ -1,0 +1,16 @@
+name: test
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies, truffle, and ganache-cli
+        run: |
+          npm install -g truffle
+          npm install
+      - name: start ganache
+        run: docker run --detach --publish 8545:8545 trufflesuite/ganache:latest
+      - name: Test
+        run: |
+          npm run test
